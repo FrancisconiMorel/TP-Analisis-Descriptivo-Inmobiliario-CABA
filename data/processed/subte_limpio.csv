@@ -1,0 +1,91 @@
+﻿ID,Tipo_Transporte,Nombre,Linea,Direccion,Barrio,Comuna,Latitud,Longitud,Flag_Coordenada_Anomala,Flag_Duplicado
+1,Subte,Caseros,H,No informado,No informado,No informado,-34.63574869190404,-58.398930404056664,0,0
+2,Subte,Inclan - Mezquita Al Ahmad,H,No informado,No informado,No informado,-34.629374324650314,-58.400972334211815,0,0
+3,Subte,Humberto 1°,H,No informado,No informado,No informado,-34.62309113761142,-58.40232549651671,0,0
+4,Subte,Venezuela,H,No informado,No informado,No informado,-34.61524116028971,-58.404734437166375,0,0
+5,Subte,Once - 30 De Diciembre,H,No informado,No informado,No informado,-34.60893439989664,-58.40603909181976,0,0
+6,Subte,9 De Julio,D,No informado,No informado,No informado,-34.60424434385433,-58.38057816074685,0,0
+7,Subte,Facultad De Medicina,D,No informado,No informado,No informado,-34.59975640870826,-58.39792687400386,0,0
+8,Subte,Tribunales - Teatro Colón,D,No informado,No informado,No informado,-34.601586388942174,-58.38514600302589,0,0
+9,Subte,Agüero,D,No informado,No informado,No informado,-34.59162740214711,-58.407164107307096,0,0
+10,Subte,R.Scalabrini Ortiz,D,No informado,No informado,No informado,-34.5851556929868,-58.4159578817373,0,0
+11,Subte,Plaza Italia,D,No informado,No informado,No informado,-34.5814110535123,-58.421198278781375,0,0
+12,Subte,Palermo,D,No informado,No informado,No informado,-34.578421972901005,-58.42571354086816,0,0
+13,Subte,Retiro,C,No informado,No informado,No informado,-34.59119321488052,-58.37402240381632,0,0
+14,Subte,Lavalle,C,No informado,No informado,No informado,-34.60176910856247,-58.378159720315566,0,0
+15,Subte,Diagonal Norte,C,No informado,No informado,No informado,-34.60484286205875,-58.37953383769559,0,0
+16,Subte,Av. De Mayo,C,No informado,No informado,No informado,-34.60898234787075,-58.38061450046986,0,0
+17,Subte,Moreno,C,No informado,No informado,No informado,-34.612616229073836,-58.380448233244984,0,0
+18,Subte,Independencia,C,No informado,No informado,No informado,-34.618124421551606,-58.38017734615888,0,0
+19,Subte,Constitucion,C,No informado,No informado,No informado,-34.627618063975376,-58.38143804863668,0,0
+20,Subte,Florida,B,No informado,No informado,No informado,-34.60329642125253,-58.37507557490589,0,0
+21,Subte,C. Pellegrini,B,No informado,No informado,No informado,-34.60363626062853,-58.38071866341278,0,0
+22,Subte,Uruguay,B,No informado,No informado,No informado,-34.604092730256646,-58.38729966906588,0,0
+23,Subte,Callao - Maestro Alfredo Bravo,B,No informado,No informado,No informado,-34.604418737076664,-58.39231755671001,0,0
+24,Subte,Pasteur - Amia,B,No informado,No informado,No informado,-34.60464219201641,-58.39947727482585,0,0
+25,Subte,Pueyrredon,B,No informado,No informado,No informado,-34.6045803098221,-58.405402208624345,0,0
+26,Subte,Carlos Gardel,B,No informado,No informado,No informado,-34.604078814375725,-58.41176510373516,0,0
+27,Subte,Almagro - Medrano,B,No informado,No informado,No informado,-34.60316426400566,-58.42096459307871,0,0
+28,Subte,Angel Gallardo,B,No informado,No informado,No informado,-34.60216166561987,-58.431275555639985,0,0
+29,Subte,Malabia - Osvaldo Pugliese,B,No informado,No informado,No informado,-34.59896691493091,-58.439772858444194,0,0
+30,Subte,Dorrego,B,No informado,No informado,No informado,-34.59171790789488,-58.44757417574107,0,0
+31,Subte,Peru,A,No informado,No informado,No informado,-34.608558085581826,-58.3742717794385,0,0
+32,Subte,Piedras,A,No informado,No informado,No informado,-34.60888074907816,-58.37908900065684,0,0
+33,Subte,Lima,A,No informado,No informado,No informado,-34.60909884479506,-58.382236114316925,0,0
+34,Subte,Saenz Peña,A,No informado,No informado,No informado,-34.60941163979187,-58.38678071351404,0,0
+35,Subte,Congreso - Pdte. Dr. Raúl Alfonsín,A,No informado,No informado,No informado,-34.60922477063858,-58.392672097001295,0,0
+36,Subte,Pasco,A,No informado,No informado,No informado,-34.60964506657074,-58.398430018353146,0,0
+37,Subte,Alberti,A,No informado,No informado,No informado,-34.60983269261519,-58.40121044219303,0,0
+38,Subte,Plaza De Miserere,A,No informado,No informado,No informado,-34.60981638710716,-58.40670979270381,0,0
+39,Subte,Loria,A,No informado,No informado,No informado,-34.610780851367856,-58.41518802065098,0,0
+40,Subte,Castro Barros,A,No informado,No informado,No informado,-34.61176939995314,-58.42181769657279,0,0
+41,Subte,Rio De Janeiro,A,No informado,No informado,No informado,-34.61520474044249,-58.42950199987938,0,0
+42,Subte,Acoyte,A,No informado,No informado,No informado,-34.618279061088415,-58.43642989126413,0,0
+43,Subte,Primera Junta,A,No informado,No informado,No informado,-34.62040428161419,-58.44117877203333,0,0
+44,Subte,Bolivar,E,No informado,No informado,No informado,-34.60924142215441,-58.37368829690775,0,0
+45,Subte,Belgrano,E,No informado,No informado,No informado,-34.61284803582894,-58.37758476922805,0,0
+46,Subte,Independencia - Beata Mama Antula,E,No informado,No informado,No informado,-34.617936227173786,-58.381538621328296,0,0
+47,Subte,San Jose,E,No informado,No informado,No informado,-34.622338242309205,-58.38515204539739,0,0
+48,Subte,Entre Rios - Rodolfo Walsh,E,No informado,No informado,No informado,-34.62271843890065,-58.39151492466532,0,0
+49,Subte,Pichincha,E,No informado,No informado,No informado,-34.62310865679827,-58.39707106223341,0,0
+50,Subte,Jujuy,E,No informado,No informado,No informado,-34.62386451404442,-58.40293931492661,0,0
+51,Subte,Urquiza,E,No informado,No informado,No informado,-34.62465260251508,-58.4093932402834,0,0
+52,Subte,Jose Maria Moreno,E,No informado,No informado,No informado,-34.62801640771465,-58.43381765291902,0,0
+53,Subte,Emilio Mitre,E,No informado,No informado,No informado,-34.63104067307458,-58.44217173462012,0,0
+54,Subte,Bulnes,D,No informado,No informado,No informado,-34.58823676433706,-58.41129653856202,0,0
+55,Subte,Pueyrredon,D,No informado,No informado,No informado,-34.59442518997953,-58.40239831055495,0,0
+56,Subte,Callao,D,No informado,No informado,No informado,-34.59963885960583,-58.3931285025438,0,0
+57,Subte,San Martin,C,No informado,No informado,No informado,-34.59505674176369,-58.37782305054521,0,0
+58,Subte,San Juan,C,No informado,No informado,No informado,-34.62191546671289,-58.379924898124486,0,0
+59,Subte,Medalla Milagrosa,E,No informado,No informado,No informado,-34.63638793805377,-58.45027890468544,0,0
+60,Subte,Av. La Plata,E,No informado,No informado,No informado,-34.627014314357936,-58.426790729105825,0,0
+61,Subte,Boedo,E,No informado,No informado,No informado,-34.62536493574887,-58.415535011684995,0,0
+62,Subte,Ministro Carranza - Miguel Abuelo,D,No informado,No informado,No informado,-34.57517843366268,-58.435015264738354,0,0
+63,Subte,Olleros,D,No informado,No informado,No informado,-34.57001254234762,-58.444669509559354,0,0
+64,Subte,Jose Hernandez,D,No informado,No informado,No informado,-34.56621559971072,-58.452126677649765,0,0
+65,Subte,Juramento,D,No informado,No informado,No informado,-34.56230955488594,-58.45649005303586,0,0
+66,Subte,Federico Lacroze,B,No informado,No informado,No informado,-34.58719774686522,-58.455030087707556,0,0
+67,Subte,Plaza De Los Virreyes - Eva Perón,E,No informado,No informado,No informado,-34.64331080894087,-58.461651880526745,0,0
+68,Subte,Varela,E,No informado,No informado,No informado,-34.64013605282059,-58.45789205604037,0,0
+69,Subte,Catedral,D,No informado,No informado,No informado,-34.6078013639001,-58.373959878509574,0,0
+70,Subte,Plaza De Mayo,A,No informado,No informado,No informado,-34.60880929908102,-58.370972689307145,0,0
+71,Subte,Congreso De Tucuman,D,No informado,No informado,No informado,-34.555642414974905,-58.462379126412664,0,0
+72,Subte,Leandro N. Alem,B,No informado,No informado,No informado,-34.60298861426501,-58.36993412575747,0,0
+73,Subte,Tronador - Villa Ortúzar,B,No informado,No informado,No informado,-34.58409463968795,-58.46622755654512,0,0
+74,Subte,De Los Incas - Pque. Chas,B,No informado,No informado,No informado,-34.58124896974297,-58.47424086083075,0,0
+75,Subte,Carabobo,A,No informado,No informado,No informado,-34.626665595345294,-58.45671024455198,0,0
+76,Subte,Puan,A,No informado,No informado,No informado,-34.6235279870421,-58.44864846354647,0,0
+77,Subte,Corrientes,H,No informado,No informado,No informado,-34.60448945839987,-58.40545309576947,0,0
+78,Subte,Parque Patricios,H,No informado,No informado,No informado,-34.63840447279842,-58.405797335978185,0,0
+79,Subte,Hospitales - Ringo Bonavena,H,No informado,No informado,No informado,-34.64126739478943,-58.41238736270171,0,0
+80,Subte,Echeverría - Mártires Palotinos,B,No informado,No informado,No informado,-34.57779761324633,-58.48101327779952,0,0
+81,Subte,Juan Manuel De Rosas - Villa Urquiza,B,No informado,No informado,No informado,-34.574319255623145,-58.486384920729684,0,0
+82,Subte,San Pedrito,A,No informado,No informado,No informado,-34.63070606055325,-58.469639501989754,0,0
+83,Subte,San José De Flores,A,No informado,No informado,No informado,-34.629086207306415,-58.463540652225156,0,0
+84,Subte,Córdoba,H,No informado,No informado,No informado,-34.59845449773643,-58.40372437975688,0,0
+85,Subte,Las Heras,H,No informado,No informado,No informado,-34.58746115122622,-58.397218811204326,0,0
+86,Subte,Santa Fe - Carlos Jauregui,H,No informado,No informado,No informado,-34.59438501065232,-58.40232564194708,0,0
+87,Subte,Facultad De Derecho - Julieta Lanteri,H,No informado,No informado,No informado,-34.58303601541506,-58.39102235543635,0,0
+88,Subte,Correo Central,E,No informado,No informado,No informado,-34.60311060328679,-58.37056106331843,0,0
+89,Subte,Catalinas,E,No informado,No informado,No informado,-34.596623004422035,-58.37166923805774,0,0
+90,Subte,Retiro,E,No informado,No informado,No informado,-34.59217655867434,-58.37572458013492,0,0

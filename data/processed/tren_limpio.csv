@@ -1,0 +1,302 @@
+﻿ID,ID_IDECABA,Tipo_Transporte,Nombre,Linea,Ramal,Direccion,Barrio,Comuna,Localidad,Latitud,Longitud,Flag_Coordenada_Anomala,Flag_Fuera_CABA,Flag_Duplicado
+1,1,Tren,3 de Febrero,Mitre,Retiro - Mitre / Jose L Suarez,No informado,Palermo,Comuna 14,No informado,-34.57187557452701,-58.42521590019884,0,0,0
+2,2,Tren,Antonio Devoto,Urquiza,Lacroze- Gral. Lemos,No informado,Villa Devoto,Comuna 11,No informado,-34.59560497644177,-58.510564999657916,0,0,0
+3,3,Tren,Belgrano C,Mitre,Retiro - Tigre,No informado,Belgrano,Comuna 13,No informado,-34.558602977874344,-58.44925061822621,0,0,0
+4,4,Tren,Belgrano R,Mitre,Retiro - Mitre / Jose L Suarez,No informado,Belgrano,Comuna 13,No informado,-34.567788741212325,-58.4624500939876,0,0,0
+5,5,Tren,Buenos Aires,Belgrano Sur,Buenos Aires - Marinos del Belgrano,No informado,Barracas,Comuna 4,No informado,-34.64535028060146,-58.393869395876266,0,0,0
+6,6,Tren,Caballito,Sarmiento,Once-Moreno,No informado,Caballito,Comuna 6,No informado,-34.619281313431756,-58.44391005839142,0,0,0
+7,7,Tren,Ciudad Universitaria,Belgrano Norte,Retiro - Villa Rosa,No informado,Belgrano,Comuna 13,No informado,-34.543733488263484,-58.44656939484064,0,0,0
+8,8,Tren,Coghlan,Mitre,Retiro - Bartolome Mitre,No informado,Coghlan,Comuna 12,No informado,-34.565359590919655,-58.47515490923982,0,0,0
+9,9,Tren,Colegiales,Mitre,Retiro - Mitre / Jose L Suarez,No informado,Colegiales,Comuna 13,No informado,-34.573024284005584,-58.44819199016154,0,0,0
+10,10,Tren,Constitución,Roca,Constitucion-La Plata,No informado,Constitucion,Comuna 1,No informado,-34.62885203837414,-58.380674080061155,0,0,0
+11,11,Tren,Devoto,San Martín,Retiro - Pilar,No informado,Villa Devoto,Comuna 11,No informado,-34.60267485983368,-58.51265664366834,0,0,0
+12,12,Tren,Dr. Antonio Sáenz,Belgrano Sur,Buenos Aires - Marinos del Belgrano,No informado,Nueva Pompeya,Comuna 4,No informado,-34.64910993910678,-58.415227168818284,0,0,0
+13,13,Tren,Dr. Francisco Beiró,Urquiza,Lacroze- Gral. Lemos,No informado,Agronomia,Comuna 15,No informado,-34.5931694373394,-58.494308525678505,0,0,0
+14,14,Tren,Dr. Lisandro de la Torre,Mitre,Retiro - Tigre,No informado,Belgrano,Comuna 13,No informado,-34.56253886667018,-58.43674464755534,0,0,0
+15,15,Tren,El Libertador,Urquiza,Lacroze- Gral. Lemos,No informado,Agronomia,Comuna 15,No informado,-34.59447796490903,-58.50302102566902,0,0,0
+16,16,Tren,Estación Once,Sarmiento,Once-Moreno,No informado,Balvanera,Comuna 3,No informado,-34.60862987687631,-58.40782723380976,0,0,0
+17,17,Tren,Federico Lacroze,Urquiza,Lacroze- Gral. Lemos,No informado,Chacarita,Comuna 15,No informado,-34.58687555104254,-58.45578378385564,0,0,0
+18,18,Tren,Flores,Sarmiento,Once-Moreno,No informado,Flores,Comuna 7,No informado,-34.62789656331278,-58.466247515727055,0,0,0
+19,19,Tren,Floresta,Sarmiento,Once-Moreno,No informado,Floresta,Comuna 10,No informado,-34.63238431096948,-58.48088088669235,0,0,0
+20,20,Tren,General Urquiza,Mitre,Retiro - Jose Leon Suarez,No informado,Villa Urquiza,Comuna 12,No informado,-34.57473250187778,-58.48784952191221,0,0,0
+21,21,Tren,Hipólito Yrigoyen,Roca,Constitucion-La Plata,No informado,Barracas,Comuna 4,No informado,-34.653595620660866,-58.37888733823568,0,0,0
+22,22,Tren,José Artigas,Urquiza,Lacroze- Gral. Lemos,No informado,Chacarita,Comuna 15,No informado,-34.590104829428924,-58.466296196115955,0,0,0
+23,23,Tren,La Paternal,San Martín,Retiro - Pilar,No informado,Paternal,Comuna 15,No informado,-34.59697820787978,-58.46701517042347,0,0,0
+24,24,Tren,Liniers,Sarmiento,Once-Moreno,No informado,Liniers,Comuna 9,No informado,-34.63889875442699,-58.526465180128824,0,0,0
+25,25,Tren,Luis María Drago,Mitre,Retiro - Jose Leon Suarez,No informado,Villa Urquiza,Comuna 12,No informado,-34.5684025810177,-58.47894737123798,0,0,0
+26,26,Tren,Luis María Saavedra,Mitre,Retiro - Bartolome Mitre,No informado,Saavedra,Comuna 12,No informado,-34.55442849705282,-58.48681529664287,0,0,0
+27,27,Tren,Ministro Carranza,Mitre,Retiro - Mitre / Jose L Suarez,No informado,Palermo,Comuna 14,No informado,-34.57561115414147,-58.43496662856017,0,0,0
+28,28,Tren,Núñez,Mitre,Retiro - Tigre,No informado,Nuñez,Comuna 13,No informado,-34.54848356111247,-58.46274930011003,0,0,0
+29,29,Tren,Palermo,San Martín,Retiro - Pilar,No informado,Palermo,Comuna 14,No informado,-34.57893684466901,-58.4268347477585,0,0,0
+30,30,Tren,Pedro Arata,Urquiza,Lacroze- Gral. Lemos,No informado,Agronomia,Comuna 15,No informado,-34.5924808425556,-58.47643226657313,0,0,0
+31,31,Tren,Presidente Illia,Belgrano Sur,Buenos Aires - Marinos del Belgrano,No informado,Villa Soldati,Comuna 8,No informado,-34.665448747968064,-58.448622774511605,0,0,0
+32,32,Tren,Pueyrredón,Mitre,Retiro - Jose Leon Suarez,No informado,Villa Pueyrredon,Comuna 12,No informado,-34.58048707712406,-58.50170118212054,0,0,0
+33,35,Tren,Retiro,Mitre,Retiro - Tigre,No informado,Retiro,Comuna 1,No informado,-34.59081198548558,-58.37512288514201,0,0,0
+34,34,Tren,Retiro,San Martín,Retiro - Pilar,No informado,Retiro,Comuna 1,No informado,-34.58930505170659,-58.37336094844152,0,0,0
+35,33,Tren,Retiro,Belgrano Norte,Retiro - Villa Rosa,No informado,Retiro,Comuna 1,No informado,-34.590189346824616,-58.37415420018353,0,0,0
+36,36,Tren,Rivadavia,Mitre,Retiro - Tigre,No informado,Nuñez,Comuna 13,No informado,-34.536614209873996,-58.468003916656244,0,0,0
+37,37,Tren,Saldías,Belgrano Norte,Retiro - Villa Rosa,No informado,Recoleta,Comuna 2,No informado,-34.57565922824308,-58.39936374786107,0,0,0
+38,38,Tren,Scalabrini Ortiz,Belgrano Norte,Retiro - Villa Rosa,No informado,Belgrano,Comuna 13,No informado,-34.54831646853125,-58.4382473940573,0,0,0
+39,39,Tren,Villa Crespo (ex Chacarita),San Martín,Retiro - Pilar,No informado,Villa Crespo,Comuna 15,No informado,-34.59252734424225,-58.44647713498287,0,0,0
+40,40,Tren,Villa del Parque,San Martín,Retiro - Pilar,No informado,Villa Del Parque,Comuna 11,No informado,-34.601455970839744,-58.49415964029635,0,0,0
+41,41,Tren,Villa Lugano,Belgrano Sur,Buenos Aires - Marinos del Belgrano,No informado,Villa Lugano,Comuna 8,No informado,-34.67731129104143,-58.47711982642373,0,0,0
+42,42,Tren,Villa Luro,Sarmiento,Once-Moreno,No informado,Villa Luro,Comuna 10,No informado,-34.63620095961024,-58.501712223119256,0,0,0
+43,43,Tren,Villa Soldati,Belgrano Sur,Buenos Aires - Marinos del Belgrano,No informado,Villa Soldati,Comuna 8,No informado,-34.66223221330092,-58.44093425553207,0,0,0
+44,219,Tren,Abbott,Roca,No informado,No informado,No informado,No informado,No informado,-35.28129500942761,-58.80279356777368,1,1,0
+45,251,Tren,Acassuso,Mitre,No informado,No informado,No informado,No informado,Acassuso,-34.47984466239989,-58.50402175599086,1,1,0
+46,36,Tren,Adolfo Sourdeaux,Belgrano Norte,No informado,No informado,No informado,No informado,Ingeniero Adolfo Sourdeaux,-34.50299905585748,-58.666462708792075,1,1,0
+47,180,Tren,Adrogué,Roca,No informado,No informado,No informado,No informado,Adrogué,-34.797817126201885,-58.39424149191243,1,1,0
+48,2,Tren,Agustín Ferrari,Sarmiento,No informado,No informado,No informado,No informado,Mariano Acosta,-34.706063889415944,-58.77939355605926,1,1,0
+49,128,Tren,Aldo Bonzi,Belgrano Sur,No informado,No informado,No informado,No informado,Aldo Bonzi,-34.71075962677399,-58.51437251229124,1,1,0
+50,217,Tren,Alejandro Korn,Roca,No informado,No informado,No informado,No informado,San Vicente,-34.98038757794364,-58.37382936972327,1,1,0
+51,10,Tren,Alejandro Petión,Roca,No informado,No informado,No informado,No informado,Cañuelas,-34.97809059966395,-58.67540440999109,1,1,0
+52,218,Tren,Altamirano,Roca,No informado,No informado,No informado,No informado,No informado,-35.36110588282554,-58.15115862439983,1,1,0
+53,27,Tren,Altimpergher,Urquiza,No informado,No informado,No informado,No informado,José C. Paz,-34.52014090226427,-58.75334343041436,1,1,0
+54,22,Tren,"Apeadero ""Dr. Ricardo Levene""",Roca,No informado,No informado,No informado,No informado,Cañuelas,-35.02165663458425,-58.72380447122397,1,1,0
+55,33,Tren,Apeadero Kloosterman,Roca,No informado,No informado,No informado,No informado,Cañuelas,-34.98636599610312,-58.68970805830323,1,1,0
+56,242,Tren,Aristóbulo del Valle,Belgrano Norte,No informado,No informado,No informado,No informado,Florida,-34.537683861695804,-58.47816624531613,0,0,0
+57,187,Tren,Av. Maipú,Tren de la Costa,No informado,No informado,No informado,No informado,Olivos,-34.51398192040446,-58.48828237082996,1,1,0
+58,288,Tren,Bancalari,Mitre,No informado,No informado,No informado,No informado,Victoria,-34.47970271863558,-58.602882693124656,1,1,0
+59,19,Tren,Banfield,Roca,No informado,No informado,No informado,No informado,Banfield,-34.7435397794875,-58.395358835796934,1,1,0
+60,284,Tren,Bartolomé Mitre,Mitre,No informado,No informado,No informado,No informado,Olivos,-34.515019605006366,-58.489224078175845,1,1,0
+61,250,Tren,Beccar,Mitre,No informado,No informado,No informado,No informado,Beccar,-34.46065439501875,-58.52668318737865,1,1,0
+62,56,Tren,Bella Vista,San Martín,No informado,No informado,No informado,No informado,Bella Vista,-34.56379976578522,-58.68466089946236,1,1,0
+63,291,Tren,Benavídez,Mitre,No informado,No informado,No informado,No informado,Benavídez,-34.409277469989114,-58.684611319586004,1,1,0
+64,157,Tren,Berazategui,Roca,No informado,No informado,No informado,No informado,Berazategui,-34.76413104742798,-58.20842865064916,1,1,0
+65,158,Tren,Bernal,Roca,No informado,No informado,No informado,No informado,Bernal,-34.70932981028496,-58.28048148637693,1,1,0
+66,213,Tren,Borges,Tren de la Costa,No informado,No informado,No informado,No informado,Olivos,-34.50850154162181,-58.48471321009081,1,1,0
+67,150,Tren,Bosques,Roca,No informado,No informado,No informado,No informado,Bosques,-34.81958729022254,-58.23011606601809,1,1,0
+68,37,Tren,Boulogne Sur Mer,Belgrano Norte,No informado,No informado,No informado,No informado,Boulogne,-34.50861753026708,-58.56532165467617,1,1,0
+69,29,Tren,Burzaco,Roca,No informado,No informado,No informado,No informado,Burzaco,-34.825117902321516,-58.391401966028845,1,1,0
+70,77,Tren,Campo de Mayo,Urquiza,No informado,No informado,No informado,No informado,Campo de Mayo,-34.54376535183564,-58.685758301416236,1,1,0
+71,227,Tren,Canal San Fernando,Tren de la Costa,No informado,No informado,No informado,No informado,Tigre,-34.42995283152897,-58.56286886944351,1,1,0
+72,211,Tren,Cañuelas,Roca,No informado,No informado,No informado,No informado,Cañuelas,-35.05922754747488,-58.75425154323478,1,1,0
+73,215,Tren,Capilla,Urquiza,No informado,No informado,No informado,No informado,No informado,-34.291845457672615,-59.10694599383332,1,1,0
+74,297,Tren,Capilla del Señor,Mitre,No informado,No informado,No informado,No informado,No informado,-34.28695116585888,-59.10171462057733,1,1,0
+75,78,Tren,Capitán Lozano,Urquiza,No informado,No informado,No informado,No informado,Campo de Mayo,-34.55537668275518,-58.669762887985975,1,1,0
+76,38,Tren,Carapachay,Belgrano Norte,No informado,No informado,No informado,No informado,Carapachay,-34.528805328989606,-58.537383552043956,0,0,0
+77,235,Tren,Carlos Spegazzini,Roca,No informado,No informado,No informado,No informado,Carlos Spegazzini,-34.91002430978792,-58.594359258765266,1,1,0
+78,257,Tren,Carupá,Mitre,No informado,No informado,No informado,No informado,San Fernando,-34.43771294306219,-58.56721895334156,1,1,0
+79,57,Tren,Caseros,San Martín,No informado,No informado,No informado,No informado,Caseros,-34.60459840711987,-58.56456058485908,1,1,0
+80,106,Tren,Castelar,Sarmiento,No informado,No informado,No informado,No informado,Castelar,-34.65202267335601,-58.641946598807,1,1,0
+81,285,Tren,Cetrángolo,Mitre,No informado,No informado,No informado,No informado,Florida,-34.52313534470526,-58.494132113346865,0,0,0
+82,269,Tren,Chilavert,Mitre,No informado,No informado,No informado,No informado,General San Martín,-34.542479712244194,-58.56655809676695,1,1,0
+83,170,Tren,City Bell,Roca,No informado,No informado,No informado,No informado,City Bell,-34.865781355057024,-58.04201010247241,1,1,0
+84,103,Tren,Ciudadela,Sarmiento,No informado,No informado,No informado,No informado,Ciudadela,-34.63997314387962,-58.54127151660328,1,1,0
+85,151,Tren,Claypole,Roca,No informado,No informado,No informado,No informado,Claypole,-34.80118334444474,-58.33831059191995,1,1,0
+86,199,Tren,Coronel Brandsen,Roca,No informado,No informado,No informado,No informado,No informado,-35.16791010321871,-58.23189755268917,1,1,0
+87,79,Tren,Coronel F. Lynch,Urquiza,No informado,No informado,No informado,No informado,Sáenz Peña,-34.59719650831005,-58.524363606746924,0,0,0
+88,144,Tren,Darío Santillán y Maximiliano Kosteki,Roca,No informado,No informado,No informado,No informado,Avellaneda,-34.66203758143972,-58.37663867075505,0,0,0
+89,141,Tren,De Elía,Roca,No informado,No informado,No informado,No informado,Aldo Bonzi,-34.70980678270647,-58.506133921873264,0,0,0
+90,39,Tren,Del Viso,Belgrano Norte,No informado,No informado,No informado,No informado,Del Viso,-34.453867794170755,-58.79571311405638,1,1,0
+91,183,Tren,Delta,Tren de la Costa,No informado,No informado,No informado,No informado,Tigre,-34.41849964254023,-58.576859140901284,1,1,0
+92,60,Tren,Doctor Domingo Cabred,San Martín,No informado,No informado,No informado,No informado,No informado,-34.48785948263319,-59.07571769515787,1,1,0
+93,221,Tren,Domselaar,Roca,No informado,No informado,No informado,No informado,San Vicente,-35.07005314443211,-58.29071171112879,1,1,0
+94,159,Tren,Don Bosco,Roca,No informado,No informado,No informado,No informado,Don Bosco,-34.703282671628045,-58.296428955406554,1,1,0
+95,40,Tren,Don Torcuato,Belgrano Norte,No informado,No informado,No informado,No informado,Don Torcuato,-34.50269204032738,-58.64189394416898,1,1,0
+96,289,Tren,Dr. Albert Schweitzer,Mitre,No informado,No informado,No informado,No informado,Victoria,-34.472038300435806,-58.57435310616345,1,1,0
+97,81,Tren,Ejército de los Andes,Urquiza,No informado,No informado,No informado,No informado,Hurlingham,-34.580141172552814,-58.64034464552957,1,1,0
+98,177,Tren,El Jagüel,Roca,No informado,No informado,No informado,No informado,El Jagüel,-34.83323954984928,-58.49613566901129,1,1,0
+99,75,Tren,El Palomar,San Martín,No informado,No informado,No informado,No informado,Ciudad Jardín Lomas de El Palomar,-34.604929967793794,-58.596038785040854,1,1,0
+100,239,Tren,Empalme Lobos,Sarmiento,No informado,No informado,No informado,No informado,No informado,-35.15155885988287,-59.09093965275986,1,1,0
+101,249,Tren,Escobar,Mitre,No informado,No informado,No informado,No informado,Belén de Escobar,-34.34959792622342,-58.795055348483245,1,1,0
+102,290,Tren,Estación El Talar,Mitre,No informado,No informado,No informado,No informado,General Pacheco,-34.462735628364975,-58.64608251650584,1,1,0
+103,34,Tren,"Estación ""La Salada""",Belgrano Sur,No informado,No informado,No informado,No informado,Ingeniero Budge,-34.71877197695961,-58.472789403055245,1,1,0
+104,152,Tren,Estanislao S. Zeballos,Roca,No informado,No informado,No informado,No informado,Estanislao Severo Zeballos,-34.81097316657124,-58.25679133087899,1,1,0
+105,35,Tren,"Ex-estación ""La Salada""",Belgrano Sur,No informado,No informado,No informado,No informado,Ciudad Celina,-34.717907789162595,-58.479938810541405,1,1,0
+106,234,Tren,Ezeiza,Roca,No informado,No informado,No informado,No informado,Ezeiza,-34.85406050598544,-58.522890075259916,1,1,0
+107,160,Tren,Ezpeleta,Roca,No informado,No informado,No informado,No informado,Ezpeleta,-34.75181292245215,-58.23432051304694,1,1,0
+108,232,Tren,Fátima,Urquiza,No informado,No informado,No informado,No informado,Fátima,-34.436765294919375,-58.99058418484783,1,1,0
+109,83,Tren,Fernández Moreno,Urquiza,No informado,No informado,No informado,No informado,Sáenz Peña,-34.59554609989093,-58.5352832585905,0,0,0
+110,233,Tren,Fiorito,Belgrano Sur,No informado,No informado,No informado,No informado,Villa Fiorito,-34.705396126436916,-58.44097704283311,0,0,0
+111,153,Tren,Florencio Varela,Roca,No informado,No informado,No informado,No informado,Florencio Varela,-34.811129505249475,-58.274075148523806,1,1,0
+112,286,Tren,Florida,Mitre,No informado,No informado,No informado,No informado,Florida,-34.530152642960374,-58.49442216758263,0,0,0
+113,41,Tren,Florida (Belgrano),Belgrano Norte,No informado,No informado,No informado,No informado,Florida Oeste,-34.53708419179525,-58.513187321003656,0,0,0
+114,112,Tren,Francisco Álvarez,Sarmiento,No informado,No informado,No informado,No informado,Francisco Álvarez,-34.632223870194046,-58.855299512048305,1,1,0
+115,293,Tren,Garín,Mitre,No informado,No informado,No informado,No informado,Garín,-34.42158758404948,-58.7366034468744,1,1,0
+116,229,Tren,General Hornos,Sarmiento,No informado,No informado,No informado,No informado,No informado,-34.89227018335908,-58.9179408909148,1,1,0
+117,208,Tren,General Las Heras,Sarmiento,No informado,No informado,No informado,No informado,No informado,-34.92802428381361,-58.94452880597068,1,1,0
+118,84,Tren,General Lemos,Urquiza,No informado,No informado,No informado,No informado,Campo de Mayo,-34.533128242407585,-58.700558754966195,1,1,0
+119,252,Tren,General Pacheco,Mitre,No informado,No informado,No informado,No informado,Troncos del Talar,-34.456034083046184,-58.61979292956449,1,1,0
+120,113,Tren,General Rodríguez,Sarmiento,No informado,No informado,No informado,No informado,General Rodríguez,-34.60888278492901,-58.953014800939435,1,1,0
+121,24,Tren,General Sarmiento,Urquiza,No informado,No informado,No informado,No informado,San Miguel,-34.543788168844,-58.7142358016109,1,1,0
+122,18,Tren,Gerli,Roca,No informado,No informado,No informado,No informado,Piñeyro,-34.6856452660867,-58.382638361360186,0,0,0
+123,30,Tren,Glew,Roca,No informado,No informado,No informado,No informado,Glew,-34.88867424960079,-58.38374970646307,1,1,0
+124,136,Tren,González Catán,Belgrano Sur,No informado,No informado,No informado,No informado,González Catán,-34.771557953037565,-58.646617002002536,1,1,0
+125,42,Tren,Grand Bourg,Belgrano Norte,No informado,No informado,No informado,No informado,Grand Bourg,-34.48539913735965,-58.725092331236084,1,1,0
+126,20,Tren,Guernica,Roca,No informado,No informado,No informado,No informado,Presidente Perón,-34.917968539485805,-58.38058478020588,1,1,0
+127,171,Tren,Guillermo Enrique Hudson,Roca,No informado,No informado,No informado,No informado,Hudson,-34.79107484627263,-58.15538466600893,1,1,0
+128,188,Tren,Haedo (Roca),Roca,No informado,No informado,No informado,No informado,Haedo,-34.64503424992396,-58.59184010770112,1,1,0
+129,104,Tren,Haedo (Sarmiento),Sarmiento,No informado,No informado,No informado,No informado,Haedo,-34.64458012117363,-58.59179163505316,1,1,0
+130,246,Tren,Hospital Español,Roca,No informado,No informado,No informado,No informado,Turdera,-34.78617855677185,-58.40773863289051,1,1,0
+131,61,Tren,Hurlingham,San Martín,No informado,No informado,No informado,No informado,Hurlingham,-34.59112104068039,-58.63229857096638,1,1,0
+132,137,Tren,Independencia,Belgrano Sur,No informado,No informado,No informado,No informado,González Catán,-34.760382338190695,-58.615787534111135,1,1,0
+133,154,Tren,Ing. Dante Ardigó,Roca,No informado,No informado,No informado,No informado,Gobernador Julio A. Costa,-34.80895125872889,-58.30221513117314,1,1,0
+134,190,Tren,Ingeniero Budge,Belgrano Sur,No informado,No informado,No informado,No informado,Ingeniero Budge,-34.71865334356075,-58.46216174001276,1,1,0
+135,142,Tren,Ingeniero Castello,Belgrano Sur,No informado,No informado,No informado,No informado,Aldo Bonzi,-34.71066535465941,-58.50646672255468,1,1,0
+136,254,Tren,Ingeniero Maschwitz,Mitre,No informado,No informado,No informado,No informado,Ingeniero Maschwitz,-34.382968044187045,-58.73636483038645,1,1,0
+137,114,Tren,Ingeniero Pablo Marín,Sarmiento,No informado,No informado,No informado,No informado,General Rodríguez,-34.62275607444499,-58.89345035262414,1,1,0
+138,298,Tren,Ingeniero Rómulo Otamendi,Mitre,No informado,No informado,No informado,No informado,No informado,-34.22214260607193,-58.89652336858851,1,1,0
+139,194,Tren,Ingeniero S. Brian,Roca,No informado,No informado,No informado,No informado,Ramos Mejia,-34.658130710496884,-58.57296945478776,1,1,0
+140,15,Tren,Intendente Pedro P. Turner,Roca,No informado,No informado,No informado,No informado,Ingeniero Budge,-34.73319671249164,-58.474906597526825,1,1,0
+141,131,Tren,Isidro Casanova,Belgrano Sur,No informado,No informado,No informado,No informado,Isidro Casanova,-34.704562773614306,-58.58749086688367,1,1,0
+142,107,Tren,Ituzaingó,Sarmiento,No informado,No informado,No informado,No informado,Ituzaingó,-34.65954339671195,-58.666178958063554,1,1,0
+143,225,Tren,J. Anchorena,Tren de la Costa,No informado,No informado,No informado,No informado,Martínez,-34.48903759089642,-58.48120807470318,1,1,0
+144,220,Tren,Jeppener,Roca,No informado,No informado,No informado,No informado,No informado,-35.27760725449243,-58.198230452711776,1,1,0
+145,85,Tren,Jorge Newbery,Urquiza,No informado,No informado,No informado,No informado,Hurlingham,-34.58785789771755,-58.62102363345031,1,1,0
+146,62,Tren,José C. Paz,San Martín,No informado,No informado,No informado,No informado,José C. Paz,-34.5190673769404,-58.750348162796946,1,1,0
+147,206,Tren,José Hernández,Roca,No informado,No informado,No informado,No informado,José Hernández,-34.907086945864535,-58.01868558170275,1,1,0
+148,129,Tren,José Ingenieros,Belgrano Sur,No informado,No informado,No informado,No informado,Ciudad Evita,-34.710781713143405,-58.53723821158177,1,1,0
+149,287,Tren,José León Suárez,Mitre,No informado,No informado,No informado,No informado,General San Martín,-34.53461683336524,-58.576341850999086,1,1,0
+150,87,Tren,José María Bosch,Urquiza,No informado,No informado,No informado,No informado,Caseros,-34.590014406986846,-58.57184475842205,1,1,0
+151,155,Tren,José Mármol,Roca,No informado,No informado,No informado,No informado,José Mármol,-34.791962260976355,-58.38104149183471,1,1,0
+152,88,Tren,Juan B. de La Salle,Urquiza,No informado,No informado,No informado,No informado,William C. Morris,-34.573301954263684,-58.64557277530775,1,1,0
+153,283,Tren,Juan B. Justo,Mitre,No informado,No informado,No informado,No informado,Florida,-34.542541806077764,-58.494661751648906,0,0,0
+154,166,Tren,Juan María Gutiérrez,Roca,No informado,No informado,No informado,No informado,Juan María Gutiérrez,-34.83401133075076,-58.18563692012601,1,1,0
+155,167,Tren,Juan Vucetich,Roca,No informado,No informado,No informado,No informado,Pereyra,-34.843854044523304,-58.14557446109784,1,1,0
+156,23,Tren,Juan Vucetich,Urquiza,No informado,No informado,No informado,No informado,José C. Paz,-34.507209930534216,-58.7999488664697,1,1,0
+157,16,Tren,Juan XXIII,Roca,No informado,No informado,No informado,No informado,Lomas de Zamora,-34.77132189212158,-58.44414675278911,1,1,0
+158,132,Tren,Justo Villegas,Belgrano Sur,No informado,No informado,No informado,No informado,Ciudad Evita,-34.7089965079048,-58.551894462651134,1,1,0
+159,195,Tren,Kilómetro 12,Belgrano Sur,No informado,No informado,No informado,No informado,Aldo Bonzi,-34.71002084614939,-58.50599867309804,1,1,0
+160,244,Tren,Km 34,Roca,No informado,No informado,No informado,No informado,Ingeniero Budge,-34.74373949916018,-58.46480036782784,1,1,0
+161,1,Tren,"Km 34,5",Sarmiento,No informado,No informado,No informado,No informado,Merlo,-34.68014032187272,-58.76021031818555,1,1,0
+162,115,Tren,La Fraternidad,Sarmiento,No informado,No informado,No informado,No informado,General Rodríguez,-34.59843837524884,-58.997778359725,1,1,0
+163,259,Tren,La Lucila,Mitre,No informado,No informado,No informado,No informado,La Lucila,-34.49767969458047,-58.48834803937373,1,1,0
+164,222,Tren,La Noria,Roca,No informado,No informado,No informado,No informado,Cañuelas,-35.16523583085291,-58.78812068860606,1,1,0
+165,32,Tren,La Plata,Roca,No informado,No informado,No informado,No informado,La Plata,-34.903680641932084,-57.95039490158763,1,1,0
+166,181,Tren,La Plata - FCPBA,Roca,No informado,No informado,No informado,No informado,La Plata,-34.940218679575324,-57.938200538620464,1,1,0
+167,116,Tren,La Reja,Sarmiento,No informado,No informado,No informado,No informado,La Reja,-34.63978869922353,-58.8283168423995,1,1,0
+168,189,Tren,La Tablada,Roca,No informado,No informado,No informado,No informado,La Tablada,-34.693003649982906,-58.52810899773472,0,0,0
+169,139,Tren,Laferrere,Belgrano Sur,No informado,No informado,No informado,No informado,Gregorio de Laferrere,-34.75080782750573,-58.58451371429797,1,1,0
+170,145,Tren,Lanús,Roca,No informado,No informado,No informado,No informado,Lanús Este,-34.707389335607,-58.39056696297573,0,0,0
+171,6,Tren,Las Barrancas,Tren de la Costa,No informado,No informado,No informado,No informado,Acassuso,-34.47238115890088,-58.49309834059667,1,1,0
+172,117,Tren,Las Malvinas,Sarmiento,No informado,No informado,No informado,No informado,General Rodríguez,-34.61621160000952,-58.92156810146368,1,1,0
+173,118,Tren,Lezica y Torrezuri,Sarmiento,No informado,No informado,No informado,No informado,No informado,-34.58460156677709,-59.05671794127745,1,1,0
+174,135,Tren,Libertad,Belgrano Sur,No informado,No informado,No informado,No informado,Libertad,-34.692144102771934,-58.686500019008726,1,1,0
+175,197,Tren,Libertador,Tren de la Costa,No informado,No informado,No informado,No informado,Olivos,-34.50159737107447,-58.48186135251807,1,1,0
+176,149,Tren,Llavallol,Roca,No informado,No informado,No informado,No informado,Llavallol,-34.797105069988326,-58.42922128522252,1,1,0
+177,200,Tren,Lobos,Sarmiento,No informado,No informado,No informado,No informado,No informado,-35.18476325841433,-59.09277155022261,1,1,0
+178,9,Tren,Lomas de Zamora,Roca,No informado,No informado,No informado,No informado,Lomas de Zamora,-34.76097756420045,-58.39719262063138,1,1,0
+179,243,Tren,Longchamps,Roca,No informado,No informado,No informado,No informado,Longchamps,-34.859334411912776,-58.38727167964141,1,1,0
+180,292,Tren,López Camelo,Mitre,No informado,No informado,No informado,No informado,General Pacheco,-34.446921127083336,-58.67736571655547,1,1,0
+181,248,Tren,Los Cardales,Mitre,No informado,No informado,No informado,No informado,No informado,-34.33090711336983,-58.98741081934489,1,1,0
+182,43,Tren,Los Polvorines,Belgrano Norte,No informado,No informado,No informado,No informado,Los Polvorines,-34.49902676885959,-58.69453144962468,1,1,0
+183,89,Tren,Lourdes,Urquiza,No informado,No informado,No informado,No informado,Santos Lugares,-34.59378531032301,-58.54697566320891,1,1,0
+184,178,Tren,Luis Guillón,Roca,No informado,No informado,No informado,No informado,Luis Guillón,-34.80328512663782,-58.44857585514457,1,1,0
+185,207,Tren,Luján,Sarmiento,No informado,No informado,No informado,No informado,No informado,-34.57769608634658,-59.10509616492056,1,1,0
+186,273,Tren,Malaver,Mitre,No informado,No informado,No informado,No informado,General San Martín,-34.55743352238509,-58.54785855428555,1,1,0
+187,44,Tren,Manuel Alberti,Belgrano Norte,No informado,No informado,No informado,No informado,Manuel Alberti,-34.4625593071142,-58.77624800130559,1,1,0
+188,172,Tren,Manuel B. Gonnet,Roca,No informado,No informado,No informado,No informado,Manuel B. Gonnet,-34.87990843645811,-58.01063688734762,1,1,0
+189,64,Tren,Manzanares,San Martín,No informado,No informado,No informado,No informado,Manzanares,-34.45207993867713,-59.0064325864769,1,1,0
+190,11,Tren,Manzone,Urquiza,No informado,No informado,No informado,No informado,Villa Astolfi,-34.486118690218326,-58.87530185651132,1,1,0
+191,296,Tren,Maquinista Savio,Mitre,No informado,No informado,No informado,No informado,Maquinista Savio,-34.40687113480071,-58.7720226555289,1,1,0
+192,212,Tren,Marcos Paz (Belgrano),Belgrano Sur,No informado,No informado,No informado,No informado,Marcos Paz,-34.7865231155745,-58.829671439599224,1,1,0
+193,230,Tren,Marcos Paz (Sarmiento),Sarmiento,No informado,No informado,No informado,No informado,Marcos Paz,-34.783242437375335,-58.83669698356406,1,1,0
+194,138,Tren,María Eva Duarte,Belgrano Sur,No informado,No informado,No informado,No informado,Gregorio de Laferrere,-34.75615592830822,-58.60086727662504,1,1,0
+195,4,Tren,Mariano Acosta,Sarmiento,No informado,No informado,No informado,No informado,Mariano Acosta,-34.724389905688675,-58.79300020267282,1,1,0
+196,228,Tren,Marina Nueva,Tren de la Costa,No informado,No informado,No informado,No informado,Victoria,-34.44457189494086,-58.53899838459101,1,1,0
+197,123,Tren,Marinos de Fournier,Belgrano Sur,No informado,No informado,No informado,No informado,Villa Madero,-34.69012130342082,-58.50746304328061,0,0,0
+198,196,Tren,Marinos del Crucero General Belgrano,Belgrano Sur,No informado,No informado,No informado,No informado,Pontevedra,-34.708796668771,-58.730865581537984,1,1,0
+199,90,Tren,Martín Coronado,Urquiza,No informado,No informado,No informado,No informado,Martín Coronado,-34.58899602300308,-58.590541578305256,1,1,0
+200,260,Tren,Martínez,Mitre,No informado,No informado,No informado,No informado,Martínez,-34.488317303928895,-58.49680149297001,1,1,0
+201,295,Tren,Matheu,Mitre,No informado,No informado,No informado,No informado,Matheu,-34.382859426500744,-58.82965679220166,1,1,0
+202,224,Tren,Máximo Paz,Roca,No informado,No informado,No informado,No informado,Cañuelas,-34.93639559781667,-58.620604386470575,1,1,0
+203,185,Tren,Merlo,Sarmiento,No informado,No informado,No informado,No informado,Merlo,-34.664386250492235,-58.727748937228334,1,1,0
+204,133,Tren,Merlo Gómez,Belgrano Sur,No informado,No informado,No informado,No informado,Castelar,-34.69703326001386,-58.6476064835646,1,1,0
+205,274,Tren,Miguelete,Mitre,No informado,No informado,No informado,No informado,General San Martín,-34.5810941387932,-58.517007632920176,0,0,0
+206,179,Tren,Monte Grande,Roca,No informado,No informado,No informado,No informado,Monte Grande,-34.814367117051454,-58.46977302737916,1,1,0
+207,108,Tren,Moreno,Sarmiento,No informado,No informado,No informado,No informado,Mariano Moreno,-34.65051085559178,-58.78975351283443,1,1,0
+208,109,Tren,Morón,Sarmiento,No informado,No informado,No informado,No informado,Morón,-34.64826567540001,-58.61968963454579,1,1,0
+209,45,Tren,Munro,Belgrano Norte,No informado,No informado,No informado,No informado,Munro,-34.53171555752562,-58.52376942129638,0,0,0
+210,65,Tren,Muñiz,San Martín,No informado,No informado,No informado,No informado,Muñiz,-34.55129612739897,-58.703419054196175,1,1,0
+211,262,Tren,Olivos,Mitre,No informado,No informado,No informado,No informado,Olivos,-34.507825626094395,-58.480602292624376,1,1,0
+212,46,Tren,Pablo Nogués,Belgrano Norte,No informado,No informado,No informado,No informado,Pablo Nogués,-34.49372264034197,-58.70639238179603,1,1,0
+213,91,Tren,Pablo Podestá,Urquiza,No informado,No informado,No informado,No informado,Pablo Podestá,-34.5883511080569,-58.60798664737696,1,1,0
+214,47,Tren,Padilla,Belgrano Norte,No informado,No informado,No informado,No informado,Villa Martelli,-34.54340977591915,-58.50076270664791,0,0,0
+215,202,Tren,Parada Arquitectura,Roca,No informado,No informado,No informado,No informado,La Plata,-34.90471581012134,-57.94251736298898,1,1,0
+216,205,Tren,Parada Diagonal 73,Roca,No informado,No informado,No informado,No informado,La Plata,-34.92010173014934,-57.91917038298201,1,1,0
+217,203,Tren,Parada Informática,Roca,No informado,No informado,No informado,No informado,La Plata,-34.90324000946101,-57.936032877259635,1,1,0
+218,7,Tren,Parada Medicina,Roca,No informado,No informado,No informado,No informado,La Plata,-34.90900200910375,-57.927893821630285,1,1,0
+219,8,Tren,Parada Periodismo,Roca,No informado,No informado,No informado,No informado,La Plata,-34.91216125406347,-57.924305849557,1,1,0
+220,204,Tren,Parada Policlínico / 1 y 72,Roca,No informado,No informado,No informado,No informado,Villa Elvira,-34.92527822247752,-57.92120575599068,1,1,0
+221,110,Tren,Paso del Rey,Sarmiento,No informado,No informado,No informado,No informado,Paso del Rey,-34.65823606186504,-58.76209908834553,1,1,0
+222,214,Tren,Pavón,Urquiza,No informado,No informado,No informado,No informado,No informado,-34.380490118741356,-59.04004393170016,1,1,0
+223,186,Tren,Pereyra,Roca,No informado,No informado,No informado,No informado,Pereyra,-34.836569368871736,-58.0946450199778,1,1,0
+224,67,Tren,Pilar (San Martín),San Martín,No informado,No informado,No informado,No informado,Pilar,-34.46866149385122,-58.90821544071775,1,1,0
+225,201,Tren,Pilar (Urquiza),Urquiza,No informado,No informado,No informado,No informado,Pilar,-34.46454548861323,-58.91657748345336,1,1,0
+226,5,Tren,Piñero,Urquiza,No informado,No informado,No informado,No informado,José C. Paz,-34.51532269878219,-58.77066073779202,1,1,0
+227,173,Tren,Plátanos,Roca,No informado,No informado,No informado,No informado,Plátanos,-34.782313552246194,-58.170828121461525,1,1,0
+228,68,Tren,Presidente Derqui,San Martín,No informado,No informado,No informado,No informado,Presidente Derqui,-34.490994938693746,-58.83845025443712,1,1,0
+229,143,Tren,Puente Alsina,Belgrano Sur,No informado,No informado,No informado,No informado,Valentín Alsina,-34.66113530213243,-58.41563745381099,0,0,0
+230,182,Tren,Punta Chica,Tren de la Costa,No informado,No informado,No informado,No informado,Beccar,-34.45050524283761,-58.52384768491807,1,1,0
+231,140,Tren,Querandí,Belgrano Sur,No informado,No informado,No informado,No informado,Ciudad Evita,-34.72235677559538,-58.530653710065906,1,1,0
+232,161,Tren,Quilmes,Roca,No informado,No informado,No informado,No informado,Quilmes,-34.72480576780309,-58.2605721534603,1,1,0
+233,156,Tren,Rafael Calzada,Roca,No informado,No informado,No informado,No informado,Rafael Calzada,-34.79669596446354,-58.359113629002906,1,1,0
+234,134,Tren,Rafael Castillo,Belgrano Sur,No informado,No informado,No informado,No informado,Rafael Castillo,-34.699699169316574,-58.62631413891518,1,1,0
+235,105,Tren,Ramos Mejía,Sarmiento,No informado,No informado,No informado,No informado,Ramos Mejia,-34.64048082805645,-58.56425150591835,1,1,0
+236,13,Tren,Ranelagh,Roca,No informado,No informado,No informado,No informado,Ranelagh,-34.7893663334492,-58.2032297480227,1,1,0
+237,146,Tren,Remedios de Escalada,Roca,No informado,No informado,No informado,No informado,Remedios de Escalada,-34.72705665369981,-58.39360401078491,1,1,0
+238,174,Tren,Ringuelet,Roca,No informado,No informado,No informado,No informado,Manuel B. Gonnet,-34.8815479443354,-57.99647581871378,1,1,0
+239,255,Tren,Río Luján,Mitre,No informado,No informado,No informado,No informado,No informado,-34.27810739924278,-58.89022929199469,1,1,0
+240,93,Tren,Rubén Darío,Urquiza,No informado,No informado,No informado,No informado,Hurlingham,-34.58754125174666,-58.62984433370274,1,1,0
+241,26,Tren,Rufino de Elizalde,Roca,No informado,No informado,No informado,No informado,Altos de San Lorenzo,-34.957464226029714,-57.943912603515884,1,1,0
+242,70,Tren,Sáenz Peña,San Martín,No informado,No informado,No informado,No informado,Villa Raffo,-34.60317028957033,-58.527882915278774,0,0,0
+243,277,Tren,San Andrés,Mitre,No informado,No informado,No informado,No informado,General San Martín,-34.56361665300118,-58.54059444105298,1,1,0
+244,111,Tren,San Antonio de Padua,Sarmiento,No informado,No informado,No informado,No informado,San Antonio de Padua,-34.665468405041864,-58.69869681639339,1,1,0
+245,253,Tren,San Fernando C,Mitre,No informado,No informado,No informado,No informado,San Fernando,-34.44421527256488,-58.5587915652762,1,1,0
+246,226,Tren,San Fernando R,Tren de la Costa,No informado,No informado,No informado,No informado,San Fernando,-34.437541578676885,-58.55395516874744,1,1,0
+247,264,Tren,San Isidro,Mitre,No informado,No informado,No informado,No informado,San Isidro,-34.471963510899464,-58.51357494326025,1,1,0
+248,184,Tren,San Isidro R,Tren de la Costa,No informado,No informado,No informado,No informado,San Isidro,-34.46531574998841,-58.50847087636146,1,1,0
+249,193,Tren,San Justo,Roca,No informado,No informado,No informado,No informado,San Justo,-34.673835573096774,-58.55580981076053,1,1,0
+250,278,Tren,San Martín,Mitre,No informado,No informado,No informado,No informado,General San Martín,-34.573714988569726,-58.53157906656693,0,0,0
+251,21,Tren,San Miguel,San Martín,No informado,No informado,No informado,No informado,San Miguel,-34.544552541379446,-58.71258708130158,1,1,0
+252,130,Tren,Sánchez de Mendeville,Belgrano Sur,No informado,No informado,No informado,No informado,Aldo Bonzi,-34.71246140229767,-58.5238654357565,1,1,0
+253,17,Tren,Santa Catalina,Roca,No informado,No informado,No informado,No informado,Llavallol,-34.7803571523533,-58.43738013722768,1,1,0
+254,168,Tren,Santa Sofía,Roca,No informado,No informado,No informado,No informado,Bosques,-34.8251222562673,-58.21300039775061,1,1,0
+255,74,Tren,Santos Lugares,San Martín,No informado,No informado,No informado,No informado,Santos Lugares,-34.60369485523194,-58.54097594100011,1,1,0
+256,162,Tren,Sarandí,Roca,No informado,No informado,No informado,No informado,Sarandí,-34.678891688735824,-58.34513866506885,0,0,0
+257,94,Tren,Sargento Barrufaldi,Urquiza,No informado,No informado,No informado,No informado,Campo de Mayo,-34.56242907475212,-58.660227437790944,1,1,0
+258,95,Tren,Sargento Cabral,Urquiza,No informado,No informado,No informado,No informado,Campo de Mayo,-34.537206321549675,-58.69492236222669,1,1,0
+259,69,Tren,Sol y Verde,San Martín,No informado,No informado,No informado,No informado,José C. Paz,-34.50400264256276,-58.79766332658582,1,1,0
+260,163,Tren,Sourigues,Roca,No informado,No informado,No informado,No informado,Sourigues,-34.8065615485445,-58.212756329812045,1,1,0
+261,247,Tren,Speratti,Sarmiento,No informado,No informado,No informado,No informado,No informado,-34.999241033381985,-58.9977262793939,1,1,0
+262,12,Tren,Sucre,San Martín,No informado,No informado,No informado,No informado,No informado,-34.506306744829594,-59.11135929484403,1,1,0
+263,125,Tren,Tapiales,Belgrano Sur,No informado,No informado,No informado,No informado,Aldo Bonzi,-34.70248805516488,-58.51157373120266,0,0,0
+264,147,Tren,Temperley,Roca,No informado,No informado,No informado,No informado,Temperley,-34.77589635726653,-58.39652973201855,1,1,0
+265,96,Tren,Teniente Agneta,Urquiza,No informado,No informado,No informado,No informado,Campo de Mayo,-34.548860475933694,-58.67877445639079,1,1,0
+266,28,Tren,Teniente General Pablo Ricchieri,Urquiza,No informado,No informado,No informado,No informado,Bella Vista,-34.56125525723323,-58.691368735796495,1,1,0
+267,50,Tren,Tierras Altas,Belgrano Norte,No informado,No informado,No informado,No informado,Tierras Altas,-34.47898927967807,-58.73944360354839,1,1,0
+268,300,Tren,Tigre,Mitre,No informado,No informado,No informado,No informado,Tigre,-34.42359703099207,-58.58167967793535,1,1,0
+269,175,Tren,Tolosa,Roca,No informado,No informado,No informado,No informado,Tolosa,-34.89091073973111,-57.968191669242955,1,1,0
+270,25,Tren,Toro,Urquiza,No informado,No informado,No informado,No informado,Presidente Derqui,-34.494717338974674,-58.844471987875984,1,1,0
+271,31,Tren,Torres,Urquiza,No informado,No informado,No informado,No informado,No informado,-34.43278799835511,-59.12903240933492,1,1,0
+272,51,Tren,Tortuguitas,Belgrano Norte,No informado,No informado,No informado,No informado,Tortuguitas,-34.47072834567622,-58.757934699971955,1,1,0
+273,223,Tren,Tristán Suárez,Roca,No informado,No informado,No informado,No informado,Tristán Suárez,-34.889400931216045,-58.56790600782278,1,1,0
+274,97,Tren,Tropezón,Urquiza,No informado,No informado,No informado,No informado,Caseros,-34.591920173150584,-58.559267812637216,1,1,0
+275,148,Tren,Turdera,Roca,No informado,No informado,No informado,No informado,Turdera,-34.79508491911549,-58.40781609512419,1,1,0
+276,236,Tren,Unión Ferroviaria,Roca,No informado,No informado,No informado,No informado,La Unión,-34.870271288799486,-58.543376965417046,1,1,0
+277,119,Tren,Universidad de Luján,Sarmiento,No informado,No informado,No informado,No informado,No informado,-34.577450361829214,-59.08720391111079,1,1,0
+278,210,Tren,Uribelarrea,Roca,No informado,No informado,No informado,No informado,Cañuelas,-35.11542507625092,-58.89840083443176,1,1,0
+279,216,Tren,Veinte de Junio,Belgrano Sur,No informado,No informado,No informado,No informado,20 de Junio,-34.78025669337994,-58.737950557601444,1,1,0
+280,52,Tren,Vicealmirante Montes,Belgrano Norte,No informado,No informado,No informado,No informado,Don Torcuato,-34.504123663698024,-58.62011022175169,1,1,0
+281,3,Tren,Vicente Casares,Roca,No informado,No informado,No informado,No informado,Cañuelas,-34.96225055526161,-58.64795066412325,1,1,0
+282,265,Tren,Vicente López,Mitre,No informado,No informado,No informado,No informado,Vicente López,-34.5248387009881,-58.47276400064025,0,0,0
+283,266,Tren,Victoria,Mitre,No informado,No informado,No informado,No informado,Victoria,-34.45640768744954,-58.54046604344664,1,1,0
+284,53,Tren,Villa Adelina,Belgrano Norte,No informado,No informado,No informado,No informado,Villa Adelina,-34.523730159393445,-58.54621392601971,1,1,0
+285,71,Tren,Villa Astolfi,San Martín,No informado,No informado,No informado,No informado,Pilar,-34.47866856733365,-58.876954142315604,1,1,0
+286,279,Tren,Villa Ballester,Mitre,No informado,No informado,No informado,No informado,General San Martín,-34.55098731692484,-58.556046406304475,1,1,0
+287,192,Tren,Villa Caraza,Belgrano Sur,No informado,No informado,No informado,No informado,Lanús Oeste,-34.698027137082086,-58.42917869404012,0,0,0
+288,55,Tren,Villa de Mayo,Belgrano Norte,No informado,No informado,No informado,No informado,Villa de Mayo,-34.50337851304764,-58.68070401951349,1,1,0
+289,191,Tren,Villa Diamante,Belgrano Sur,No informado,No informado,No informado,No informado,Lanús Oeste,-34.68140511317664,-58.42833864912682,0,0,0
+290,164,Tren,Villa Domínico,Roca,No informado,No informado,No informado,No informado,Villa Domínico,-34.69147003237294,-58.32543298899859,1,1,0
+291,169,Tren,Villa Elisa,Roca,No informado,No informado,No informado,No informado,Villa Elisa,-34.849632100848154,-58.07515034042929,1,1,0
+292,176,Tren,Villa España,Roca,No informado,No informado,No informado,No informado,Villa España,-34.774351447485735,-58.19490245052368,1,1,0
+293,127,Tren,Villa Madero,Belgrano Sur,No informado,No informado,No informado,No informado,Villa Madero,-34.68407105486788,-58.492419445137315,0,0,0
+294,54,Tren,Villa Rosa,Belgrano Norte,No informado,No informado,No informado,No informado,Villa Rosa,-34.41657559595767,-58.87151102322087,1,1,0
+295,231,Tren,Villars,Belgrano Sur,No informado,No informado,No informado,No informado,No informado,-34.82893720074529,-58.93837703229719,1,1,0
+296,267,Tren,Virreyes,Mitre,No informado,No informado,No informado,No informado,Virreyes,-34.450636768781706,-58.55071245417065,1,1,0
+297,165,Tren,Wilde,Roca,No informado,No informado,No informado,No informado,Wilde,-34.69751970590955,-58.31135197185844,1,1,0
+298,73,Tren,William Morris,San Martín,No informado,No informado,No informado,No informado,William C. Morris,-34.57835383904754,-58.656774323361645,1,1,0
+299,238,Tren,Zamudio,Sarmiento,No informado,No informado,No informado,No informado,No informado,-34.85790064871327,-58.8922326874134,1,1,0
+300,209,Tren,Zapiola,Sarmiento,No informado,No informado,No informado,No informado,No informado,-35.05841674314386,-59.042025875153,1,1,0
+301,294,Tren,Zelaya,Mitre,No informado,No informado,No informado,No informado,Zelaya,-34.3701245570181,-58.8692909866509,1,1,0
