@@ -487,3 +487,201 @@ Los datasets públicos pertenecen al Gobierno de la Ciudad Autónoma de Buenos A
 Las publicaciones inmobiliarias pertenecen a Mercado Libre y a sus respectivos anunciantes. Su utilización en este proyecto corresponde a una muestra académica y no implica afiliación con la plataforma.
 
 Antes de reutilizar o redistribuir los datos, se recomienda revisar las condiciones y licencias vigentes de cada fuente.
+
+## Detalle de los scripts de limpieza
+
+En esta sección se resume, a grandes rasgos, qué procesamiento realiza cada uno de los archivos ubicados en la carpeta `data/processing codes/`.
+
+### `procesar_datos_Mercadolibre.py`
+
+Procesa el archivo completo obtenido mediante el scraping de Mercado Libre.
+
+El script:
+
+- Conserva todas las publicaciones obtenidas.
+- Reduce las 186 columnas originales a 56 variables relevantes para el análisis.
+- Agrega 9 flags temáticos de control de calidad.
+- Agrega un flag general y una descripción del motivo de la anomalía.
+- Mantiene separados el precio y la moneda.
+- Conserva las coordenadas geográficas de las propiedades.
+- No convierte monedas.
+- No elimina automáticamente outliers.
+- Completa con `0` los amenities no informados para que puedan utilizarse como variables binarias.
+
+El resultado es un dataset de 67 columnas preparado para el análisis descriptivo.
+
+### `limpiar_subte.py`
+
+Procesa el archivo de estaciones de subte.
+
+El archivo original almacenaba las coordenadas dentro de una geometría con formato:
+
+```text
+POINT (longitud latitud)
+```
+
+El script:
+
+- Separa la geometría en las columnas `Latitud` y `Longitud`.
+- Normaliza los nombres de las estaciones.
+- Normaliza las líneas de subte.
+- Agrega la variable `Tipo_Transporte`.
+- Controla que las coordenadas se encuentren dentro de valores razonables.
+- Marca posibles coordenadas anómalas.
+- Marca posibles registros duplicados.
+- Conserva las 90 estaciones originales.
+
+Estas coordenadas permitirán calcular la distancia entre cada propiedad y la estación de subte más cercana.
+
+### `limpiar_trenes.py`
+
+Procesa el archivo de estaciones ferroviarias.
+
+El script:
+
+- Separa la geometría WKT en `Latitud` y `Longitud`.
+- Normaliza los nombres de las líneas ferroviarias.
+- Conserva el nombre de la estación y el ramal.
+- Conserva barrio, comuna y localidad cuando están informados.
+- Agrega la variable `Tipo_Transporte`.
+- Marca coordenadas anómalas.
+- Crea un flag para identificar estaciones ubicadas fuera de CABA.
+- Controla posibles duplicados.
+
+El archivo contiene estaciones de CABA y del resto del AMBA. Por ese motivo, las estaciones externas no fueron eliminadas, sino identificadas mediante `Flag_Fuera_CABA`.
+
+### `limpiar_metrobus.py`
+
+Procesa el archivo de estaciones de Metrobus.
+
+El script:
+
+- Normaliza las coordenadas geográficas.
+- Utiliza `X` como longitud y `Y` como latitud.
+- Utiliza `coord_X` y `coord_Y` como respaldo y validación.
+- Combina las columnas `L1` a `L6` en una única columna llamada `Lineas`.
+- Conserva el sentido de circulación de cada línea.
+- Reconstruye direcciones faltantes cuando existe información suficiente.
+- Crea identificadores técnicos para las estaciones.
+- Marca coordenadas anómalas.
+- Controla posibles duplicados.
+- Conserva las 390 estaciones originales.
+
+El resultado permite calcular la cercanía de cada inmueble a la red de Metrobus.
+
+### `limpiar_colectivos.py`
+
+Procesa el archivo de paradas de colectivo.
+
+El script:
+
+- Convierte las coordenadas con coma decimal a valores numéricos.
+- Separa las coordenadas en `Latitud` y `Longitud`.
+- Combina las líneas disponibles en cada parada.
+- Elimina líneas repetidas dentro de un mismo registro.
+- Conserva el sentido de circulación.
+- Calcula la cantidad de líneas por parada.
+- Reconstruye direcciones faltantes a partir de la calle y la altura.
+- Normaliza barrios y comunas.
+- Marca coordenadas anómalas.
+- Identifica posibles duplicados.
+
+Se conservaron las 6.962 filas originales. Los registros sospechosos fueron marcados mediante flags, pero no se eliminaron automáticamente.
+
+Este dataset permitirá calcular la cantidad de paradas y líneas disponibles alrededor de cada propiedad.
+
+### `unificar_delitos.py`
+
+Procesa y unifica los archivos de delitos correspondientes a 2023, 2024 y 2025.
+
+El script:
+
+- Une los tres archivos en un único dataset.
+- Conserva el identificador original de cada hecho.
+- Conserva el año, mes, día, fecha y franja horaria.
+- Conserva el tipo y subtipo de delito.
+- Conserva los indicadores de uso de arma y moto.
+- Conserva barrio, comuna y cantidad.
+- Convierte `Latitud` y `Longitud` a valores numéricos.
+- Verifica que los identificadores sean únicos.
+- Guarda los registros rechazados en un archivo separado.
+
+Se eliminaron únicamente los registros con:
+
+- Coordenadas faltantes.
+- Coordenadas iguales a cero.
+- Coordenadas no numéricas.
+- Coordenadas no finitas.
+- Coordenadas fuera de los límites utilizados para CABA.
+
+Los archivos originales contenían 447.938 registros. Luego del procesamiento se conservaron 438.081 y se separaron 9.857 por problemas en sus coordenadas.
+
+Este dataset permitirá calcular la cantidad o densidad de delitos alrededor de cada propiedad.
+
+### `limpiar_espacios_verdes.py`
+
+Procesa el archivo de espacios verdes públicos.
+
+El archivo original contenía plazas, parques, plazoletas, canteros centrales, patios recreativos y otros tipos de espacios urbanos.
+
+Para el análisis se conservaron principalmente los espacios verdes grandes o destinados al uso familiar.
+
+Se incluyeron:
+
+- Plazas sin conflictos evidentes.
+- Parques con una superficie mínima de 1.000 m².
+- Jardines identificados con al menos 5.000 m² o con patio de juegos.
+- El Jardín Botánico.
+- Reservas ecológicas.
+
+Se excluyeron:
+
+- Canteros centrales.
+- Plazoletas pequeñas.
+- Patios y paseos de superficie reducida.
+- Canchas, clubes y plazas secas.
+- Espacios que no representaban claramente un área verde familiar independiente.
+
+El script también realizó un procesamiento geográfico:
+
+- Validó las geometrías.
+- Reparó geometrías inválidas cuando fue posible.
+- Proyectó temporalmente los polígonos a UTM 21S.
+- Calculó el centroide de cada espacio verde.
+- Verificó si el centroide se encontraba dentro del polígono.
+- Utilizó un punto interno cuando el centroide quedaba fuera.
+- Convirtió las coordenadas finales a EPSG:4326.
+- Agregó flags de revisión y calidad geométrica.
+
+Las columnas `Latitud_Centroide` y `Longitud_Centroide` conservan el centro geométrico calculado.
+
+Las columnas principales `Latitud` y `Longitud` contienen un punto válido ubicado dentro del espacio verde, que puede utilizarse para representarlo en un mapa.
+
+El resultado final contiene 428 espacios verdes:
+
+- 359 plazas.
+- 58 parques.
+- 8 jardines o paseos verdes.
+- 2 reservas ecológicas.
+- 1 jardín botánico.
+
+## Utilidad de las coordenadas geográficas
+
+La incorporación y normalización de las coordenadas geográficas permite relacionar cada publicación inmobiliaria con las características de su entorno.
+
+A partir de las columnas `Latitud` y `Longitud` se podrán calcular:
+
+- Distancia a la estación de subte más cercana.
+- Distancia a una estación ferroviaria.
+- Distancia a una estación de Metrobus.
+- Cantidad de paradas de colectivo dentro de un radio determinado.
+- Cantidad de líneas de colectivo cercanas.
+- Cantidad o densidad de delitos alrededor de la propiedad.
+- Distancia al espacio verde familiar más cercano.
+- Indicadores generales de conectividad, seguridad y calidad del entorno.
+
+El análisis se realizará utilizando la ubicación individual de cada propiedad, en lugar de asignar el mismo valor promedio a todos los inmuebles de un barrio.
+
+De esta manera, dos propiedades ubicadas dentro del mismo barrio podrán diferenciarse según su cercanía real al transporte público, los espacios verdes y otros elementos del entorno urbano.
+
+
