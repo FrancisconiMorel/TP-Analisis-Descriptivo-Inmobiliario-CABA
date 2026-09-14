@@ -56,6 +56,7 @@ flowchart LR
 ```text
 .
 ├── README.md
+├── .gitignore
 ├── scrapper/
 │   ├── mercadolibre_scraping_completo.py
 │   └── MercadoLibre_scraper.py
@@ -68,11 +69,13 @@ flowchart LR
 │   │   ├── estaciones-de-metrobus.csv
 │   │   ├── estaciones_de_subte.csv
 │   │   ├── estaciones_ferroviarias.csv
+│   │   ├── hospitales.csv
 │   │   ├── paradas-de-colectivo.csv
 │   │   └── enlace_output_scrappeo_MeLi
 │   ├── processing codes/
 │   │   ├── limpiar_colectivos.py
 │   │   ├── limpiar_espacios_verdes.py
+│   │   ├── limpiar_hospitales.py
 │   │   ├── limpiar_metrobus.py
 │   │   ├── limpiar_subte.py
 │   │   ├── limpiar_trenes.py
@@ -80,12 +83,14 @@ flowchart LR
 │   │   └── unificar_delitos.py
 │   └── processed/
 │       ├── colectivos_limpio.csv
+│       ├── delitos_2023_2025_unificado_limpio.csv
 │       ├── espacios_verdes_familiares_limpio.csv
+│       ├── hospitales_limpio.csv
+│       ├── mercadolibre_caba_procesado.csv
 │       ├── metrobus_limpio.csv
 │       ├── subte_limpio.csv
 │       ├── tren_limpio.csv
 │       ├── Unificacion.ipynb
-│       ├── dataframefinal.csv
 │       └── enlace_scrappeo_procesado_MeLi
 ├── EDA/
 │   └── EDA.ipynb
@@ -100,6 +105,7 @@ flowchart LR
 - `scrapper/`: código utilizado para obtener las publicaciones inmobiliarias.
 - `EDA/`: notebook de análisis exploratorio sobre el dataset unificado.
 - `extras/`: documentación complementaria y reportes de calidad.
+- `data/processed/dataframefinal.csv`: **no está versionado**, se regenera ejecutando `Unificacion.ipynb`.
 
 ## Fuentes de datos
 
@@ -126,7 +132,7 @@ Los datasets geográficos complementarios fueron descargados del portal oficial 
 - [Paradas de colectivo](https://data.buenosaires.gob.ar/dataset/colectivos-paradas)
 - [Delitos](https://data.buenosaires.gob.ar/dataset/delitos)
 - [Espacios verdes](https://data.buenosaires.gob.ar/dataset/espacios-verdes)
-- Hospitales y efectores de salud
+- [Hospitales](https://data.buenosaires.gob.ar/dataset/hospitales)
 
 Los archivos guardados en el repositorio son una copia de los datos utilizados en el trabajo. Las fuentes oficiales pueden actualizarse posteriormente.
 
@@ -197,10 +203,11 @@ Por tipo de propiedad:
 
 Para el análisis Buy to Rent residencial se consideran principalmente los **55.582 departamentos, PH y casas**. Las oficinas y los locales se conservan, pero quedan fuera del alcance principal.
 
-Debido a su tamaño, los archivos inmobiliarios se distribuyen mediante Google Drive:
+El **dataset procesado** (`data/processed/mercadolibre_caba_procesado.csv`, 33 MB) está incluido en el repositorio.
+
+El **dataset crudo**, con las 186 columnas originales, se distribuye por Google Drive porque excede el límite práctico de GitHub:
 
 - [Dataset crudo de Mercado Libre](https://drive.google.com/file/d/1l2Xgb9xCmSfVGG7uE_JkXDR-RuG6U4LW/view?usp=drive_link)
-- [Dataset procesado de Mercado Libre](https://drive.google.com/file/d/19rStMXtGiBTy-BMTic86LX5C47lYTlnX/view?usp=drive_link)
 
 ## Limpieza del dataset inmobiliario
 
@@ -500,7 +507,7 @@ Las **63 publicaciones sin coordenadas** quedan con estas cuatro variables en nu
 
 El resultado se exporta como `dataframefinal.csv`: 55.582 filas con las variables originales del dataset procesado más las columnas de normalización, KPIs y entorno descriptas arriba.
 
-> **Reproducibilidad:** el notebook fue desarrollado en Google Colab y lee los insumos desde rutas de Google Drive. Para ejecutarlo desde una copia local del repositorio hay que reemplazar esas rutas por las de `data/processed/`.
+> **Reproducibilidad:** el notebook resuelve todas las rutas a partir de la raíz del repositorio, de modo que funciona desde cualquier copia local sin depender de Google Drive. Requiere `scipy`, y se ejecuta desde un entorno virtual con las dependencias del proyecto instaladas.
 
 ## Documentación complementaria
 
@@ -569,6 +576,12 @@ python3 "data/processing codes/limpiar_espacios_verdes.py" \
   --entrada data/raw/espacio_verde_publico.csv \
   --salida data/processed/espacios_verdes_familiares_limpio.csv \
   --excluidos data/processed/espacios_verdes_excluidos_revision.csv
+```
+
+### Hospitales
+
+```bash
+python3 "data/processing codes/limpiar_hospitales.py"
 ```
 
 ### Mercado Libre
@@ -813,6 +826,23 @@ El resultado final contiene 428 espacios verdes:
 - 8 jardines o paseos verdes.
 - 2 reservas ecológicas.
 - 1 jardín botánico.
+
+### `limpiar_hospitales.py`
+
+Procesa el listado de hospitales y efectores de salud.
+
+El archivo original guarda las coordenadas en una geometría `POINT (x y)` expresada en la proyección local del GCBA (Gauss-Krüger, faja "0 de Flores"), no en latitud y longitud.
+
+El script:
+
+- Extrae `x` e `y` de la geometría.
+- Aplica un offset de calibración sobre el falso origen de la proyección.
+- Reproyecta a EPSG:4326 con `pyproj`.
+- Crea las columnas `latitud` y `longitud`.
+
+El offset fue calibrado comparando la posición calculada del Hospital Garrahan contra su ubicación real. Conviene validarlo contra hospitales adicionales distribuidos por la ciudad: si el error creciera hacia los bordes, indicaría que además hay una diferencia de datum no contemplada.
+
+Este dataset se utiliza para calcular `Distancia_Hospital_m`.
 
 ## Utilidad de las coordenadas geográficas
 
