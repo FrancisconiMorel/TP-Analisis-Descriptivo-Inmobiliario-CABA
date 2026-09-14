@@ -2,7 +2,7 @@ import pandas as pd
 from pyproj import Transformer, CRS
 
 # 1. Cargar el CSV
-df = pd.read_csv('/Users/valentinzuppa/Desktop/Descriptiva/analisis/hospitales.csv')
+df = pd.read_csv("data/raw/hospitales.csv")
 
 # 2. Extraer x e y del formato "POINT (x y)"
 coords = df["geometry"].str.extract(r"POINT \(([-\d.]+) ([-\d.]+)\)").astype(float)
@@ -31,5 +31,5 @@ df["latitud"] = lat
 df["longitud"] = lon
 
 # 5. Guardar resultado
-df.to_csv("hospitales_con_coordenadas.csv", index=False)
+df.to_csv("data/processed/hospitales_limpio.csv", index=False)
 print(df[["nam", "dir", "latitud", "longitud"]].head())
