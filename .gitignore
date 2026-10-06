@@ -1,2 +1,3 @@
 .DS_Store
 .venv/
+data/processed/dataframe_limpio.csv
