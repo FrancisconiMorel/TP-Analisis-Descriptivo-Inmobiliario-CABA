@@ -31,6 +31,54 @@ El análisis está orientado a un inversor que busca comprar una propiedad, alqu
 - **Delitos:** años 2023, 2024 y 2025.
 - **Unidad de análisis inmobiliaria:** una publicación de Mercado Libre.
 
+## Cambios respecto de la primera entrega
+
+La segunda entrega consolida lo desarrollado en el TP1 y agrega una etapa reproducible de calidad, EDA y análisis multivariado:
+
+| Aspecto | Incorporación en el TP2 |
+|---|---|
+| Dataset analítico | Se parte de `dataframefinal.csv` (88 columnas) y se genera `dataframe_limpio.csv` (111 columnas). |
+| Faltantes | Se documenta su cobertura y se aplican tratamientos explícitos únicamente cuando existe una regla acordada; cada imputación queda identificada. |
+| Valores anómalos | Se distinguen datos inválidos, valores sospechosos y extremos plausibles. No se eliminan publicaciones automáticamente. |
+| Duplicados | Se identifican grupos seguros y probables sin borrar filas del archivo original. |
+| EDA | Se integran el análisis cualitativo, cuantitativo y las relaciones exploratorias entre variables. |
+| Profundización | Se incorporan outliers contextuales, análisis de sensibilidad, modelos ajustados y escenarios Buy to Rent. |
+| Reproducibilidad | Los cuatro notebooks quedan numerados y conectados mediante entradas y salidas explícitas. |
+
+## Preguntas e hipótesis de trabajo
+
+El análisis busca responder cuatro grupos de preguntas:
+
+- **Descriptivas:** ¿cómo se distribuyen los precios, superficies, tipologías, ambientes y amenities en CABA?
+- **Diagnósticas:** ¿qué características del inmueble y del entorno se relacionan con las diferencias de precio y rentabilidad?
+- **Predictivas:** ¿qué variables permiten construir un precio de referencia para comparar publicaciones?
+- **Prescriptivas:** ¿qué barrios y segmentos presentan condiciones más atractivas para una estrategia Buy to Rent bajo distintos supuestos?
+
+Las hipótesis iniciales del proyecto son:
+
+| Hipótesis | Formulación resumida |
+|---|---|
+| H1 | Los barrios del sur y oeste presentan mayor rentabilidad estimada que los barrios premium del norte. |
+| H2 | Amenities y cochera incrementan proporcionalmente más el precio de venta que el alquiler y pueden reducir la rentabilidad relativa. |
+| H3 | Las unidades de uno y dos ambientes presentan mayor rentabilidad estimada que las unidades de tres o más ambientes. |
+| H4 | Una mayor distancia al subte se relaciona con un menor precio por m², incluso comparando dentro de un mismo barrio. |
+| H4b | Una mayor accesibilidad a colectivos se relaciona con diferencias de precio dentro de una misma zona. |
+| H5 | Una mayor concentración de delitos se relaciona con menores precios por m², controlando por características y barrio. |
+| H6 | Las publicaciones de particulares tienen mayor probabilidad de aparecer subvaluadas que las de inmobiliarias. |
+| H7 | El acceso a espacios verdes tiene una relación diferencial con el precio de las unidades familiares de tres o más ambientes. |
+| H8 | La distancia al centro de salud más cercano se relaciona con diferencias en el precio de venta por m². |
+
+Estas hipótesis se consideran puntos de partida. Los notebooks distinguen evidencia descriptiva, asociaciones ajustadas y resultados no concluyentes; no se interpretan como relaciones causales.
+
+## Principales resultados del TP2
+
+- El dataset limpio conserva las **55.582 publicaciones residenciales** y amplía la base de 88 a **111 variables**, sin modificar las columnas originales.
+- El barrio, la superficie, el tipo de propiedad y el nivel de amenities concentran gran parte de las diferencias observadas en los precios publicados.
+- Los valores extremos no se eliminan de manera automática: los errores o datos imposibles se apartan de los cálculos correspondientes y los extremos plausibles se conservan para evitar sesgar la oferta premium.
+- En los modelos ajustados no aparece evidencia clara de una prima por cercanía al subte. La concentración de delitos presenta una asociación negativa con los precios, pero su magnitud es sensible a los extremos y no debe interpretarse causalmente.
+- El efecto diferencial de los espacios verdes sobre las unidades familiares no resulta robusto entre especificaciones.
+- Los escenarios Buy to Rent son exploratorios y dependen de la cobertura del alquiler tradicional, las expensas, la vacancia, el mantenimiento y el tipo de cambio. No constituyen una recomendación de inversión.
+
 ## Flujo general de datos
 
 ```mermaid
@@ -45,10 +93,13 @@ flowchart LR
 
     E --> I[Dataset inmobiliario procesado]
     H --> J[Transporte, delitos, salud y espacios verdes]
-    I --> U[Unificación y cálculo de KPIs]
+    I --> U[01 Unificación y cálculo de KPIs]
     J --> U
     U --> V[dataframefinal.csv]
-    V --> K[Análisis descriptivo y geoespacial]
+    V --> Q[02 Calidad y limpieza]
+    Q --> L[dataframe_limpio.csv]
+    L --> K[03 EDA descriptivo]
+    L --> M[04 Outliers y análisis multivariado]
 ```
 
 ## Estructura del repositorio
@@ -90,12 +141,14 @@ flowchart LR
 │       ├── metrobus_limpio.csv
 │       ├── subte_limpio.csv
 │       ├── tren_limpio.csv
-│       ├── Unificacion.ipynb
+│       ├── dataframefinal.csv
+│       ├── dataframe_limpio.csv
 │       └── enlace_scrappeo_procesado_MeLi
 ├── notebooks/
-│   ├── EDA_inicial.ipynb
-│   ├── Limpieza.ipynb
-│   └── 03_outliers_y_analisis_multivariado.ipynb
+│   ├── 01_unificacion.ipynb
+│   ├── 02_calidad_y_limpieza.ipynb
+│   ├── 03_eda_inicial.ipynb
+│   └── 04_outliers_y_analisis_multivariado.ipynb
 └── extras/
     ├── propuesta_negocio_descriptiva.pdf
     └── resumen_calidad_mercadolibre_caba.pdf
@@ -107,8 +160,8 @@ flowchart LR
 - `scrapper/`: código utilizado para obtener las publicaciones inmobiliarias.
 - `notebooks/`: análisis sobre el dataset unificado (EDA inicial, limpieza de faltantes y duplicados, y análisis multivariado).
 - `extras/`: documentación complementaria y reportes de calidad.
-- `data/processed/dataframefinal.csv`: salida de `Unificacion.ipynb`. **Está versionado**: no hace falta ejecutar `Unificacion.ipynb` para correr los notebooks de `notebooks/`.
-- `data/processed/dataframe_limpio.csv`: salida de `notebooks/Limpieza.ipynb`. **No está versionado** (está en `.gitignore`, pesa unos 47 MB): se genera ejecutando `Limpieza.ipynb`.
+- `data/processed/dataframefinal.csv`: salida de `notebooks/01_unificacion.ipynb` (88 columnas).
+- `data/processed/dataframe_limpio.csv`: salida de `notebooks/02_calidad_y_limpieza.ipynb` (111 columnas). **Está versionado** y es la entrada de los notebooks 03 y 04.
 
 ## Fuentes de datos
 
@@ -391,7 +444,7 @@ Las columnas `Latitud_Centroide` y `Longitud_Centroide` contienen el centro geom
 
 ## Unificación y construcción del dataset final
 
-El notebook [`Unificacion.ipynb`](data/processed/Unificacion.ipynb) toma el dataset inmobiliario procesado, lo acota al universo residencial, calcula los KPIs de inversión y le agrega las variables de entorno derivadas de los datasets geográficos. Su salida es `dataframefinal.csv`, el archivo sobre el que se realiza el análisis descriptivo.
+El notebook [`01_unificacion.ipynb`](notebooks/01_unificacion.ipynb) toma el dataset inmobiliario procesado, lo acota al universo residencial, calcula los KPI originales y agrega las variables de entorno derivadas de los datasets geográficos. Su salida es `dataframefinal.csv`, que luego pasa por el notebook de calidad y limpieza.
 
 ### 1. Acotamiento del universo
 
@@ -514,7 +567,7 @@ El resultado se exporta como `dataframefinal.csv`: 55.582 filas con las variable
 
 ## Limpieza de faltantes, outliers y duplicados
 
-El notebook [`notebooks/Limpieza.ipynb`](notebooks/Limpieza.ipynb) toma `dataframefinal.csv`, diagnostica tres problemas de calidad (datos faltantes, precios fuera de contexto y avisos repetidos) y agrega columnas de marcas y tratamientos. Se ejecuta en unos 30 segundos.
+El notebook [`02_calidad_y_limpieza.ipynb`](notebooks/02_calidad_y_limpieza.ipynb) toma `dataframefinal.csv`, diagnostica faltantes, precios fuera de contexto y avisos repetidos, y agrega columnas de marcas y tratamientos. No replica el EDA ni los modelos: su responsabilidad termina al generar `dataframe_limpio.csv`.
 
 **Qué NO hace:** no borra ninguna fila y no modifica ningún valor de las 88 columnas originales. Antes de guardar, el notebook verifica con `assert` que las filas y los valores originales no cambiaron. Todo lo nuevo va en columnas aparte, así que cualquier tratamiento se puede ignorar.
 
@@ -528,19 +581,19 @@ El notebook [`notebooks/Limpieza.ipynb`](notebooks/Limpieza.ipynb) toma `datafra
 | 2 | Precio por m² fuera de contexto | Se marcan con umbrales 0,40 y 2,50; no se borra. | Aplicada |
 | 3 | Duplicados | Se marcan todos, con nivel `Seguro` o `Probable`; no se borra. | Aplicada |
 | 4 | Cocheras en PH | Un nulo significa "no tiene": se imputa 0 y queda marcado. | Aplicada |
-| 5 | Alquiler tradicional o temporario | Resultados en dos versiones y revisión manual de una muestra. | Revisión manual pendiente |
-| 7 | Expensas de PH y casas en la rentabilidad | Los ceros cuentan en la mediana de la celda. | Parche preparado para `Unificacion.ipynb` |
+| 5 | Alquiler tradicional o temporario | Se informan resultados amplios y estrictos; la baja cobertura se declara como limitación. | Cerrada sin reclasificación automática |
+| 7 | Expensas de PH y casas en la rentabilidad | Los ceros cuentan en la mediana de la celda. | Aplicada en `01_unificacion.ipynb` |
 | 8 | Expensas de departamentos | Se imputan con la mediana de su celda y quedan marcadas. | Aplicada |
-| | Balcón | No se discutió por separado. | Pendiente (queda sin imputar) |
+| | Balcón | Los nulos se conservan para no confundir ausencia de información con ausencia de balcón. | Cerrada sin imputación |
 
 ### Parámetros del notebook
 
 | Parámetro | Valor | Significado |
 |---|---|---|
 | `IMPUTAR_COCHERAS_PH` | `True` | Imputa 0 en las cocheras nulas de PH (decisión 4). |
-| `BALCON_0_ES_NO_TIENE` | `False` | Si es `True`, la superficie de balcón nula pasa a 0 donde `Balcon = 0`. Pendiente de confirmar. |
+| `BALCON_0_ES_NO_TIENE` | `False` | Mantiene nula la superficie de balcón cuando no está informada; no se asume automáticamente que equivale a 0. |
 | `EXPENSAS_CERO_DEPTO_ES_FALTANTE` | `True` | Los ceros de expensas de departamentos se tratan como faltantes. |
-| `UNIFICACION_CUENTA_CEROS_PH_CASA` | `False` | Poner `True` solo cuando `Unificacion.ipynb` incluya el parche de expensas (decisión 7). Si no coincide con la versión que generó el CSV, falla el control de réplica a propósito. |
+| `UNIFICACION_CUENTA_CEROS_PH_CASA` | `True` | Replica la versión actual de `01_unificacion.ipynb`, donde los ceros de expensas de PH y casas cuentan en la mediana. |
 | `UMBRAL_BAJO`, `UMBRAL_ALTO` | `0,40`, `2,50` | Umbrales del precio por m² relativo a su grupo (decisión 2). |
 | `K_VECINOS`, `MIN_N`, `MIN_N_GRUPO` | `15`, `5`, `8` | Vecinos para asignar barrio, mínimo de avisos por celda de rentabilidad y mínimo de avisos por grupo de precio. |
 
@@ -552,7 +605,7 @@ Los conteos son sobre las 55.582 filas (ventas y alquileres), salvo que se indiq
 
 | Columna | Definición |
 |---|---|
-| `Motivo_Rentabilidad_Nula` | Por qué un aviso no tiene `Rentabilidad_Neta_Zona`. Valores: `Calculada` (42.067), `Faltan alquileres (<5)` (11.888), `Sin barrio o ambientes` (1.025), `Sin expensas válidas` (395) y `Faltan ventas y alquileres (<5 c/u)` (207). Replica la lógica de `Unificacion.ipynb` y coincide en el 100% de los avisos. |
+| `Motivo_Rentabilidad_Nula` | Por qué un aviso no tiene `Rentabilidad_Neta_Zona`. Valores: `Calculada` (42.067), `Faltan alquileres (<5)` (11.888), `Sin barrio o ambientes` (1.025), `Sin expensas válidas` (395) y `Faltan ventas y alquileres (<5 c/u)` (207). Replica la lógica de `01_unificacion.ipynb` y coincide en el 100% de los avisos. |
 | `Flag_Rentabilidad_No_Calculable` | 1 si `Rentabilidad_Neta_Zona` es nula (13.515 filas). |
 | `Rentabilidad_Neta_Cascada` | Rentabilidad neta con cascada de granularidad: Barrio × Tipo × Ambientes (igual a `Rentabilidad_Neta_Zona`, verificado con `assert`), después Barrio × Tipo y después Barrio. 327 nulos. **Columna experimental: no reemplaza** a la original. |
 | `Nivel_Rentabilidad_Cascada` | Con qué nivel se calculó: `Barrio x Tipo x Ambientes` (42.067), `Barrio x Tipo` (8.493) o `Barrio` (4.695). Los valores de niveles gruesos no son comparables con los del nivel original. |
@@ -598,7 +651,7 @@ Se consideran el mismo inmueble los avisos con igual barrio, tipo, dirección, p
 - Varios tratamientos descansan en supuestos que no se pueden probar con los datos (por ejemplo, que una cochera nula en PH significa "no tiene"). Por eso todos van en columnas aparte, con su marca.
 - `Expensas_USD_Imputada` se validó en departamentos que sí informan expensas, que tienden a ser edificios más viejos. Aplicarla a edificios nuevos es una extrapolación: probablemente subestima.
 - Los valores de `Rentabilidad_Neta_Cascada` en niveles distintos del original no son comparables entre sí.
-- El notebook también replica el `Score_Oportunidad` de `Unificacion.ipynb` para medir cómo lo afectan estos problemas, pero no lo guarda.
+- El impacto estadístico de los extremos y las decisiones de calidad se estudia en `04_outliers_y_analisis_multivariado.ipynb`; no se replica aquí el ranking de oportunidades.
 
 
 ## Documentación complementaria
@@ -627,7 +680,7 @@ Desde la raíz del repositorio:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install pandas numpy requests beautifulsoup4 urllib3 shapely pyproj scipy
+pip install pandas numpy requests beautifulsoup4 urllib3 shapely pyproj scipy matplotlib seaborn statsmodels jupyter ipykernel
 ```
 
 ### Transporte
@@ -689,22 +742,22 @@ python3 "data/processing codes/procesar_datos_Mercadolibre.py" \
 
 ### Unificación
 
-Una vez generados todos los archivos anteriores, se ejecuta `data/processed/Unificacion.ipynb`, que produce `dataframefinal.csv`.
+Una vez generados todos los archivos anteriores, se ejecuta `notebooks/01_unificacion.ipynb`, que produce `dataframefinal.csv`.
 
 > **Nota técnica:** `mercadolibre_scraping_completo.py` funciona como orquestador y utiliza el módulo `MercadoLibre_scraper.py`, que contiene los parsers de extracción. Para reproducir el scraping desde cero, ambos archivos deben encontrarse dentro de `scrapper/`.
 
 ### Notebooks de análisis
 
-Los notebooks 2 a 4 leen `data/processed/dataframefinal.csv`. `Unificacion.ipynb` y `Limpieza.ipynb` localizan la raíz del repositorio buscando la carpeta `.git`, así que hay que ejecutarlos dentro de una copia clonada y no de un `.zip` descargado desde GitHub.
+El notebook 02 lee `dataframefinal.csv`; los notebooks 03 y 04 leen `dataframe_limpio.csv`. Los notebooks localizan la raíz del repositorio con rutas relativas, por lo que deben ejecutarse dentro de una copia local del repositorio.
 
 | Orden | Notebook | Qué hace | Escribe |
 |---|---|---|---|
-| 1 | `data/processed/Unificacion.ipynb` | Construye el dataset final y los KPIs. | `dataframefinal.csv` |
-| 2 | `notebooks/EDA_inicial.ipynb` | Análisis exploratorio cualitativo y cuantitativo. | nada |
-| 3 | `notebooks/Limpieza.ipynb` | Diagnostica faltantes, outliers y duplicados y agrega columnas de marcas. | `dataframe_limpio.csv` |
-| 4 | `notebooks/03_outliers_y_analisis_multivariado.ipynb` | Outliers, análisis bivariado y multivariado. No usa la salida de `Limpieza`. | nada |
+| 1 | `notebooks/01_unificacion.ipynb` | Integra las fuentes, normaliza y construye los KPI originales. | `dataframefinal.csv` |
+| 2 | `notebooks/02_calidad_y_limpieza.ipynb` | Diagnostica faltantes, valores extremos y duplicados; agrega tratamientos trazables. | `dataframe_limpio.csv` |
+| 3 | `notebooks/03_eda_inicial.ipynb` | EDA descriptivo general: distribuciones y relaciones exploratorias no ajustadas. | nada |
+| 4 | `notebooks/04_outliers_y_analisis_multivariado.ipynb` | Outliers contextuales, sensibilidad, modelos ajustados y escenarios Buy to Rent. | nada |
 
-Para correr cualquiera de los notebooks 2 a 4 alcanza con `dataframefinal.csv`, que ya está en el repositorio.
+Para reproducir el flujo completo se ejecutan los notebooks en orden. Como ambos CSV están versionados, también es posible ejecutar directamente los notebooks 03 y 04 usando `dataframe_limpio.csv`.
 
 ## Limitaciones
 
@@ -735,15 +788,19 @@ Para correr cualquiera de los notebooks 2 a 4 alcanza con `dataframefinal.csv`, 
 - Las distancias son en línea recta, no de recorrido a pie.
 - El conteo de delitos no está normalizado por población ni por flujo de personas, por lo que las zonas céntricas y de alta circulación aparecen con valores altos aunque no sean necesariamente más riesgosas para un residente.
 
-## Próximas etapas
+## Estado de la PreEntrega 2
 
-- Análisis exploratorio del dataset unificado (`EDA/EDA.ipynb`).
-- Incorporar distancia a espacios verdes, tren y Metrobus, que ya están limpios pero todavía no se cruzaron.
-- Revisar conflictos de amenities y cobertura de expensas.
-- Mejorar la clasificación de alquiler tradicional y temporario.
-- Construir un índice de conectividad que resuma las variables de transporte.
-- Generar visualizaciones y mapas para el análisis descriptivo.
-- Validar el ranking de oportunidades contra casos concretos.
+**La PreEntrega 2 se considera finalizada dentro del alcance definido.** No quedan tareas obligatorias pendientes para esta entrega: las limitaciones que permanecen están documentadas y se contemplan al interpretar los resultados.
+
+### Completado en el TP2
+
+- EDA cualitativo, cuantitativo y exploratorio en `notebooks/03_eda_inicial.ipynb`.
+- Diagnóstico y tratamiento trazable de faltantes, expensas, amenities, duplicados y valores anómalos en `notebooks/02_calidad_y_limpieza.ipynb`.
+- Incorporación al dataset de distancia al subte y hospitales, cantidad de colectivos y delitos, y distancia, cantidad y superficie de espacios verdes.
+- Visualizaciones descriptivas, análisis contextual de outliers, sensibilidad y modelos ajustados en los notebooks 03 y 04.
+- Escenarios exploratorios Buy to Rent con costos, vacancia y tipo de cambio.
+
+La integración de tren y Metrobus, un índice sintético de conectividad, mapas finales y un ranking operativo de inversión fueron desestimados para esta entrega porque no son requisitos de la consigna. La cobertura limitada de la clasificación entre alquiler tradicional, temporario y desconocido se conserva como una limitación explícita, no como una tarea pendiente.
 
 ## Uso académico y licencias
 
@@ -959,14 +1016,10 @@ A partir de las columnas `Latitud` y `Longitud` ya se calcularon:
 - Distancia al hospital más cercano.
 - Cantidad de paradas de colectivo dentro de un radio de 500 metros.
 - Cantidad de delitos dentro de un radio de 1.000 metros.
-
-Y quedan pendientes de incorporar:
-
-- Distancia a una estación ferroviaria.
-- Distancia a una estación de Metrobus.
 - Distancia al espacio verde familiar más cercano.
-- Cantidad de líneas de colectivo cercanas.
-- Un índice general de conectividad que resuma las variables anteriores.
+- Cantidad y superficie de espacios verdes accesibles dentro de un radio de 1.000 metros.
+
+Las distancias a tren y Metrobus, la cantidad de líneas y un índice general de conectividad no forman parte del alcance final de la PreEntrega 2. Se conservaron sus fuentes limpias como material complementario, pero su integración fue desestimada y no constituye una tarea pendiente.
 
 El análisis se realiza utilizando la ubicación individual de cada propiedad, en lugar de asignar el mismo valor promedio a todos los inmuebles de un barrio.
 
