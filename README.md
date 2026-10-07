@@ -92,8 +92,10 @@ flowchart LR
 │       ├── tren_limpio.csv
 │       ├── Unificacion.ipynb
 │       └── enlace_scrappeo_procesado_MeLi
-├── EDA/
-│   └── EDA.ipynb
+├── notebooks/
+│   ├── EDA_inicial.ipynb
+│   ├── Limpieza.ipynb
+│   └── 03_outliers_y_analisis_multivariado.ipynb
 └── extras/
     ├── propuesta_negocio_descriptiva.pdf
     └── resumen_calidad_mercadolibre_caba.pdf
@@ -103,9 +105,10 @@ flowchart LR
 - `data/processing codes/`: scripts utilizados para limpiar y transformar los datos.
 - `data/processed/`: archivos preparados para el análisis.
 - `scrapper/`: código utilizado para obtener las publicaciones inmobiliarias.
-- `EDA/`: notebook de análisis exploratorio sobre el dataset unificado.
+- `notebooks/`: análisis sobre el dataset unificado (EDA inicial, limpieza de faltantes y duplicados, y análisis multivariado).
 - `extras/`: documentación complementaria y reportes de calidad.
-- `data/processed/dataframefinal.csv`: **no está versionado**, se regenera ejecutando `Unificacion.ipynb`.
+- `data/processed/dataframefinal.csv`: salida de `Unificacion.ipynb`. **Está versionado**: no hace falta ejecutar `Unificacion.ipynb` para correr los notebooks de `notebooks/`.
+- `data/processed/dataframe_limpio.csv`: salida de `notebooks/Limpieza.ipynb`. **No está versionado** (está en `.gitignore`, pesa unos 47 MB): se genera ejecutando `Limpieza.ipynb`.
 
 ## Fuentes de datos
 
@@ -509,6 +512,95 @@ El resultado se exporta como `dataframefinal.csv`: 55.582 filas con las variable
 
 > **Reproducibilidad:** el notebook resuelve todas las rutas a partir de la raíz del repositorio, de modo que funciona desde cualquier copia local sin depender de Google Drive. Requiere `scipy`, y se ejecuta desde un entorno virtual con las dependencias del proyecto instaladas.
 
+## Limpieza de faltantes, outliers y duplicados
+
+El notebook [`notebooks/Limpieza.ipynb`](notebooks/Limpieza.ipynb) toma `dataframefinal.csv`, diagnostica tres problemas de calidad (datos faltantes, precios fuera de contexto y avisos repetidos) y agrega columnas de marcas y tratamientos. Se ejecuta en unos 30 segundos.
+
+**Qué NO hace:** no borra ninguna fila y no modifica ningún valor de las 88 columnas originales. Antes de guardar, el notebook verifica con `assert` que las filas y los valores originales no cambiaron. Todo lo nuevo va en columnas aparte, así que cualquier tratamiento se puede ignorar.
+
+**Entrada:** `data/processed/dataframefinal.csv`. **Salida:** `data/processed/dataframe_limpio.csv` (las mismas 55.582 filas, 88 columnas originales + 23 nuevas).
+
+### Decisiones de grupo
+
+| # | Tema | Decisión | Estado |
+|---|---|---|---|
+| 1 | Rentabilidad y H1 | H1 se evalúa solo en los barrios con rentabilidad en el nivel original; la cascada es prueba de robustez. | Aplicada |
+| 2 | Precio por m² fuera de contexto | Se marcan con umbrales 0,40 y 2,50; no se borra. | Aplicada |
+| 3 | Duplicados | Se marcan todos, con nivel `Seguro` o `Probable`; no se borra. | Aplicada |
+| 4 | Cocheras en PH | Un nulo significa "no tiene": se imputa 0 y queda marcado. | Aplicada |
+| 5 | Alquiler tradicional o temporario | Resultados en dos versiones y revisión manual de una muestra. | Revisión manual pendiente |
+| 7 | Expensas de PH y casas en la rentabilidad | Los ceros cuentan en la mediana de la celda. | Parche preparado para `Unificacion.ipynb` |
+| 8 | Expensas de departamentos | Se imputan con la mediana de su celda y quedan marcadas. | Aplicada |
+| | Balcón | No se discutió por separado. | Pendiente (queda sin imputar) |
+
+### Parámetros del notebook
+
+| Parámetro | Valor | Significado |
+|---|---|---|
+| `IMPUTAR_COCHERAS_PH` | `True` | Imputa 0 en las cocheras nulas de PH (decisión 4). |
+| `BALCON_0_ES_NO_TIENE` | `False` | Si es `True`, la superficie de balcón nula pasa a 0 donde `Balcon = 0`. Pendiente de confirmar. |
+| `EXPENSAS_CERO_DEPTO_ES_FALTANTE` | `True` | Los ceros de expensas de departamentos se tratan como faltantes. |
+| `UNIFICACION_CUENTA_CEROS_PH_CASA` | `False` | Poner `True` solo cuando `Unificacion.ipynb` incluya el parche de expensas (decisión 7). Si no coincide con la versión que generó el CSV, falla el control de réplica a propósito. |
+| `UMBRAL_BAJO`, `UMBRAL_ALTO` | `0,40`, `2,50` | Umbrales del precio por m² relativo a su grupo (decisión 2). |
+| `K_VECINOS`, `MIN_N`, `MIN_N_GRUPO` | `15`, `5`, `8` | Vecinos para asignar barrio, mínimo de avisos por celda de rentabilidad y mínimo de avisos por grupo de precio. |
+
+### Diccionario de las 23 columnas nuevas
+
+Los conteos son sobre las 55.582 filas (ventas y alquileres), salvo que se indique otra cosa.
+
+**Rentabilidad**
+
+| Columna | Definición |
+|---|---|
+| `Motivo_Rentabilidad_Nula` | Por qué un aviso no tiene `Rentabilidad_Neta_Zona`. Valores: `Calculada` (42.067), `Faltan alquileres (<5)` (11.888), `Sin barrio o ambientes` (1.025), `Sin expensas válidas` (395) y `Faltan ventas y alquileres (<5 c/u)` (207). Replica la lógica de `Unificacion.ipynb` y coincide en el 100% de los avisos. |
+| `Flag_Rentabilidad_No_Calculable` | 1 si `Rentabilidad_Neta_Zona` es nula (13.515 filas). |
+| `Rentabilidad_Neta_Cascada` | Rentabilidad neta con cascada de granularidad: Barrio × Tipo × Ambientes (igual a `Rentabilidad_Neta_Zona`, verificado con `assert`), después Barrio × Tipo y después Barrio. 327 nulos. **Columna experimental: no reemplaza** a la original. |
+| `Nivel_Rentabilidad_Cascada` | Con qué nivel se calculó: `Barrio x Tipo x Ambientes` (42.067), `Barrio x Tipo` (8.493) o `Barrio` (4.695). Los valores de niveles gruesos no son comparables con los del nivel original. |
+
+**Faltantes y codificaciones**
+
+| Columna | Definición |
+|---|---|
+| `Estado_Inmueble_Limpio` | `Estado_Inmueble` con el texto "Desconocido" convertido en nulo (41.894 nulos). Informados: A estrenar 7.226, En pozo 3.554, Reciclado 1.591, A refaccionar 1.317. |
+| `Tipo_Alquiler_Limpio` | `Tipo_Alquiler` con "Desconocido" convertido en nulo. También es nulo en las ventas (no aplica). Solo 454 alquileres están clasificados: Tradicional 239 y Temporario 215. |
+| `Superficie_Balcon_m2_Tratada` | Igual a `Superficie_Balcon_m2` mientras `BALCON_0_ES_NO_TIENE = False`. Con `True`, pasa a 0 donde `Balcon = 0` y la superficie es nula. |
+| `Flag_Balcon_Sin_Dato` | 1 donde `Balcon = 0` y la superficie de balcón es nula (21.522 filas). Se calcula siempre, se imputen o no. |
+| `Cocheras_Tratada` | `Cocheras`, con las cocheras nulas de PH pasadas a 0 (decisión 4). 3 nulos. |
+| `Flag_Cocheras_PH_Sin_Dato` | 1 en los PH con `Cocheras` nula, es decir, los imputados (5.201 filas). |
+| `Expensas_USD_Limpio` | `Expensas_USD` con los ceros de **departamentos** pasados a nulo (en departamentos, un 0 casi siempre es "todavía no hay expensas fijadas"). En PH y casas los ceros se mantienen. 19.028 nulos. |
+| `Expensas_USD_Imputada` | `Expensas_USD_Limpio`, y en los departamentos sin expensas, la mediana de su celda: Barrio × Ambientes (mínimo 5 avisos), si no el Barrio, si no la mediana global. En la validación cruzada, este método aproxima mejor que una regresión con amenities (error mediano de 32,7% contra 37,1%). 1.406 nulos, que son PH y casas con expensas nulas y no se imputan. |
+| `Flag_Expensas_Imputada` | 1 en los departamentos con expensa imputada (17.622 filas: 16.215 ceros y 1.407 nulos). |
+| `Flag_Antiguedad_Cero_Sin_Estado` | 1 si `Antiguedad = 0` y el estado no es "A estrenar" ni "En pozo" (11.132 filas). Marca los ceros que no se pueden verificar. **La antigüedad 0 no se trata como faltante.** |
+| `Barrio_Completo` | `Barrio_Normalizado`, y para los 133 avisos sin barrio, el más frecuente entre los 15 avisos más cercanos por coordenadas. Acierta en el 87,4% de la validación. Es un dato **aproximado**: sirve para describir por barrio y no se usa para recalcular KPIs. |
+| `Flag_Barrio_Por_Vecinos` | 1 en los avisos cuyo barrio se asignó por vecinos (133 filas). |
+
+**Precios fuera de contexto**
+
+| Columna | Definición |
+|---|---|
+| `Ratio_Precio_m2_vs_Mediana` | `Precio_m2_USD` dividido por la mediana de su grupo (Barrio × Tipo × Operación, mínimo 8 avisos; si no alcanza, Barrio × Operación). 1 significa igual a la mediana. 54.555 no nulos. |
+| `Flag_Precio_m2_Muy_Bajo` | 1 si el ratio es menor a 0,40 (319 filas). Pueden ser oportunidades o errores de carga: se revisan a mano, no se borran. |
+| `Flag_Precio_m2_Muy_Alto` | 1 si el ratio es mayor a 2,50 (210 filas). |
+
+**Duplicados de contenido**
+
+Se consideran el mismo inmueble los avisos con igual barrio, tipo, dirección, precio, superficie y ambientes (4.957 avisos en 2.218 grupos), aunque tengan `Item_ID` y `Link` distintos.
+
+| Columna | Definición |
+|---|---|
+| `Grupo_Duplicado` | Identificador del grupo de avisos repetidos. Nulo si el aviso no tiene repetidos. Solo sirve para agrupar. |
+| `Duplicado_Nivel` | Certeza del grupo. `Alto`: mismo piso informado, probable republicación (2.048 avisos). `Medio`: piso no informado, no se puede distinguir (2.372). `Bajo`: pisos distintos, probables unidades distintas (537). |
+| `Duplicado_Sobrante_Nivel` | Para los avisos que no son la primera aparición de su grupo: `Seguro` (nivel Alto, 1.106) o `Probable` (nivel Medio, 1.295). Nulo en los demás, incluidos los de nivel Bajo. |
+| `Flag_Duplicado_Sobrante` | 1 si `Duplicado_Sobrante_Nivel` no es nulo (2.401 filas). |
+
+### Limitaciones
+
+- Varios tratamientos descansan en supuestos que no se pueden probar con los datos (por ejemplo, que una cochera nula en PH significa "no tiene"). Por eso todos van en columnas aparte, con su marca.
+- `Expensas_USD_Imputada` se validó en departamentos que sí informan expensas, que tienden a ser edificios más viejos. Aplicarla a edificios nuevos es una extrapolación: probablemente subestima.
+- Los valores de `Rentabilidad_Neta_Cascada` en niveles distintos del original no son comparables entre sí.
+- El notebook también replica el `Score_Oportunidad` de `Unificacion.ipynb` para medir cómo lo afectan estos problemas, pero no lo guarda.
+
+
 ## Documentación complementaria
 
 En la carpeta `extras/` se incluyen los documentos requeridos para el trabajo:
@@ -600,6 +692,19 @@ python3 "data/processing codes/procesar_datos_Mercadolibre.py" \
 Una vez generados todos los archivos anteriores, se ejecuta `data/processed/Unificacion.ipynb`, que produce `dataframefinal.csv`.
 
 > **Nota técnica:** `mercadolibre_scraping_completo.py` funciona como orquestador y utiliza el módulo `MercadoLibre_scraper.py`, que contiene los parsers de extracción. Para reproducir el scraping desde cero, ambos archivos deben encontrarse dentro de `scrapper/`.
+
+### Notebooks de análisis
+
+Los notebooks 2 a 4 leen `data/processed/dataframefinal.csv`. `Unificacion.ipynb` y `Limpieza.ipynb` localizan la raíz del repositorio buscando la carpeta `.git`, así que hay que ejecutarlos dentro de una copia clonada y no de un `.zip` descargado desde GitHub.
+
+| Orden | Notebook | Qué hace | Escribe |
+|---|---|---|---|
+| 1 | `data/processed/Unificacion.ipynb` | Construye el dataset final y los KPIs. | `dataframefinal.csv` |
+| 2 | `notebooks/EDA_inicial.ipynb` | Análisis exploratorio cualitativo y cuantitativo. | nada |
+| 3 | `notebooks/Limpieza.ipynb` | Diagnostica faltantes, outliers y duplicados y agrega columnas de marcas. | `dataframe_limpio.csv` |
+| 4 | `notebooks/03_outliers_y_analisis_multivariado.ipynb` | Outliers, análisis bivariado y multivariado. No usa la salida de `Limpieza`. | nada |
+
+Para correr cualquiera de los notebooks 2 a 4 alcanza con `dataframefinal.csv`, que ya está en el repositorio.
 
 ## Limitaciones
 
