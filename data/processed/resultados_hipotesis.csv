@@ -1,0 +1,12 @@
+Hipótesis,Contraste,Estimación,IC95,p_unilateral,Magnitud,Robustez (signo esperado),n,Nota,p_Holm,Estado
+H1,Rentabilidad bruta Sur/Oeste > Norte premium (misma tipología),+20.6%,"[+7.8%, +40.6%]",0.000999,+1.03 p.p. sobre una base de 5.01%,5/5,55,Bootstrap jerárquico (barrios y avisos),0.010989,Sostenida
+H3,Rentabilidad bruta 1–2 amb > 3+ amb (mismo barrio y tipo),-0.6%,"[-8.8%, +10.0%]",0.716483,-0.03 p.p. sobre la mediana de 5.81%,0/4,28,Wilcoxon pareado,1.0,No sostenida
+H2a,Prima de la cochera mayor en venta que en alquiler,-0.030,"[-0.076, +0.016]",0.898898,+3.0% en la rentabilidad bruta de la unidad,0/5,48255,Diferencia de coeficientes; errores por barrio,1.0,No sostenida
+H2b,Prima de los amenities mayor en venta que en alquiler,+0.001,"[-0.013, +0.016]",0.41613,-0.1% en la rentabilidad bruta de la unidad,4/5,48255,Diferencia de coeficientes; errores por barrio,1.0,No sostenida
+H4,Distancia al subte → USD/m² de venta (−),-0.0093,"[-0.0262, +0.0076]",0.136297,"-1.5% de P25 a P75 (-2,147 USD)",5/6,44119,FE barrio; errores por barrio,1.0,No sostenida
+H4.5,Estaciones de subte a 500 m → USD/m² de venta (+),-0.0071,"[-0.0244, +0.0101]",0.795703,"-0.7% de P25 a P75 (-1,033 USD)",0/6,44119,FE barrio; errores por barrio,1.0,No sostenida
+H4b,Paradas de colectivo a 500 m → USD/m² de venta (bilateral),-0.0640,"[-0.1050, -0.0230]",0.002919,"-4.3% de P25 a P75 (-6,306 USD)",6/6,44119,FE barrio; errores por barrio,0.029186,Sostenida
+H5,Delitos a 1.000 m → USD/m² de venta (−),+0.0045,"[-0.0389, +0.0480]",0.582815,+0.4% de P25 a P75 (+608 USD),3/6,44119,FE barrio; errores por barrio,1.0,No sostenida
+H8,Distancia al hospital → USD/m² de venta (−),-0.0142,"[-0.0451, +0.0167]",0.180521,"-1.1% de P25 a P75 (-1,667 USD)",5/6,44119,FE barrio; errores por barrio,1.0,No sostenida
+H7 (reformulada),Asociación verde–alquiler/m² mayor en 3+ amb que en 1–2 amb,-0.0098,"[-0.0333, +0.0136]",0.798206,P25→P75 de verde: +5.5% en 1–2 amb vs +3.8% en 3+ amb,2/6,4042,Sin componente educativa (dato no integrado),1.0,No sostenida
+H6,"P(subvaluado ≤ −15%) mayor en particulares (mismo barrio, tipo y ambientes)",+4.3 p.p.,"[+0.6, +8.0] p.p.",0.011259,+4.3 p.p. sobre una base de 14.4% en inmobiliarias,4/5,45825,Índice fuera de muestra; 578 particulares,0.101328,No sostenida

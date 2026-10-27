@@ -100,6 +100,8 @@ flowchart LR
     Q --> L[dataframe_limpio.csv]
     L --> K[03 EDA descriptivo]
     L --> M[04 Outliers y análisis multivariado]
+    L --> N[05 Análisis de hipótesis]
+    N --> O[Indicadores para el dashboard]
 ```
 
 ## Estructura del repositorio
@@ -109,10 +111,13 @@ flowchart LR
 ├── README.md
 ├── .gitignore
 ├── src/
-│   └── tipo_cambio.py
+│   ├── tipo_cambio.py
+│   ├── indicadores.py
+│   └── modelos.py
 ├── tests/
 │   ├── test_tipo_cambio.py
-│   └── test_pipeline_tipo_cambio.py
+│   ├── test_pipeline_tipo_cambio.py
+│   └── test_indicadores_modelos.py
 ├── scrapper/
 │   ├── mercadolibre_scraping_completo.py
 │   └── MercadoLibre_scraper.py
@@ -148,12 +153,17 @@ flowchart LR
 │       ├── tren_limpio.csv
 │       ├── dataframefinal.csv
 │       ├── dataframe_limpio.csv
-│       └── enlace_scrappeo_procesado_MeLi
+│       ├── enlace_scrappeo_procesado_MeLi
+│       ├── indicadores_avisos.csv
+│       ├── indicadores_barrio.csv
+│       ├── rentabilidad_segmentos.csv
+│       └── resultados_hipotesis.csv
 ├── notebooks/
 │   ├── 01_unificacion.ipynb
 │   ├── 02_calidad_y_limpieza.ipynb
 │   ├── 03_eda_inicial.ipynb
-│   └── 04_outliers_y_analisis_multivariado.ipynb
+│   ├── 04_outliers_y_analisis_multivariado.ipynb
+│   └── 05_analisis_de_hipotesis.ipynb
 └── extras/
     ├── propuesta_negocio_descriptiva.pdf
     └── resumen_calidad_mercadolibre_caba.pdf
@@ -162,7 +172,7 @@ flowchart LR
 - `data/raw/`: archivos originales sin modificar.
 - `data/processing codes/`: scripts utilizados para limpiar y transformar los datos.
 - `data/processed/`: archivos preparados para el análisis.
-- `src/`: funciones reutilizables que usan los notebooks (por ahora, el tipo de cambio que usan el scraper, el procesamiento y la unificación).
+- `src/`: lógica estable que usan los scripts y notebooks: el tipo de cambio (`tipo_cambio.py`), la base analítica, la rentabilidad por segmento y el score (`indicadores.py`), y el modelo de precio de referencia con su validación (`modelos.py`).
 - `tests/`: tests automáticos de `src/` (`python -m pytest tests`).
 - `scrapper/`: código utilizado para obtener las publicaciones inmobiliarias.
 - `notebooks/`: análisis sobre el dataset unificado (EDA inicial, limpieza de faltantes y duplicados, y análisis multivariado).
@@ -708,7 +718,7 @@ Desde la raíz del repositorio:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install pandas numpy requests beautifulsoup4 urllib3 shapely pyproj scipy matplotlib seaborn statsmodels jupyter ipykernel pytest
+pip install pandas numpy requests beautifulsoup4 urllib3 shapely pyproj scipy matplotlib seaborn statsmodels scikit-learn jupyter ipykernel pytest
 ```
 
 ### Transporte
@@ -786,7 +796,7 @@ Los tests no usan internet: reemplazan las APIs por datos fijos. Tampoco necesit
 
 ### Notebooks de análisis
 
-El notebook 02 lee `dataframefinal.csv`; los notebooks 03 y 04 leen `dataframe_limpio.csv`. Los notebooks localizan la raíz del repositorio con rutas relativas, por lo que deben ejecutarse dentro de una copia local del repositorio.
+El notebook 02 lee `dataframefinal.csv`; los notebooks 03, 04 y 05 leen `dataframe_limpio.csv`. Los notebooks localizan la raíz del repositorio con rutas relativas, por lo que deben ejecutarse dentro de una copia local del repositorio.
 
 | Orden | Notebook | Qué hace | Escribe |
 |---|---|---|---|
@@ -794,8 +804,9 @@ El notebook 02 lee `dataframefinal.csv`; los notebooks 03 y 04 leen `dataframe_l
 | 2 | `notebooks/02_calidad_y_limpieza.ipynb` | Diagnostica faltantes, valores extremos y duplicados; agrega tratamientos trazables. | `dataframe_limpio.csv` |
 | 3 | `notebooks/03_eda_inicial.ipynb` | EDA descriptivo general: distribuciones y relaciones exploratorias no ajustadas. | nada |
 | 4 | `notebooks/04_outliers_y_analisis_multivariado.ipynb` | Outliers contextuales, sensibilidad, modelos ajustados y escenarios Buy to Rent. | nada |
+| 5 | `notebooks/05_analisis_de_hipotesis.ipynb` | Evaluación formal de las hipótesis, modelo de precio validado fuera de muestra, indicadores por aviso y barrio, score con sensibilidad y segmentación de barrios. | `indicadores_avisos.csv`, `indicadores_barrio.csv`, `rentabilidad_segmentos.csv`, `resultados_hipotesis.csv` |
 
-Para reproducir el flujo completo se ejecutan los notebooks en orden. Como ambos CSV están versionados, también es posible ejecutar directamente los notebooks 03 y 04 usando `dataframe_limpio.csv`.
+Para reproducir el flujo completo se ejecutan los notebooks en orden. Como ambos CSV están versionados, también es posible ejecutar directamente los notebooks 03, 04 y 05 usando `dataframe_limpio.csv`. El notebook 05 tarda unos minutos (validación cruzada y bootstrap); sus semillas están fijas.
 
 ## Limitaciones
 
@@ -825,6 +836,47 @@ Para reproducir el flujo completo se ejecutan los notebooks en orden. Como ambos
 - Los posibles duplicados de transporte se marcan, pero no se eliminan automáticamente.
 - Las distancias son en línea recta, no de recorrido a pie.
 - El conteo de delitos no está normalizado por población ni por flujo de personas, por lo que las zonas céntricas y de alta circulación aparecen con valores altos aunque no sean necesariamente más riesgosas para un residente.
+
+## PreEntrega 3: análisis de hipótesis, modelos e indicadores
+
+El notebook [`05_analisis_de_hipotesis.ipynb`](notebooks/05_analisis_de_hipotesis.ipynb) pasa de la exploración a un análisis validado y orientado a la decisión. La lógica reutilizable está en [`src/indicadores.py`](src/indicadores.py) y [`src/modelos.py`](src/modelos.py), con tests en `tests/test_indicadores_modelos.py`; el notebook orquesta, muestra e interpreta.
+
+### Metodología
+
+- **Base analítica común** (`indicadores.criterios_base`): precio y superficie (15–2.000 m²) utilizables, flags de calidad sin conflicto, barrio y ambientes informados, sin alquileres temporarios declarados y **sin avisos repetidos**. Quedan 45.825 ventas y 4.099 alquileres. El notebook muestra cuántos avisos elimina cada criterio.
+- **Contrastes con dirección preespecificada** (la de la propuesta), p-valor unilateral y **corrección de Holm** sobre los 11 contrastes.
+- **Incertidumbre que respeta la estructura de los datos:** errores agrupados por barrio en los modelos por aviso (los avisos de un mismo barrio no son independientes) y **bootstrap jerárquico** (barrios y avisos) para la rentabilidad por segmento.
+- **Magnitud y robustez:** cada efecto se traduce a % de precio, USD o puntos de rentabilidad, y se repite con especificaciones alternativas (solo departamentos, sin precios fuera de contexto, con repetidos, definiciones alternativas).
+- **Modelo de precio de referencia:** baseline de comparables (la lógica del `Indice_Subvaluacion` original) contra regresión ridge y gradient boosting, con validación cruzada de 5 pliegues **agrupada por inmueble**. Fuera de muestra, el gradient boosting baja el error mediano de 16,9% a 9,7% en venta y de 17,0% a 12,1% en alquiler. El intervalo de predicción del 90% se valida por cobertura.
+
+### Estado de las hipótesis
+
+| Hipótesis | Resultado | Estado |
+|---|---|---|
+| H1 — Rentabilidad Sur/Oeste > Norte premium | +21% relativo para una misma tipología (~+1 p.p. sobre 5,0%); IC95% +8% a +41%. No significativa con la definición estricta de barrios | Sostenida |
+| H2 — Cochera y amenities encarecen más la venta que el alquiler | Primas similares (cochera: 14% venta, 18% alquiler; amenities: 6,5% y 6,3%) | No sostenida |
+| H3 — 1–2 ambientes rinden más que 3+ | Diferencia mediana −0,6% dentro del mismo barrio y tipo | No sostenida |
+| H4 / H4.5 — Cercanía al subte → mayor precio | Efectos menores al 1,5% e indistinguibles de cero dentro del barrio | No sostenida |
+| H4b — Colectivos → diferencias de precio | Más paradas a 500 m: −4,3% de USD/m² (P25→P75); 6 de 6 especificaciones | Sostenida |
+| H5 — Delitos → menor precio | Sin asociación una vez que la incertidumbre se agrupa por barrio | No sostenida |
+| H6 — Particulares más subvaluados | +4,3 p.p. (p sin ajustar 0,011), pero no supera Holm; los particulares también aparecen más sobrevaluados | No sostenida (evidencia sugestiva) |
+| H7 — Verde × unidad familiar (reformulada, sin escuelas) | El verde se asocia con alquileres más altos, pero no más en 3+ ambientes | No sostenida |
+| H8 — Distancia al hospital → menor precio | Indistinguible de cero | No sostenida |
+
+### Indicadores consolidados (fuente del dashboard)
+
+| Archivo | Contenido |
+|---|---|
+| `indicadores_avisos.csv` | Una fila por venta de la base: precio estimado fuera de muestra con intervalo del 90%, `Indice_Subvaluacion_Modelo`, alquiler estimado, rentabilidad bruta y neta por aviso, soporte del modelo de alquiler, factor de confianza, `Score_Oportunidad_v2` y ranking dentro del presupuesto del interlocutor (USD 80.000–250.000). |
+| `indicadores_barrio.csv` | Una fila por barrio: cobertura, precios por m², rentabilidad observada y modelada, % de avisos subvaluados, entorno y segmento de barrio. |
+| `rentabilidad_segmentos.csv` | Rentabilidad bruta observada por barrio × tipo × ambientes (≥5 ventas y ≥5 alquileres). |
+| `resultados_hipotesis.csv` | Estimación, IC95%, p-valor unilateral y de Holm, magnitud, robustez y estado de cada contraste. |
+
+El **score v2** combina la rentabilidad neta del aviso y la subvaluación fuera de muestra, normalizadas por percentiles, con pesos de 50/50 y ponderadas por la confianza en el dato. Los avisos con precio/m² menor al 40% de su grupo se apartan para revisión manual. Mover ±25 puntos el peso entre ambos componentes conserva el 82–84% del top 100. La segmentación de barrios (k-means, k=4, ARI bootstrap mediano 1,00) separa los barrios sobre todo por centralidad y precio de entrada.
+
+### Pendiente para completar la PreEntrega 3
+
+- **Dashboard** para el interlocutor, alimentado exclusivamente por los cuatro CSV anteriores.
 
 ## Estado de la PreEntrega 2
 
