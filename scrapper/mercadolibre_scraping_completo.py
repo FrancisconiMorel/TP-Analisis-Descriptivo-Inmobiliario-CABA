@@ -1,8 +1,10 @@
 """Ejecución completa, incremental y reanudable del scraper v3.
 
 Este archivo NO modifica la lógica de extracción de MercadoLibre_scraper.py:
-reutiliza sus buscadores, parsers y sus 186 columnas. Solamente agrega una
-orquestación segura para ejecuciones largas.
+reutiliza sus buscadores, parsers y sus 186 columnas. Agrega una orquestación
+segura para ejecuciones largas y tres columnas de tipo de cambio
+(``TC_Scraping``, ``Fecha_TC_Scraping``, ``Fuente_TC_Scraping``): la cotización
+del dólar vigente el día en que se scrapeó cada aviso (ver ``src/tipo_cambio.py``).
 
 Uso normal:
     python mercadolibre_scraping_completo.py
@@ -30,6 +32,17 @@ from typing import Any
 import pandas as pd
 
 import MercadoLibre_scraper as v3
+
+# Raíz del repositorio en el path para importar src/ (el scraper corre desde scrapper/)
+RAIZ_REPO = Path(__file__).resolve().parents[1]
+if str(RAIZ_REPO) not in sys.path:
+    sys.path.insert(0, str(RAIZ_REPO))
+from src import tipo_cambio as tcmod  # noqa: E402
+
+# Esquema del CSV de detalles: las 186 columnas v3 + las 3 de tipo de cambio
+TC_COLUMNS = tcmod.COLUMNAS_TC
+DATA_COLUMNS = [*v3.COLUMNS, *TC_COLUMNS]
+SIN_DATO = "N/A"
 
 
 OUTPUT_DIR = Path("output_mercadolibre")
@@ -164,6 +177,32 @@ def read_csv_checked(path: Path, columns: list[str]) -> pd.DataFrame:
     return frame.reindex(columns=columns)
 
 
+def read_data_checked(path: Path) -> tuple[pd.DataFrame, bool]:
+    """Lee el CSV de detalles. Acepta archivos anteriores sin las columnas de
+    tipo de cambio: las agrega vacías y avisa que hay que reescribir el archivo."""
+    if not path.exists() or path.stat().st_size == 0:
+        return pd.DataFrame(columns=DATA_COLUMNS), False
+    header = list(pd.read_csv(path, dtype=str, nrows=0).columns)
+    missing_tc = [column for column in TC_COLUMNS if column not in header]
+    if missing_tc and len(missing_tc) != len(TC_COLUMNS):
+        raise RuntimeError(f"El esquema de {path} tiene solo parte de las columnas de tipo de cambio: faltan {missing_tc}")
+    frame = read_csv_checked(path, [column for column in DATA_COLUMNS if column in header or column not in TC_COLUMNS])
+    for column in missing_tc:
+        frame[column] = SIN_DATO
+    return frame.reindex(columns=DATA_COLUMNS), bool(missing_tc)
+
+
+def output_data_frame(frame: pd.DataFrame) -> pd.DataFrame:
+    """Aplica el formato v3 y vuelve a agregar las columnas de tipo de cambio."""
+    base = v3.output_frame(frame)
+    if len(base) != len(frame):
+        raise RuntimeError("v3.output_frame cambió la cantidad de filas: no se pueden alinear las columnas de tipo de cambio.")
+    for column in TC_COLUMNS:
+        values = frame[column] if column in frame.columns else pd.Series(SIN_DATO, index=frame.index)
+        base[column] = values.fillna(SIN_DATO).replace("", SIN_DATO).to_numpy()
+    return base.reindex(columns=DATA_COLUMNS)
+
+
 def deduplicate(frame: pd.DataFrame) -> tuple[pd.DataFrame, int]:
     """Deduplica primero por Item_ID y luego por Link, conservando lo último."""
     if frame.empty:
@@ -181,10 +220,15 @@ def deduplicate(frame: pd.DataFrame) -> tuple[pd.DataFrame, int]:
 
 
 def load_and_normalize_data() -> tuple[pd.DataFrame, int]:
-    frame = read_csv_checked(DATA_FILE, v3.COLUMNS)
+    frame, migrated = read_data_checked(DATA_FILE)
     frame, removed = deduplicate(frame)
-    if DATA_FILE.exists() and removed:
-        atomic_csv(v3.output_frame(frame), DATA_FILE, v3.COLUMNS)
+    if DATA_FILE.exists() and (removed or migrated):
+        # Un CSV anterior sin columnas de tipo de cambio se reescribe con el esquema
+        # nuevo antes de agregar filas; esos avisos los completa el procesamiento.
+        atomic_csv(output_data_frame(frame), DATA_FILE, DATA_COLUMNS)
+        if migrated:
+            print(f"{DATA_FILE.name}: se agregaron las columnas de tipo de cambio "
+                  f"(vacías para los {len(frame)} avisos ya guardados).", flush=True)
     return frame, removed
 
 
@@ -483,7 +527,7 @@ def discover_links(
 def append_detail_batch(batch: list[dict], stats: Stats) -> None:
     if not batch:
         return
-    frame = v3.output_frame(pd.DataFrame(batch))
+    frame = output_data_frame(pd.DataFrame(batch))
     header = not DATA_FILE.exists() or DATA_FILE.stat().st_size == 0
     frame.to_csv(
         DATA_FILE,
@@ -500,10 +544,10 @@ def append_detail_batch(batch: list[dict], stats: Stats) -> None:
 def compact_data(stats: Stats) -> None:
     if not DATA_FILE.exists():
         return
-    frame = read_csv_checked(DATA_FILE, v3.COLUMNS)
+    frame, _ = read_data_checked(DATA_FILE)
     frame, removed = deduplicate(frame)
     stats.duplicates += removed
-    atomic_csv(v3.output_frame(frame), DATA_FILE, v3.COLUMNS)
+    atomic_csv(output_data_frame(frame), DATA_FILE, DATA_COLUMNS)
 
 
 def scrape_details(
@@ -539,6 +583,8 @@ def scrape_details(
         flush=True,
     )
 
+    cotizador = tcmod.CotizadorDiario()
+    avisos_sin_tc = 0
     batch: list[dict] = []
     try:
         for position, row in pending.iterrows():
@@ -568,6 +614,15 @@ def scrape_details(
                         stats.duplicates += 1
                         stats.consecutive_errors = 0
                     else:
+                        cotizacion = cotizador.para()
+                        if cotizacion is None:
+                            avisos_sin_tc += 1
+                            if avisos_sin_tc == 1 or avisos_sin_tc % 500 == 0:
+                                log_event(stats, f"sin cotización del dólar ({avisos_sin_tc} avisos); "
+                                          "la completa el procesamiento", item_id)
+                            record.update({column: SIN_DATO for column in TC_COLUMNS})
+                        else:
+                            record.update(cotizacion.como_columnas())
                         batch.append(record)
                         existing_ids.add(record_id)
                         existing_links.add(record_link)
@@ -628,6 +683,8 @@ def verify(network: bool = True) -> None:
     assert len(v3.COLUMNS) == 186, "El esquema v3 ya no tiene 186 columnas"
     assert len(v3.COLUMNS) == len(set(v3.COLUMNS)), "Hay columnas v3 duplicadas"
     assert "Item_ID" in v3.COLUMNS and "Link" in v3.COLUMNS
+    assert not set(TC_COLUMNS) & set(v3.COLUMNS), "v3 ya trae columnas de tipo de cambio"
+    assert len(DATA_COLUMNS) == 189, "El CSV de detalles debería tener 189 columnas"
     assert DATA_FILE.name not in {
         v3.DATA_FILE.name,
         "mercadolibre_caba_venta_alquiler.csv",
@@ -672,7 +729,7 @@ def verify(network: bool = True) -> None:
     assert protection_marker(visible_challenge) == "captcha"
 
     if DATA_FILE.exists():
-        read_csv_checked(DATA_FILE, v3.COLUMNS)
+        read_data_checked(DATA_FILE)
     if LINKS_FILE.exists():
         read_csv_checked(LINKS_FILE, v3.LINK_COLUMNS)
     load_checkpoint()
@@ -692,9 +749,16 @@ def verify(network: bool = True) -> None:
                 "Mercado Libre respondió, pero no se detectaron tarjetas válidas; "
                 "no es seguro iniciar el scraping."
             )
+        cotizacion = tcmod.obtener_cotizacion_del_dia()
+        if cotizacion is None:
+            print("⚠ No respondió la API del dólar: el scraping sigue y el procesamiento "
+                  "completará TC_Scraping con la serie histórica.", flush=True)
+        else:
+            print(f"Dólar {tcmod.CASA} ({tcmod.PRECIO}) del día: {cotizacion.valor:,.2f} ARS/USD "
+                  f"({cotizacion.fecha}, {cotizacion.fuente}).", flush=True)
 
     print(
-        "✓ Verificación superada: 186 columnas v3 intactas, archivos separados, "
+        "✓ Verificación superada: 186 columnas v3 intactas + 3 de tipo de cambio, archivos separados, "
         "checkpoint, deduplicación y guardado incremental disponibles"
         + (", conexión y tarjetas válidas." if network else "."),
         flush=True,

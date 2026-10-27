@@ -3,16 +3,26 @@
 El programa:
 
 1. Lee ``output_mercadolibre/mercadolibre_caba_scraping_completo.csv``.
-2. Conserva todas las filas y 56 variables originales seleccionadas.
+2. Conserva todas las filas, 56 variables originales seleccionadas y las 3
+   columnas de tipo de cambio que agrega el scraper.
 3. Calcula nueve flags tematicos, un flag general y ``Motivo_Anomalia``.
-4. Genera ``mercadolibre_caba_procesado.csv`` con 67 columnas.
+4. Genera ``mercadolibre_caba_procesado.csv`` con 70 columnas.
 5. Genera ``reporte_anomalias.csv`` con un resumen auditable.
 
-No corrige, convierte monedas, elimina outliers ni deduplica filas. Por regla
-explicita de procesamiento, solamente completa con ``0`` los amenities y
-caracteristicas binarias que no fueron informados; el resto de los valores se
-copia textualmente desde el archivo de entrada. Las conversiones numericas se
-realizan solo en variables temporales para evaluar reglas de calidad.
+No corrige, convierte monedas, elimina outliers ni deduplica filas. Hay dos
+excepciones explicitas:
+
+- Completa con ``0`` los amenities y caracteristicas binarias que no fueron
+  informados.
+- Completa ``TC_Scraping``, ``Fecha_TC_Scraping`` y ``Fuente_TC_Scraping`` en
+  los avisos que no los tienen (scrapings anteriores a esas columnas o dias en
+  que la API no respondio), con la serie historica del dolar para la fecha de
+  ``Fecha_Scraping``. La fuente queda identificada en ``Fuente_TC_Scraping``.
+  Si hace falta completar y la API no responde, el procesamiento se detiene.
+
+El resto de los valores se copia textualmente desde el archivo de entrada. Las
+conversiones numericas se realizan solo en variables temporales para evaluar
+reglas de calidad.
 """
 
 from __future__ import annotations
@@ -29,6 +39,12 @@ from typing import Iterable, Sequence
 
 import numpy as np
 import pandas as pd
+
+# Raiz del repositorio en el path para importar src/ (este archivo esta en data/processing codes/)
+RAIZ_REPO = Path(__file__).resolve().parents[2]
+if str(RAIZ_REPO) not in sys.path:
+    sys.path.insert(0, str(RAIZ_REPO))
+from src import tipo_cambio as tcmod  # noqa: E402
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -122,8 +138,11 @@ FLAG_COLUMNS = [
     "Flag_Faltantes_Criticos",
 ]
 
+TC_COLUMNS = tcmod.COLUMNAS_TC  # TC_Scraping, Fecha_TC_Scraping, Fuente_TC_Scraping
+
 OUTPUT_COLUMNS = [
     *BASE_COLUMNS,
+    *TC_COLUMNS,
     *FLAG_COLUMNS,
     "Flag_Anomalia_General",
     "Motivo_Anomalia",
@@ -387,9 +406,17 @@ def read_source(path: Path) -> tuple[pd.DataFrame, int]:
             "Faltan columnas necesarias en el CSV de entrada: " + ", ".join(missing)
         )
 
+    # Las columnas de tipo de cambio son opcionales: los scrapings anteriores no las tienen.
+    tc_present = [column for column in TC_COLUMNS if column in header]
+    if tc_present and len(tc_present) != len(TC_COLUMNS):
+        raise ValueError(
+            "El CSV de entrada tiene solo parte de las columnas de tipo de cambio: "
+            + ", ".join(tc_present)
+        )
+
     source = pd.read_csv(
         path,
-        usecols=REQUIRED_INPUT_COLUMNS,
+        usecols=[*REQUIRED_INPUT_COLUMNS, *tc_present],
         dtype=str,
         keep_default_na=False,
         na_filter=False,
@@ -397,7 +424,45 @@ def read_source(path: Path) -> tuple[pd.DataFrame, int]:
         on_bad_lines="error",
         low_memory=False,
     )
+    for column in TC_COLUMNS:
+        if column not in source.columns:
+            source[column] = ""
     return source, len(header)
+
+
+def tc_missing_mask(source: pd.DataFrame) -> pd.Series:
+    """Avisos sin cotizacion utilizable (vacia, N/A o no numerica)."""
+    valores = pd.to_numeric(source["TC_Scraping"].where(~missing_mask(source["TC_Scraping"])), errors="coerce")
+    return valores.isna() | valores.le(0)
+
+
+def complete_exchange_rate(source: pd.DataFrame, serie: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Completa las columnas de tipo de cambio faltantes con la serie historica.
+
+    Solo descarga la serie si hay algo para completar. Las filas que ya traen
+    cotizacion del scraper no se tocan.
+    """
+    faltante = tc_missing_mask(source)
+    if not faltante.any():
+        return source[TC_COLUMNS].copy()
+    if serie is None:
+        print(f"Completando el tipo de cambio de {int(faltante.sum()):,} avisos con la serie historica...".replace(",", "."))
+        try:
+            serie = tcmod.obtener_serie_historica()
+        except Exception as exc:
+            raise RuntimeError(
+                "Hay avisos sin TC_Scraping y no se pudo descargar la serie historica del dolar "
+                f"({exc!r}). Volve a correr el procesamiento con conexion a internet."
+            ) from exc
+    completed = tcmod.completar_faltantes(source, serie, faltante)
+    sin_tc = tc_missing_mask(completed)
+    if sin_tc.any():
+        fechas = sorted(source.loc[sin_tc, "Fecha_Scraping"].str[:10].unique())[:5]
+        raise RuntimeError(
+            f"{int(sin_tc.sum())} avisos siguen sin cotizacion para su fecha de scraping "
+            f"(por ejemplo {fechas}). Revisar Fecha_Scraping."
+        )
+    return completed
 
 
 def add_reason(
@@ -808,6 +873,7 @@ def process_data(
     venta_ars_min: float,
     expensas_ars_max: float,
     expensas_usd_max: float,
+    exchange_rate_series: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     reasons: list[list[str]] = [[] for _ in range(len(source))]
     flags = {
@@ -826,6 +892,9 @@ def process_data(
 
     processed = source[BASE_COLUMNS].copy()
     fill_missing_binary_features(processed)
+    exchange_rate = complete_exchange_rate(source, exchange_rate_series)
+    for column in TC_COLUMNS:
+        processed[column] = exchange_rate[column]
     for column in FLAG_COLUMNS:
         processed[column] = flags[column].astype("int8")
 
@@ -902,6 +971,9 @@ def build_report(source: pd.DataFrame, processed: pd.DataFrame) -> pd.DataFrame:
     ):
         add_report_row(rows, "Moneda", label, count, total)
 
+    for label, count in ordered_counts(processed["Fuente_TC_Scraping"], []):
+        add_report_row(rows, "Fuente_TC_Scraping", label, count, total)
+
     return pd.DataFrame(
         rows,
         columns=["Seccion", "Categoria", "Cantidad", "Porcentaje_Total"],
@@ -932,7 +1004,7 @@ def validate_report(report: pd.DataFrame, processed: pd.DataFrame) -> None:
         if int(flag_rows.loc[flag, "Cantidad"]) != int(processed[flag].sum()):
             raise AssertionError(f"El reporte no coincide con {flag}.")
 
-    for section in ("Tipo_Operacion", "Tipo_Propiedad", "Moneda"):
+    for section in ("Tipo_Operacion", "Tipo_Propiedad", "Moneda", "Fuente_TC_Scraping"):
         section_total = int(
             report.loc[report["Seccion"].eq(section), "Cantidad"].sum()
         )
@@ -949,8 +1021,16 @@ def validate_processed(source: pd.DataFrame, processed: pd.DataFrame) -> None:
         )
     if list(processed.columns) != OUTPUT_COLUMNS:
         raise AssertionError("El orden o los nombres de las columnas de salida son incorrectos.")
-    if len(processed.columns) != 67:
-        raise AssertionError(f"Se esperaban 67 columnas y hay {len(processed.columns)}.")
+    if len(processed.columns) != 70:
+        raise AssertionError(f"Se esperaban 70 columnas y hay {len(processed.columns)}.")
+
+    # Tipo de cambio: todos los avisos con cotizacion positiva; los que la traian del scraper, sin cambios
+    if tc_missing_mask(processed).any():
+        raise AssertionError("Quedaron avisos sin TC_Scraping.")
+    from_scraper = ~tc_missing_mask(source)
+    for column in TC_COLUMNS:
+        if not processed.loc[from_scraper, column].equals(source.loc[from_scraper, column]):
+            raise AssertionError(f"Se modificaron valores de {column} que venian del scraper.")
 
     for column in BASE_COLUMNS:
         expected = source[column].copy()
@@ -1040,7 +1120,7 @@ def validate_written_processed(
         end = offset + len(chunk)
         expected_processed = processed.iloc[offset:end]
 
-        for column in BASE_COLUMNS:
+        for column in [*BASE_COLUMNS, *TC_COLUMNS]:
             actual = chunk[column].reset_index(drop=True)
             expected = expected_processed[column].reset_index(drop=True)
             if not actual.equals(expected):

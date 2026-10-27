@@ -37,7 +37,7 @@ La segunda entrega consolida lo desarrollado en el TP1 y agrega una etapa reprod
 
 | Aspecto | Incorporación en el TP2 |
 |---|---|
-| Dataset analítico | Se parte de `dataframefinal.csv` (92 columnas) y se genera `dataframe_limpio.csv` (115 columnas). |
+| Dataset analítico | Se parte de `dataframefinal.csv` (91 columnas) y se genera `dataframe_limpio.csv` (114 columnas). |
 | Faltantes | Se documenta su cobertura y se aplican tratamientos explícitos únicamente cuando existe una regla acordada; cada imputación queda identificada. |
 | Valores anómalos | Se distinguen datos inválidos, valores sospechosos y extremos plausibles. No se eliminan publicaciones automáticamente. |
 | Duplicados | Se identifican grupos seguros y probables sin borrar filas del archivo original. |
@@ -72,7 +72,7 @@ Estas hipótesis se consideran puntos de partida. Los notebooks distinguen evide
 
 ## Principales resultados del TP2
 
-- El dataset limpio conserva las **55.582 publicaciones residenciales** y amplía la base de 92 a **115 variables**, sin modificar las columnas originales.
+- El dataset limpio conserva las **55.582 publicaciones residenciales** y amplía la base de 91 a **114 variables**, sin modificar las columnas originales.
 - El barrio, la superficie, el tipo de propiedad y el nivel de amenities concentran gran parte de las diferencias observadas en los precios publicados.
 - Los valores extremos no se eliminan de manera automática: los errores o datos imposibles se apartan de los cálculos correspondientes y los extremos plausibles se conservan para evitar sesgar la oferta premium.
 - En los modelos ajustados no aparece evidencia clara de una prima por cercanía al subte. La concentración de delitos presenta una asociación negativa con los precios, pero su magnitud es sensible a los extremos y no debe interpretarse causalmente.
@@ -111,7 +111,8 @@ flowchart LR
 ├── src/
 │   └── tipo_cambio.py
 ├── tests/
-│   └── test_tipo_cambio.py
+│   ├── test_tipo_cambio.py
+│   └── test_pipeline_tipo_cambio.py
 ├── scrapper/
 │   ├── mercadolibre_scraping_completo.py
 │   └── MercadoLibre_scraper.py
@@ -147,7 +148,6 @@ flowchart LR
 │       ├── tren_limpio.csv
 │       ├── dataframefinal.csv
 │       ├── dataframe_limpio.csv
-│       ├── metadata_tipo_cambio.json
 │       └── enlace_scrappeo_procesado_MeLi
 ├── notebooks/
 │   ├── 01_unificacion.ipynb
@@ -162,13 +162,13 @@ flowchart LR
 - `data/raw/`: archivos originales sin modificar.
 - `data/processing codes/`: scripts utilizados para limpiar y transformar los datos.
 - `data/processed/`: archivos preparados para el análisis.
-- `src/`: funciones reutilizables que usan los notebooks (por ahora, el tipo de cambio).
+- `src/`: funciones reutilizables que usan los notebooks (por ahora, el tipo de cambio que usan el scraper, el procesamiento y la unificación).
 - `tests/`: tests automáticos de `src/` (`python -m pytest tests`).
 - `scrapper/`: código utilizado para obtener las publicaciones inmobiliarias.
 - `notebooks/`: análisis sobre el dataset unificado (EDA inicial, limpieza de faltantes y duplicados, y análisis multivariado).
 - `extras/`: documentación complementaria y reportes de calidad.
-- `data/processed/dataframefinal.csv`: salida de `notebooks/01_unificacion.ipynb` (92 columnas).
-- `data/processed/dataframe_limpio.csv`: salida de `notebooks/02_calidad_y_limpieza.ipynb` (115 columnas). **Está versionado** y es la entrada de los notebooks 03 y 04.
+- `data/processed/dataframefinal.csv`: salida de `notebooks/01_unificacion.ipynb` (91 columnas).
+- `data/processed/dataframe_limpio.csv`: salida de `notebooks/02_calidad_y_limpieza.ipynb` (114 columnas). **Está versionado** y es la entrada de los notebooks 03 y 04.
 
 ## Fuentes de datos
 
@@ -228,6 +228,16 @@ Entre las variables obtenidas se encuentran:
 - Amenities y características.
 - Título y descripción.
 - Fecha y hora del scraping.
+- Tipo de cambio del día del scraping (`TC_Scraping`, `Fecha_TC_Scraping`, `Fuente_TC_Scraping`).
+
+### Tipo de cambio del día
+
+El orquestador agrega a cada aviso la cotización del dólar blue (precio de venta) vigente el día en que se scrapeó, con la lógica de [`src/tipo_cambio.py`](src/tipo_cambio.py):
+
+- Consulta [DolarApi](https://dolarapi.com/v1/dolares/blue) **una vez por día de scraping** y reutiliza el valor para todos los avisos de ese día. Si el scraping dura varios días, cada aviso queda con el dólar de su día.
+- Si DolarApi no responde, usa el último dato de [ArgentinaDatos](https://api.argentinadatos.com/v1/cotizaciones/dolares/blue).
+- Si ninguna responde, **el scraping sigue**: los avisos quedan con `N/A`, se registra en el log y el procesamiento los completa después con la serie histórica. Vuelve a intentar a los 10 minutos.
+- Un CSV de una corrida anterior, sin estas columnas, se actualiza al esquema nuevo antes de seguir agregando avisos.
 
 ### Controles del scraper
 
@@ -252,7 +262,7 @@ El dataset crudo contiene:
 - **65.846 publicaciones**
 - **56.553 publicaciones de venta**
 - **9.293 publicaciones de alquiler**
-- **186 columnas**
+- **186 columnas** (las corridas nuevas agregan 3 de tipo de cambio: 189)
 - **0 identificadores duplicados**
 - **0 enlaces duplicados**
 
@@ -279,8 +289,9 @@ El archivo crudo fue procesado con [`procesar_datos_Mercadolibre.py`](data/proce
 El procesamiento:
 
 - Conserva las 65.846 publicaciones.
-- Selecciona 56 variables relevantes.
-- Genera un dataset final de 67 columnas.
+- Selecciona 56 variables relevantes y conserva las 3 de tipo de cambio.
+- Genera un dataset final de 70 columnas.
+- Completa el tipo de cambio de los avisos que no lo tienen (los del scraping de agosto de 2026, anterior a esas columnas, o los de días en que la API no respondió) con la serie histórica de ArgentinaDatos para su `Fecha_Scraping`. `Fuente_TC_Scraping` indica qué avisos se completaron así. Si hay que completar y no hay conexión, el script se detiene.
 - No convierte precios entre monedas en esta etapa (la conversión se realiza en la unificación).
 - No elimina publicaciones por ser outliers.
 - No modifica precios, superficies o coordenadas originales.
@@ -476,19 +487,17 @@ El notebook incluye una verificación que corta la ejecución si aparece algún 
 
 ### 3. Conversión de moneda
 
-Los precios se llevan a una unidad común mediante `Precio_USD` y `Expensas_USD`. Se generan dos tipos de cambio, cada uno con su fecha (lógica en [`src/tipo_cambio.py`](src/tipo_cambio.py)):
+Los precios se llevan a una unidad común mediante `Precio_USD` y `Expensas_USD`, con el dólar del día de scraping de cada aviso. El tipo de cambio **no se calcula en la unificación**: llega en el dataset desde el scraper.
 
 | Columna | Qué es | Origen |
 |---|---|---|
-| `TC_Scraping` | Dólar blue (venta) del día en que se scrapeó cada aviso, según `Fecha_Scraping`. **Con este se calculan `Precio_USD` y `Expensas_USD`.** | Valores fijos en `TC_SCRAPING_BLUE_VENTA`, tomados de [ArgentinaDatos](https://api.argentinadatos.com/v1/cotizaciones/dolares/blue) |
-| `Fecha_TC_Scraping` | Día de la cotización aplicada. | `Fecha_Scraping` en hora de Buenos Aires |
-| `TC_Actual` | Dólar blue (venta) al momento de correr el notebook. Se usa para medir la variación desde el scraping y en los escenarios del notebook 04. | Se descarga en cada ejecución de [DolarApi](https://dolarapi.com/v1/dolares/blue); si no responde, del último dato de ArgentinaDatos |
-| `Fecha_TC_Actual` | Fecha de esa cotización. | La fuente de la API |
+| `TC_Scraping` | Dólar blue (venta) vigente el día en que se scrapeó el aviso. **Con este se calculan `Precio_USD` y `Expensas_USD`.** | El scraper, desde [DolarApi](https://dolarapi.com/v1/dolares/blue). Para avisos sin dato, el procesamiento, desde la serie histórica de [ArgentinaDatos](https://api.argentinadatos.com/v1/cotizaciones/dolares/blue) |
+| `Fecha_TC_Scraping` | Fecha de la cotización. | La API consultada |
+| `Fuente_TC_Scraping` | De dónde salió la cotización. | — |
 
-- **Por qué dos:** el dólar del scraping es un dato histórico. Fijarlo hace que los KPIs no cambien según el día en que se corre el notebook. El dólar actual se actualiza solo y muestra cuánto se movió el tipo de cambio desde la observación de los precios.
-- **Nuevos scrapings:** hay que agregar los días nuevos a `TC_SCRAPING_BLUE_VENTA`. El notebook se detiene si algún aviso no tiene cotización para su día.
-- **Sin conexión:** `TC_Actual` queda vacío y el resto del pipeline corre igual.
-- **Trazabilidad:** cada corrida guarda las cotizaciones usadas, con fecha y fuente, en `data/processed/metadata_tipo_cambio.json`.
+- Los avisos del scraping de agosto de 2026 se scrapearon antes de existir estas columnas, así que su cotización la completó el procesamiento con la serie histórica.
+- Cada scraping nuevo trae la cotización de su propio día, sin tocar el código.
+- El notebook se detiene si algún aviso no tiene `TC_Scraping`.
 
 Cuando `Moneda_Expensas` está vacía se asume ARS.
 
@@ -588,9 +597,9 @@ El resultado se exporta como `dataframefinal.csv`: 55.582 filas con las variable
 
 El notebook [`02_calidad_y_limpieza.ipynb`](notebooks/02_calidad_y_limpieza.ipynb) toma `dataframefinal.csv`, diagnostica faltantes, precios fuera de contexto y avisos repetidos, y agrega columnas de marcas y tratamientos. No replica el EDA ni los modelos: su responsabilidad termina al generar `dataframe_limpio.csv`.
 
-**Qué NO hace:** no borra ninguna fila y no modifica ningún valor de las 92 columnas originales. Antes de guardar, el notebook verifica con `assert` que las filas y los valores originales no cambiaron. Todo lo nuevo va en columnas aparte, así que cualquier tratamiento se puede ignorar.
+**Qué NO hace:** no borra ninguna fila y no modifica ningún valor de las 91 columnas originales. Antes de guardar, el notebook verifica con `assert` que las filas y los valores originales no cambiaron. Todo lo nuevo va en columnas aparte, así que cualquier tratamiento se puede ignorar.
 
-**Entrada:** `data/processed/dataframefinal.csv`. **Salida:** `data/processed/dataframe_limpio.csv` (las mismas 55.582 filas, 92 columnas originales + 23 nuevas).
+**Entrada:** `data/processed/dataframefinal.csv`. **Salida:** `data/processed/dataframe_limpio.csv` (las mismas 55.582 filas, 91 columnas originales + 23 nuevas).
 
 ### Decisiones de grupo
 
@@ -759,9 +768,11 @@ python3 "data/processing codes/procesar_datos_Mercadolibre.py" \
   --reporte extras/reporte_anomalias.csv
 ```
 
+Necesita conexión a internet si algún aviso no trae `TC_Scraping` (como el CSV crudo de agosto de 2026), para completarlo con la serie histórica del dólar.
+
 ### Unificación
 
-Una vez generados todos los archivos anteriores, se ejecuta `notebooks/01_unificacion.ipynb`, que produce `dataframefinal.csv`. Con conexión a internet descarga el dólar actual (`TC_Actual`); sin conexión esa columna queda vacía y el resto corre igual.
+Una vez generados todos los archivos anteriores, se ejecuta `notebooks/01_unificacion.ipynb`, que produce `dataframefinal.csv`. No necesita internet: el tipo de cambio ya viene en `mercadolibre_caba_procesado.csv`.
 
 ### Tests
 
@@ -769,7 +780,7 @@ Una vez generados todos los archivos anteriores, se ejecuta `notebooks/01_unific
 python -m pytest tests
 ```
 
-Los tests no usan internet: reemplazan las APIs por datos fijos.
+Los tests no usan internet: reemplazan las APIs por datos fijos. Tampoco necesitan `MercadoLibre_scraper.py`: lo reemplazan por un módulo mínimo.
 
 > **Nota técnica:** `mercadolibre_scraping_completo.py` funciona como orquestador y utiliza el módulo `MercadoLibre_scraper.py`, que contiene los parsers de extracción. Para reproducir el scraping desde cero, ambos archivos deben encontrarse dentro de `scrapper/`.
 
@@ -798,7 +809,7 @@ Para reproducir el flujo completo se ejecutan los notebooks en orden. Como ambos
 
 ### De los KPIs de inversión
 
-- La conversión a dólares usa el dólar blue del día de scraping de cada aviso (`TC_Scraping`). Los avisos de venta suelen publicarse en USD y los de alquiler en pesos, así que la elección del tipo de cambio (blue, MEP u oficial) impacta directamente sobre la rentabilidad estimada. El notebook 04 cuantifica esa sensibilidad con ±20% y con el dólar actual.
+- La conversión a dólares usa el dólar blue del día de scraping de cada aviso (`TC_Scraping`). Los avisos de venta suelen publicarse en USD y los de alquiler en pesos, así que la elección del tipo de cambio (blue, MEP u oficial) impacta directamente sobre la rentabilidad estimada. El notebook 04 cuantifica esa sensibilidad con escenarios de ±20%.
 - La rentabilidad se calcula comparando **medianas de zona**, no propiedades individuales: no existe una misma unidad publicada simultáneamente en venta y en alquiler.
 - El volumen de avisos de alquiler es mucho menor que el de venta (4.591 contra 47.127 en el modelo de valuación). Solo 139 combinaciones de barrio, tipo y ambientes tienen datos suficientes de ambas operaciones, lo que acota fuertemente la cobertura del ranking.
 - La rentabilidad neta no descuenta impuestos, vacancia, comisiones ni gastos de escrituración.
@@ -850,7 +861,8 @@ Procesa el archivo completo obtenido mediante el scraping de Mercado Libre.
 El script:
 
 - Conserva todas las publicaciones obtenidas.
-- Reduce las 186 columnas originales a 56 variables relevantes para el análisis.
+- Reduce las 186 columnas originales a 56 variables relevantes para el análisis, y conserva las 3 de tipo de cambio que agrega el scraper.
+- Completa el tipo de cambio faltante con la serie histórica del dólar para la fecha de scraping.
 - Agrega 9 flags temáticos de control de calidad.
 - Agrega un flag general y una descripción del motivo de la anomalía.
 - Mantiene separados el precio y la moneda.
@@ -859,7 +871,7 @@ El script:
 - No elimina automáticamente outliers.
 - Completa con `0` los amenities no informados para que puedan utilizarse como variables binarias.
 
-El resultado es un dataset de 67 columnas preparado para el análisis descriptivo.
+El resultado es un dataset de 70 columnas preparado para el análisis descriptivo.
 
 ### `limpiar_subte.py`
 
