@@ -1,4 +1,4 @@
-"""Indicadores de inversión Buy to Rent: zonas, base analítica, rentabilidad y score.
+"""Indicadores de inversión Buy to Rent: zonas, base analítica, rentabilidad, costos e índice de priorización.
 
 Lo usa ``notebooks/05_analisis_de_hipotesis.ipynb``. Las funciones no leen ni
 escriben archivos: reciben un DataFrame con el esquema de
@@ -7,6 +7,8 @@ modificar la entrada.
 """
 
 from __future__ import annotations
+
+from dataclasses import dataclass, replace
 
 import numpy as np
 import pandas as pd
@@ -114,6 +116,120 @@ def normalizar(serie: pd.Series, metodo: str = "rango") -> pd.Series:
     raise ValueError(f"Método '{metodo}' no válido. Opciones: 'rango', 'minmax'")
 
 
+# ---------------------------------------------------------------- costos de la inversión
+
+@dataclass(frozen=True)
+class SupuestosCostos:
+    """Supuestos de costos de una inversión Buy to Rent en CABA (2026).
+
+    Los porcentajes sobre el alquiler se aplican al alquiler mensual; los
+    porcentajes sobre el precio, al precio publicado. Las fuentes de cada valor
+    del escenario base están en el README (sección "Costos de la inversión").
+    """
+    nombre: str = "Base"
+    meses_contrato: float = 24             # duración típica del contrato
+    meses_vacancia: float = 1.0            # meses sin inquilino entre contratos (30 a 60 días para alquilar)
+    meses_comision_alquiler: float = 1.21  # 1 mes + IVA por contrato, a cargo del propietario en CABA (Ley 5859)
+    administracion_pct_alquiler: float = 0.0   # 4% a 6% si se terceriza la administración
+    expensas_ordinarias_propietario: bool = False  # en la práctica las paga el inquilino, salvo en la vacancia
+    expensas_extraordinarias_pct: float = 0.10     # supuesto: extraordinarias como % de las ordinarias
+    mantenimiento_pct_precio: float = 0.01     # supuesto del grupo desde la PE2
+    abl_pct_precio: float = 0.002              # supuesto: la valuación fiscal no está en el dataset
+    ganancias_pct_renta: float = 0.0           # alquiler de vivienda exento desde 2026 (Ley 27.802, Decreto 406/2026)
+    costos_entrada_pct: float = 0.086          # comisión 4% + IVA, escribano 2% + IVA, mitad de sellos 2,7%
+    costos_salida_pct: float = 0.054           # comisión 3% + IVA, mitad de sellos, certificados
+    anios_tenencia: int = 10
+
+    def __post_init__(self):
+        if self.meses_contrato <= 0 or self.meses_vacancia < 0:
+            raise ValueError("meses_contrato debe ser positivo y meses_vacancia no negativo")
+
+
+ESCENARIOS_COSTOS = {
+    "Optimista": SupuestosCostos("Optimista", meses_vacancia=0.5, meses_comision_alquiler=1.0,
+                                 expensas_extraordinarias_pct=0.0, mantenimiento_pct_precio=0.005,
+                                 abl_pct_precio=0.001, costos_entrada_pct=0.06, costos_salida_pct=0.045),
+    "Base": SupuestosCostos(),
+    "Pesimista": SupuestosCostos("Pesimista", meses_vacancia=2.0, administracion_pct_alquiler=0.05,
+                                 expensas_extraordinarias_pct=0.20, mantenimiento_pct_precio=0.015,
+                                 abl_pct_precio=0.004, costos_entrada_pct=0.10, costos_salida_pct=0.06),
+}
+
+
+def componentes_flujo(alquiler_mensual: pd.Series, precio: pd.Series, expensas_mensuales: pd.Series,
+                      s: SupuestosCostos = ESCENARIOS_COSTOS["Base"]) -> pd.DataFrame:
+    """Ingreso y cada costo anual de la inversión, en USD por año (los costos con signo positivo).
+
+    El ingreso es el alquiler de los meses ocupados: con contratos de ``meses_contrato``
+    y ``meses_vacancia`` entre uno y otro, la ocupación es contrato / (contrato + vacancia).
+    Las comisiones se pagan una vez por contrato y se anualizan sobre ese ciclo.
+    Si faltan las expensas, los costos que dependen de ellas quedan nulos.
+    """
+    ciclo = s.meses_contrato + s.meses_vacancia
+    ocupacion = s.meses_contrato / ciclo
+    renta = 12 * alquiler_mensual * ocupacion
+    expensas_anuales = 12 * expensas_mensuales
+    fraccion_ordinarias = 1.0 if s.expensas_ordinarias_propietario else (1 - ocupacion)
+    return pd.DataFrame({
+        "Ingreso_alquiler": renta,
+        "Vacancia": 12 * alquiler_mensual - renta,
+        "Comision_alquiler": alquiler_mensual * s.meses_comision_alquiler * 12 / ciclo,
+        "Administracion": s.administracion_pct_alquiler * renta,
+        "Expensas_propietario": expensas_anuales * (fraccion_ordinarias + s.expensas_extraordinarias_pct),
+        "Mantenimiento": s.mantenimiento_pct_precio * precio,
+        "ABL": s.abl_pct_precio * precio,
+        "Ganancias": s.ganancias_pct_renta * renta,
+    })
+
+
+def flujo_neto_anual(alquiler_mensual, precio, expensas_mensuales, s=ESCENARIOS_COSTOS["Base"]) -> pd.Series:
+    """Ingreso por alquiler menos todos los costos anuales (USD por año)."""
+    c = componentes_flujo(alquiler_mensual, precio, expensas_mensuales, s)
+    return c.Ingreso_alquiler - c.drop(columns=["Ingreso_alquiler", "Vacancia"]).sum(axis=1, min_count=6)
+
+
+def rentabilidad_neta(alquiler_mensual, precio, expensas_mensuales, s=ESCENARIOS_COSTOS["Base"]) -> pd.Series:
+    """Flujo neto anual sobre la inversión total (precio + costos de entrada)."""
+    return flujo_neto_anual(alquiler_mensual, precio, expensas_mensuales, s) / (precio * (1 + s.costos_entrada_pct))
+
+
+def tir_tenencia(alquiler_mensual, precio, expensas_mensuales, s=ESCENARIOS_COSTOS["Base"],
+                 valorizacion_anual: float = 0.0) -> pd.Series:
+    """TIR anual de comprar, alquilar ``s.anios_tenencia`` años y vender.
+
+    Flujos: −precio × (1 + costos de entrada) al inicio; el flujo neto anual cada año;
+    y el precio de venta (con ``valorizacion_anual`` en USD) menos los costos de salida
+    al final. Con valorización 0 supone que el precio en USD se mantiene: no es un pronóstico.
+    A diferencia del payback (1 / rentabilidad), incorpora los costos de entrada y salida
+    y el valor temporal del dinero.
+    """
+    precio = pd.Series(precio, dtype=float)
+    flujo = pd.Series(flujo_neto_anual(alquiler_mensual, precio, expensas_mensuales, s), index=precio.index)
+    n = s.anios_tenencia
+    inversion = (precio * (1 + s.costos_entrada_pct)).to_numpy()
+    venta = (precio * (1 + valorizacion_anual) ** n * (1 - s.costos_salida_pct)).to_numpy()
+    f = flujo.to_numpy()
+
+    def vpn(r):
+        descuento = (1 + r)[:, None] ** -np.arange(1, n + 1)[None, :]
+        return -inversion + f * descuento.sum(axis=1) + venta * descuento[:, -1]
+
+    bajo, alto = np.full(len(f), -0.99), np.full(len(f), 1.0)
+    for _ in range(100):  # bisección vectorizada: el VPN decrece con la tasa
+        medio = (bajo + alto) / 2
+        positivo = vpn(medio) > 0
+        bajo, alto = np.where(positivo, medio, bajo), np.where(positivo, alto, medio)
+    tir = (bajo + alto) / 2
+    return pd.Series(np.where(np.isfinite(f) & np.isfinite(inversion), tir, np.nan), index=precio.index)
+
+
+def con_supuestos(s: SupuestosCostos, **cambios) -> SupuestosCostos:
+    """Copia de ``s`` con algunos supuestos cambiados (para sensibilidad)."""
+    return replace(s, **cambios)
+
+
+# ------------------------------------------------------------- índice de priorización
+
 def factor_confianza(df: pd.DataFrame, valor_no_critico: float = 0.6) -> pd.Series:
     """1 sin anomalías, ``valor_no_critico`` con alguna no crítica, 0 con faltantes críticos o coordenadas anómalas."""
     critico = df.Flag_Faltantes_Criticos.eq(1) | df.Flag_Coordenadas_Anomalas.eq(1)
@@ -121,11 +237,14 @@ def factor_confianza(df: pd.DataFrame, valor_no_critico: float = 0.6) -> pd.Seri
     return pd.Series(np.where(critico, 0.0, factor), index=df.index)
 
 
-def score_oportunidad(rentabilidad: pd.Series, subvaluacion: pd.Series, confianza: pd.Series,
-                      peso_rentabilidad: float = 0.5, metodo: str = "rango") -> pd.Series:
-    """Score 0-100: combina rentabilidad (más es mejor) y subvaluación (más negativa es mejor).
+def indice_priorizacion(rentabilidad: pd.Series, subvaluacion: pd.Series, confianza: pd.Series,
+                        peso_rentabilidad: float = 0.5, metodo: str = "rango") -> pd.Series:
+    """Índice 0-100 para ordenar qué avisos revisar primero (screening, no recomendación de compra).
 
+    Combina rentabilidad (más es mejor) y subvaluación (más negativa es mejor).
     ``subvaluacion`` es (precio / precio estimado − 1), así que se invierte antes de normalizar.
+    Los pesos son un supuesto: no hay datos de resultados posteriores para validar la
+    regla de decisión, así que el notebook 05 mide cuánto cambia el orden si se modifican.
     """
     if not 0 <= peso_rentabilidad <= 1:
         raise ValueError("peso_rentabilidad debe estar entre 0 y 1")

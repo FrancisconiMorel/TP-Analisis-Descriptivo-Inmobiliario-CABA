@@ -41,30 +41,77 @@ def test_rentabilidad_es_razon_de_medianas_y_exige_minimo():
     assert seg.Bruta_m2.iloc[0] == pytest.approx(seg.Bruta.iloc[0])  # misma superficie
 
 
-# ------------------------------------------------------------ score
+# ------------------------------------------------------------ índice de priorización
 
 def test_score_premia_rentabilidad_alta_y_precio_bajo():
     rent = pd.Series([0.03, 0.05, 0.07])
     subval = pd.Series([0.2, 0.0, -0.2])  # el tercero está 20% por debajo de su referencia
-    score = ind.score_oportunidad(rent, subval, pd.Series([1.0, 1.0, 1.0]))
+    score = ind.indice_priorizacion(rent, subval, pd.Series([1.0, 1.0, 1.0]))
     assert score.is_monotonic_increasing
     assert score.iloc[2] == pytest.approx(100)
 
 
 def test_score_respeta_confianza_y_pesos():
     rent, subval = pd.Series([0.03, 0.07]), pd.Series([-0.2, 0.2])
-    solo_rent = ind.score_oportunidad(rent, subval, pd.Series([1.0, 1.0]), peso_rentabilidad=1)
-    solo_subval = ind.score_oportunidad(rent, subval, pd.Series([1.0, 1.0]), peso_rentabilidad=0)
+    solo_rent = ind.indice_priorizacion(rent, subval, pd.Series([1.0, 1.0]), peso_rentabilidad=1)
+    solo_subval = ind.indice_priorizacion(rent, subval, pd.Series([1.0, 1.0]), peso_rentabilidad=0)
     assert solo_rent.idxmax() == 1 and solo_subval.idxmax() == 0
-    assert ind.score_oportunidad(rent, subval, pd.Series([0.0, 0.6])).iloc[0] == 0
+    assert ind.indice_priorizacion(rent, subval, pd.Series([0.0, 0.6])).iloc[0] == 0
     with pytest.raises(ValueError):
-        ind.score_oportunidad(rent, subval, pd.Series([1.0, 1.0]), peso_rentabilidad=1.5)
+        ind.indice_priorizacion(rent, subval, pd.Series([1.0, 1.0]), peso_rentabilidad=1.5)
 
 
 def test_factor_confianza():
     flags = pd.DataFrame({"Flag_Anomalia_General": [0, 1, 1, 0], "Flag_Faltantes_Criticos": [0, 0, 1, 0],
                           "Flag_Coordenadas_Anomalas": [0, 0, 0, 1]})
     assert ind.factor_confianza(flags).tolist() == [1.0, 0.6, 0.0, 0.0]
+
+
+# ------------------------------------------------------------ costos de la inversión
+
+SIN_COSTOS = ind.SupuestosCostos("Sin costos", meses_vacancia=0, meses_comision_alquiler=0,
+                                 expensas_extraordinarias_pct=0, mantenimiento_pct_precio=0, abl_pct_precio=0,
+                                 costos_entrada_pct=0, costos_salida_pct=0)
+
+
+def test_sin_costos_la_neta_es_la_bruta_y_la_tir_coincide():
+    alquiler, precio, expensas = pd.Series([500.0]), pd.Series([100_000.0]), pd.Series([80.0])
+    assert ind.rentabilidad_neta(alquiler, precio, expensas, SIN_COSTOS).iloc[0] == pytest.approx(0.06)
+    # Comprar, cobrar 6% por año y revender al mismo precio rinde exactamente 6%.
+    assert ind.tir_tenencia(alquiler, precio, expensas, SIN_COSTOS).iloc[0] == pytest.approx(0.06, abs=1e-6)
+
+
+def test_componentes_del_escenario_base():
+    s = ind.SupuestosCostos()
+    c = ind.componentes_flujo(pd.Series([1_000.0]), pd.Series([200_000.0]), pd.Series([100.0]), s).iloc[0]
+    ocupacion = 24 / 25
+    assert c.Ingreso_alquiler == pytest.approx(12_000 * ocupacion)
+    assert c.Comision_alquiler == pytest.approx(1_000 * 1.21 * 12 / 25)
+    # El propietario paga las ordinarias solo en la vacancia, más las extraordinarias.
+    assert c.Expensas_propietario == pytest.approx(1_200 * ((1 - ocupacion) + 0.10))
+    assert c.Mantenimiento == pytest.approx(2_000) and c.ABL == pytest.approx(400) and c.Ganancias == 0
+    neto = c.Ingreso_alquiler - c[["Comision_alquiler", "Administracion", "Expensas_propietario",
+                                   "Mantenimiento", "ABL", "Ganancias"]].sum()
+    assert ind.flujo_neto_anual(pd.Series([1_000.0]), pd.Series([200_000.0]), pd.Series([100.0]), s).iloc[0] \
+        == pytest.approx(neto)
+
+
+def test_escenarios_ordenados_y_expensas_faltantes():
+    args = (pd.Series([700.0, 700.0]), pd.Series([120_000.0, 120_000.0]), pd.Series([90.0, np.nan]))
+    netas = {n: ind.rentabilidad_neta(*args, s).iloc[0] for n, s in ind.ESCENARIOS_COSTOS.items()}
+    assert netas["Optimista"] > netas["Base"] > netas["Pesimista"]
+    assert np.isnan(ind.rentabilidad_neta(*args).iloc[1])  # sin expensas no hay neta
+    tir = ind.tir_tenencia(*args)
+    assert np.isnan(tir.iloc[1]) and tir.iloc[0] < netas["Base"]  # los costos de salida bajan el retorno
+
+
+def test_ordinarias_a_cargo_del_propietario_bajan_la_neta():
+    args = (pd.Series([700.0]), pd.Series([120_000.0]), pd.Series([90.0]))
+    base = ind.SupuestosCostos()
+    assert ind.rentabilidad_neta(*args, ind.con_supuestos(base, expensas_ordinarias_propietario=True)).iloc[0] \
+        < ind.rentabilidad_neta(*args, base).iloc[0]
+    with pytest.raises(ValueError):
+        ind.SupuestosCostos(meses_contrato=0)
 
 
 # ------------------------------------------------------------ modelos

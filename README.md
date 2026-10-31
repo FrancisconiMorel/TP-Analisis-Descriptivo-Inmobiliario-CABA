@@ -31,6 +31,22 @@ El análisis está orientado a un inversor que busca comprar una propiedad, alqu
 - **Delitos:** años 2023, 2024 y 2025.
 - **Unidad de análisis inmobiliaria:** una publicación de Mercado Libre.
 
+## Contexto macroeconómico
+
+Los datos son una foto de agosto de 2026. Estas condiciones del mercado ayudan a leer los resultados:
+
+| Tema | Situación | Qué implica para el análisis |
+|---|---|---|
+| Inflación y alquileres | Inflación de 33,4% en 12 meses a septiembre de 2026 (1,9% mensual). En el mismo período, el alquiler de un 2 ambientes en CABA subió 28,7%. | Los alquileres se publican mayormente en pesos y se ajustan; las ventas, en dólares. La rentabilidad en USD depende del tipo de cambio (ver la sensibilidad del notebook 04). |
+| Precios de venta | El m² de un departamento en CABA ronda USD 2.484, con una suba de 1,4% en 2026. | Con alquileres que suben y precios estables, la rentabilidad bruta está en máximos de casi 25 años (5,7% según Zonaprop). |
+| Oferta de alquileres | Desde la derogación de la Ley de Alquileres (DNU 70/2023), la oferta pasó de unas 4.000 a cerca de 17.000 unidades. Una unidad tarda de 30 a 60 días en alquilarse. | Hay que contar vacancia: la rentabilidad neta la incluye en los tres escenarios de costos. |
+| Crédito hipotecario | Solo el 17% de las escrituras de CABA de agosto de 2026 tuvo hipoteca (4 puntos menos que un año antes). | La compra depende del ahorro en dólares, lo que limita la demanda al revender (liquidez). |
+| Impuestos | Desde 2026, el alquiler de vivienda está exento de Ganancias para personas humanas (Ley 27.802 y Decreto 406/2026). Sellos en CABA: 2,7% hasta $226,1 millones y 3,5% por encima. | El escenario base no descuenta Ganancias. Un inversor no accede a la exención de sellos por vivienda única. |
+
+Por eso los resultados describen un mercado en transición: si vuelve el crédito o se estabiliza la oferta de alquileres, la relación entre precio y renta puede cambiar.
+
+Fuentes: [INDEC vía Finanzas Digital (13/10/2026)](https://finanzasdigital.com/inflacion-argentina-septiembre-2026-indec-ipc-acumulada/), [Zonaprop, Index CABA septiembre 2026](https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/10/INDEX_CABA_REPORTE_2026-09.pdf), [iProfesional, rentabilidad récord (20/07/2026)](https://www.iprofesional.com/realestate/460148-la-rentabilidad-que-deja-alquilar-un-departamento-toco-un-record-en-casi-25-anos), [iProfesional, oferta récord de alquileres (06/09/2026)](https://www.iprofesional.com/realestate/463807-record-de-oferta-de-alquileres-en-caba-que-pasara-con-los-precios), [iProfesional, días para alquilar (2025)](https://www.iprofesional.com/realestate/426144-cuantos-dias-tarda-en-alquilarse-un-departamento-en-caba), [elDiarioAR, exención de Ganancias (01/06/2026)](https://www.eldiarioar.com/economia/gobierno-reglamento-exenciones-ganancias-alquileres-vivienda-venta-inmuebles_1_13266176.html), [Colegio de Escribanos, Código Fiscal 2026](https://www.colegio-escribanos.org.ar/noticias/2025_12_19-Codigo-Fiscal-2026-INFORME.pdf).
+
 ## Cambios respecto de la primera entrega
 
 La segunda entrega consolida lo desarrollado en el TP1 y agrega una etapa reproducible de calidad, EDA y análisis multivariado:
@@ -172,7 +188,7 @@ flowchart LR
 - `data/raw/`: archivos originales sin modificar.
 - `data/processing codes/`: scripts utilizados para limpiar y transformar los datos.
 - `data/processed/`: archivos preparados para el análisis.
-- `src/`: lógica estable que usan los scripts y notebooks: el tipo de cambio (`tipo_cambio.py`), la base analítica, la rentabilidad por segmento y el score (`indicadores.py`), y el modelo de precio de referencia con su validación (`modelos.py`).
+- `src/`: lógica estable que usan los scripts y notebooks: el tipo de cambio (`tipo_cambio.py`), la base analítica, la rentabilidad por segmento, los costos de la inversión y el índice de priorización (`indicadores.py`), y el modelo de precio de referencia con su validación (`modelos.py`).
 - `tests/`: tests automáticos de `src/` (`python -m pytest tests`).
 - `scrapper/`: código utilizado para obtener las publicaciones inmobiliarias.
 - `notebooks/`: análisis sobre el dataset unificado (EDA inicial, limpieza de faltantes y duplicados, y análisis multivariado).
@@ -538,11 +554,11 @@ Proporción de amenities presentes sobre una lista de 15 características de con
 
 Promedio y mediana de `Precio_m2_USD` agregados por barrio y operación, y en una segunda tabla desagregados también por tipo de propiedad.
 
-**Rentabilidad y payback**
+> **Versión PE2.** Los KPIs de inversión de esta sección se conservan porque `02_calidad_y_limpieza.ipynb` los usa para diagnosticar la cobertura. Para las conclusiones se usan los del notebook 05 (sección "PreEntrega 3"): rentabilidad neta por aviso con costos, índice de subvaluación fuera de muestra e índice de priorización. El **payback** y el **score de oportunidad** se eliminaron.
+
+**Rentabilidad por zona**
 
 Se agrupa por **barrio × tipo de propiedad × ambientes agrupados**, exigiendo un mínimo de 5 avisos por combinación para confiar en la mediana. Quedan **139 combinaciones** que tienen simultáneamente avisos de venta y de alquiler suficientes.
-
-Sobre esas combinaciones se calcula:
 
 ```text
 Rentabilidad_Bruta_Estimada = (Alquiler_Mediano × 12) / Precio_Venta_Mediano
@@ -550,13 +566,11 @@ Rentabilidad_Bruta_Estimada = (Alquiler_Mediano × 12) / Precio_Venta_Mediano
 Rentabilidad_Neta_Estimada  = (Alquiler_Mediano × 12
                                − Expensas_Medianas × 12
                                − Precio_Venta_Mediano × 1%) / Precio_Venta_Mediano
-
-Payback_Period_Anios        = 1 / Rentabilidad_Neta_Estimada
 ```
 
-El 1% anual corresponde a un supuesto de mantenimiento. Las expensas se calculan solo sobre registros sin `Flag_Expensas_Anomalas`, ya que el campo está informado en aproximadamente el 43% del dataset.
+Esta neta resta las expensas ordinarias completas, que en un alquiler paga el inquilino, y no incluye vacancia, comisiones, ABL ni costos de compra. La versión corregida está en el notebook 05.
 
-**Índice de sobre/subvaluación**
+**Índice de sobre/subvaluación (versión PE2)**
 
 Para cada publicación se estima un precio esperado a partir de la mediana de `Precio_m2_USD` de sus comparables, multiplicada por su superficie. Los comparables se buscan en cascada, bajando de granularidad hasta encontrar al menos 8 avisos:
 
@@ -569,18 +583,7 @@ Para cada publicación se estima un precio esperado a partir de la mediana de `P
 Indice_Subvaluacion = (Precio_USD − Precio_Predicho_USD) / Precio_Predicho_USD
 ```
 
-Un valor negativo indica que la publicación está por debajo de sus comparables. Se calculó sobre **51.673 publicaciones** (47.127 de venta y 4.591 de alquiler); solo 45 quedaron sin grupo comparable.
-
-**Score de oportunidad**
-
-Ranking de publicaciones de venta que combina rentabilidad de la zona y subvaluación individual, ambas normalizadas entre 0 y 1, con pesos iguales:
-
-```text
-Score_Oportunidad = (0,5 × Rentabilidad_Neta_norm + 0,5 × Subvaluacion_norm)
-                    × Factor_Confianza × 100
-```
-
-El `Factor_Confianza` vale `1,0` si la publicación no tiene ninguna anomalía, `0,6` si tiene una anomalía no crítica, y `0,0` si tiene faltantes críticos o coordenadas anómalas (en cuyo caso queda excluida del ranking).
+**Problema conocido:** el grupo de comparables incluye al propio aviso, así que el índice queda sesgado hacia cero. Se conserva solo como referencia; el notebook 05 lo reemplaza por `Indice_Subvaluacion_Modelo`, calculado fuera de muestra.
 
 ### 7. Variables de entorno geográfico
 
@@ -804,7 +807,7 @@ El notebook 02 lee `dataframefinal.csv`; los notebooks 03, 04 y 05 leen `datafra
 | 2 | `notebooks/02_calidad_y_limpieza.ipynb` | Diagnostica faltantes, valores extremos y duplicados; agrega tratamientos trazables. | `dataframe_limpio.csv` |
 | 3 | `notebooks/03_eda_inicial.ipynb` | EDA descriptivo general: distribuciones y relaciones exploratorias no ajustadas. | nada |
 | 4 | `notebooks/04_outliers_y_analisis_multivariado.ipynb` | Outliers contextuales, sensibilidad, modelos ajustados y escenarios Buy to Rent. | nada |
-| 5 | `notebooks/05_analisis_de_hipotesis.ipynb` | Evaluación formal de las hipótesis, modelo de precio validado fuera de muestra, indicadores por aviso y barrio, score con sensibilidad y segmentación de barrios. | `indicadores_avisos.csv`, `indicadores_barrio.csv`, `rentabilidad_segmentos.csv`, `resultados_hipotesis.csv` |
+| 5 | `notebooks/05_analisis_de_hipotesis.ipynb` | Evaluación formal de las hipótesis, modelo de precio validado fuera de muestra, indicadores por aviso y barrio con costos de la inversión, índice de priorización con sensibilidad y segmentación de barrios. | `indicadores_avisos.csv`, `indicadores_barrio.csv`, `rentabilidad_segmentos.csv`, `resultados_hipotesis.csv` |
 
 Para reproducir el flujo completo se ejecutan los notebooks en orden. Como ambos CSV están versionados, también es posible ejecutar directamente los notebooks 03, 04 y 05 usando `dataframe_limpio.csv`. El notebook 05 tarda unos minutos (validación cruzada y bootstrap); sus semillas están fijas.
 
@@ -822,11 +825,10 @@ Para reproducir el flujo completo se ejecutan los notebooks en orden. Como ambos
 
 - La conversión a dólares usa el dólar blue del día de scraping de cada aviso (`TC_Scraping`). Los avisos de venta suelen publicarse en USD y los de alquiler en pesos, así que la elección del tipo de cambio (blue, MEP u oficial) impacta directamente sobre la rentabilidad estimada. El notebook 04 cuantifica esa sensibilidad con escenarios de ±20%.
 - La rentabilidad se calcula comparando **medianas de zona**, no propiedades individuales: no existe una misma unidad publicada simultáneamente en venta y en alquiler.
-- El volumen de avisos de alquiler es mucho menor que el de venta (4.591 contra 47.127 en el modelo de valuación). Solo 139 combinaciones de barrio, tipo y ambientes tienen datos suficientes de ambas operaciones, lo que acota fuertemente la cobertura del ranking.
-- La rentabilidad neta no descuenta impuestos, vacancia, comisiones ni gastos de escrituración.
-- El `Payback_Period_Anios` pierde sentido cuando la rentabilidad neta es negativa o cercana a cero.
-- El índice de subvaluación compara cada aviso contra la mediana de su propio grupo, que lo incluye, y asume que el precio crece de forma proporcional a la superficie.
-- Los pesos del `Score_Oportunidad` son un supuesto del trabajo, no un resultado empírico. La normalización min-max es sensible a los valores extremos del índice de subvaluación.
+- El volumen de avisos de alquiler es mucho menor que el de venta (4.591 contra 47.127 en el modelo de valuación). Solo 139 combinaciones de barrio, tipo y ambientes tienen datos suficientes de ambas operaciones, lo que acota fuertemente la cobertura de la rentabilidad por zona. El notebook 05 la amplía con una rentabilidad por aviso basada en un modelo de alquiler.
+- La rentabilidad neta del notebook 05 incluye vacancia, comisiones, expensas a cargo del dueño, mantenimiento, ABL y costos de compra y venta, con tres escenarios. El ABL, las expensas extraordinarias y el mantenimiento son supuestos sin dato por aviso.
+- El índice de subvaluación de la PE2 compara cada aviso contra la mediana de su propio grupo, que lo incluye. El notebook 05 lo reemplaza por un índice fuera de muestra.
+- Los pesos del `Indice_Priorizacion` (50/50) y los supuestos de costos no son resultados empíricos: el notebook 05 mide cuánto cambia el orden si se modifican. No hay datos de resultados posteriores para validar el índice como regla de inversión, así que se usa solo para decidir qué avisos revisar primero.
 - Un aviso "subvaluado" puede simplemente tener características no capturadas en los datos (estado, orientación, piso, calidad de la construcción).
 
 ### Del cruce geoespacial
@@ -848,6 +850,25 @@ El notebook [`05_analisis_de_hipotesis.ipynb`](notebooks/05_analisis_de_hipotesi
 - **Incertidumbre que respeta la estructura de los datos:** errores agrupados por barrio en los modelos por aviso (los avisos de un mismo barrio no son independientes) y **bootstrap jerárquico** (barrios y avisos) para la rentabilidad por segmento.
 - **Magnitud y robustez:** cada efecto se traduce a % de precio, USD o puntos de rentabilidad, y se repite con especificaciones alternativas (solo departamentos, sin precios fuera de contexto, con repetidos, definiciones alternativas).
 - **Modelo de precio de referencia:** baseline de comparables (la lógica del `Indice_Subvaluacion` original) contra regresión ridge y gradient boosting, con validación cruzada de 5 pliegues **agrupada por inmueble**. Fuera de muestra, el gradient boosting baja el error mediano de 16,9% a 9,7% en venta y de 17,0% a 12,1% en alquiler. El intervalo de predicción del 90% se valida por cobertura.
+- **Costos de la inversión:** la rentabilidad neta por aviso descuenta vacancia, comisión por alquilar, expensas a cargo del dueño, mantenimiento, ABL y costos de compra, en tres escenarios (optimista, base y pesimista). La **TIR a 10 años** con costos de compra y de venta reemplaza al payback.
+
+### Costos de la inversión
+
+Supuestos de `ind.SupuestosCostos` (escenario base y rango optimista–pesimista):
+
+| Costo | Base | Optimista – pesimista | Fuente o criterio |
+|---|---|---|---|
+| Vacancia | 1 mes por contrato de 24 | 0,5 – 2 meses | 30 a 60 días para alquilar ([iProfesional](https://www.iprofesional.com/realestate/426144-cuantos-dias-tarda-en-alquilarse-un-departamento-en-caba)); oferta en máximos ([iProfesional](https://www.iprofesional.com/realestate/463807-record-de-oferta-de-alquileres-en-caba-que-pasara-con-los-precios)) |
+| Comisión por alquilar | 1 mes + IVA por contrato, a cargo del propietario | 1 mes – 1 mes + IVA | Ley 5859 de CABA ([Infozona](https://www.infozona.com.ar/?p=350997)) |
+| Administración | 0% | 0% – 5% del alquiler | Entre 4% y 6% si se terceriza ([Infozona](https://www.infozona.com.ar/?p=350997)) |
+| Expensas a cargo del dueño | Ordinarias solo en la vacancia + extraordinarias (10% de las ordinarias) | 0% – 20% | Las ordinarias las paga el inquilino; las extraordinarias, el propietario ([iProfesional](https://www.iprofesional.com/legales/459135-la-guia-para-saber-que-debe-pagar-el-dueno-y-el-inquilino-en-las-expensas-extraordinarias)). El 10% es un supuesto |
+| Mantenimiento | 1% del precio por año | 0,5% – 1,5% | Supuesto del grupo |
+| ABL | 0,2% del precio por año | 0,1% – 0,4% | Supuesto: se calcula sobre la valuación fiscal, que no está en el dataset |
+| Ganancias | 0% | 0% | Exención para alquiler de vivienda desde 2026 ([elDiarioAR](https://www.eldiarioar.com/economia/gobierno-reglamento-exenciones-ganancias-alquileres-vivienda-venta-inmuebles_1_13266176.html)) |
+| Costos de compra | 8,6% del precio | 6% – 10% | Comisión 4% + IVA, escribano 2% + IVA y la mitad de sellos de 2,7% ([Mudafy](https://mudafy.com.ar/guias/post/que-gastos-se-afrontan-al-comprar-una-propiedad), [Ámbito](https://www.ambito.com/real-estate/cuales-son-los-gastos-que-pagan-comprador-y-vendedor-una-propiedad-us100000-caba-y-provincia-n6287354), [Colegio de Escribanos](https://www.colegio-escribanos.org.ar/noticias/2025_12_19-Codigo-Fiscal-2026-INFORME.pdf)) |
+| Costos de venta | 5,4% del precio | 4,5% – 6% | Comisión 3% + IVA, mitad de sellos y certificados ([iProfesional](https://www.iprofesional.com/realestate/423461-cuanto-cuesta-escriturar-una-casa-2025-como-se-hace)) |
+
+Resultado: la rentabilidad mediana de las ventas en soporte pasa de **6,3% bruta a 4,0% neta** en el escenario base (2,7% a 5,0% según el escenario). La TIR a 10 años, sin valorización, es de **2,9%**. El sur/oeste rinde más que el norte premium en los tres escenarios. La liquidez entra solo por los costos de salida, porque el dataset no tiene tiempos de venta.
 
 ### Estado de las hipótesis
 
@@ -867,12 +888,12 @@ El notebook [`05_analisis_de_hipotesis.ipynb`](notebooks/05_analisis_de_hipotesi
 
 | Archivo | Contenido |
 |---|---|
-| `indicadores_avisos.csv` | Una fila por venta de la base: precio estimado fuera de muestra con intervalo del 90%, `Indice_Subvaluacion_Modelo`, alquiler estimado, rentabilidad bruta y neta por aviso, soporte del modelo de alquiler, factor de confianza, `Score_Oportunidad_v2` y ranking dentro del presupuesto del interlocutor (USD 80.000–250.000). |
-| `indicadores_barrio.csv` | Una fila por barrio: cobertura, precios por m², rentabilidad observada y modelada, % de avisos subvaluados, entorno y segmento de barrio. |
+| `indicadores_avisos.csv` | Una fila por venta de la base: precio estimado fuera de muestra con intervalo del 90%, `Indice_Subvaluacion_Modelo`, alquiler estimado, rentabilidad bruta y neta por aviso, soporte del modelo de alquiler, rentabilidad neta en los escenarios optimista y pesimista, TIR a 10 años, factor de confianza, `Indice_Priorizacion` y `Orden_Revision` dentro del presupuesto del interlocutor (USD 80.000–250.000). |
+| `indicadores_barrio.csv` | Una fila por barrio: cobertura, precios por m², rentabilidad observada y modelada (neta base y pesimista, TIR a 10 años), % de avisos subvaluados, entorno y segmento de barrio. |
 | `rentabilidad_segmentos.csv` | Rentabilidad bruta observada por barrio × tipo × ambientes (≥5 ventas y ≥5 alquileres). |
 | `resultados_hipotesis.csv` | Estimación, IC95%, p-valor unilateral y de Holm, magnitud, robustez y estado de cada contraste. |
 
-El **score v2** combina la rentabilidad neta del aviso y la subvaluación fuera de muestra, normalizadas por percentiles, con pesos de 50/50 y ponderadas por la confianza en el dato. Los avisos con precio/m² menor al 40% de su grupo se apartan para revisión manual. Mover ±25 puntos el peso entre ambos componentes conserva el 82–84% del top 100. La segmentación de barrios (k-means, k=4, ARI bootstrap mediano 1,00) separa los barrios sobre todo por centralidad y precio de entrada.
+El **índice de priorización** (antes "score de oportunidad") combina la rentabilidad neta del aviso y la subvaluación fuera de muestra, normalizadas por percentiles, con pesos de 50/50 y ponderadas por la confianza en el dato. Sirve para ordenar **qué avisos revisar primero**; no es una recomendación de compra, porque no hay datos de resultados posteriores para validarlo como regla de inversión. Los avisos con precio/m² menor al 40% de su grupo se apartan para revisión manual. Mover ±25 puntos el peso entre ambos componentes conserva el 81–83% del top 100, y cambiar los supuestos de costos, el 98–99%. La segmentación de barrios (k-means, k=4, ARI bootstrap mediano 0,90) separa los barrios sobre todo por centralidad y precio de entrada.
 
 ### Pendiente para completar la PreEntrega 3
 
