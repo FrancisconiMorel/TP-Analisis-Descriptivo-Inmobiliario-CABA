@@ -1,0 +1,26 @@
+# Dependencias del proyecto (versiones probadas con Python 3.12).
+# Instalación: python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+
+# Datos y análisis
+pandas==3.0.5
+numpy==2.5.3
+scipy==1.18.1
+statsmodels==0.15.0
+scikit-learn==1.9.1
+
+# Geoespacial (cruces con transporte, delitos, hospitales y espacios verdes)
+shapely==2.1.2
+pyproj==3.8.0
+
+# Visualización
+matplotlib==3.11.2
+seaborn==0.13.2
+
+# Scraping
+requests==2.34.2
+beautifulsoup4==4.15.0
+urllib3==2.7.0
+
+# Notebooks y tests
+ipykernel==7.3.0
+pytest==9.1.1

@@ -891,7 +891,7 @@ Resultado: la rentabilidad mediana de las ventas en soporte pasa de **6,3% bruta
 | Hipótesis | Resultado | Estado |
 |---|---|---|
 | H1 — Rentabilidad Sur/Oeste > Norte premium | +21% relativo para una misma tipología (~+1 p.p. sobre 5,0%); IC95% +8% a +41%. No significativa con la definición estricta de barrios | Sostenida |
-| H2 — Cochera y amenities encarecen más la venta que el alquiler | Primas similares (cochera: 14% venta, 18% alquiler; amenities: 6,5% y 6,3%) | No sostenida |
+| H2 — Cochera y amenities encarecen más la venta que el alquiler | Primas similares (cochera: 14,5% venta, 18,3% alquiler; cada amenity de edificio: 6,4% y 6,5%). Se estima con los amenities tratados (sección 2.6.9 del notebook 02) y da lo mismo con los originales | No sostenida |
 | H3 — 1–2 ambientes rinden más que 3+ | Diferencia mediana −0,6% dentro del mismo barrio y tipo | No sostenida |
 | H4 / H4.5 — Cercanía al subte → mayor precio | Efectos menores al 1,5% e indistinguibles de cero dentro del barrio | No sostenida |
 | H4b — Colectivos → diferencias de precio | Más paradas a 500 m: −4,3% de USD/m² (P25→P75); 6 de 6 especificaciones | Sostenida |
@@ -899,6 +899,21 @@ Resultado: la rentabilidad mediana de las ventas en soporte pasa de **6,3% bruta
 | H6 — Particulares más subvaluados | +4,3 p.p. (p sin ajustar 0,011), pero no supera Holm; los particulares también aparecen más sobrevaluados | No sostenida (evidencia sugestiva) |
 | H7 — Verde × unidad familiar (reformulada, sin escuelas) | El verde se asocia con alquileres más altos, pero no más en 3+ ambientes | No sostenida |
 | H8 — Distancia al hospital → menor precio | Indistinguible de cero | No sostenida |
+
+### Qué aporta cada fuente externa
+
+Para cada fuente integrada: qué hipótesis permite evaluar, qué se encontró y qué decisión habilita para el inversor. Todos los efectos se miden **dentro del mismo barrio**: la diferencia entre barrios ya está en el precio.
+
+| Fuente | Variable | Hipótesis | Resultado | Qué decisión habilita |
+|---|---|---|---|---|
+| Subte | Distancia a la estación más cercana y estaciones a 500 m | H4, H4.5 | No sostenida: −1,5% de USD/m² de P25 a P75, con un IC que incluye el cero | No pagar una prima por estar cerca del subte: la accesibilidad ya está en el precio del barrio |
+| Colectivos | Paradas a 500 m | H4b | **Sostenida:** −4,3% de USD/m² de P25 a P75 (≈ USD −6.200 por unidad), 6 de 6 especificaciones | Las unidades sobre corredores de colectivo (avenidas) cotizan menos. Conviene revisar ruido y exposición en la visita; es un argumento para negociar |
+| Delitos | Delitos 2023–2025 a 1.000 m | H5 | No sostenida: +0,4%, con signo inestable (3 de 6 especificaciones) | No usar el mapa del delito para descartar unidades dentro de un barrio |
+| Hospitales | Distancia al más cercano | H8 | No sostenida: −1,2%, indistinguible de cero | No es un criterio de selección |
+| Espacios verdes | Superficie verde a 1.000 m | H7 (reformulada) | No sostenida: el verde se asocia con el alquiler en +5,4% en 1–2 ambientes y +3,9% en 3+ | No pagar más por unidades familiares cerca de parques esperando un alquiler más alto |
+| Tren y Metrobus | Distancias integradas al dataset | — | Sin hipótesis asociada | Quedan como variables descriptivas |
+
+Que la mayoría de las fuentes no muestre efecto dentro del barrio también es un resultado útil: el inversor puede priorizar el barrio y la unidad, y no pagar extra por atributos del entorno que el mercado no valora una vez elegido el barrio.
 
 ### Indicadores consolidados (fuente del dashboard)
 
