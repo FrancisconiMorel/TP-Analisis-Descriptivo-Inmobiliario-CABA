@@ -926,23 +926,11 @@ Que la mayoría de las fuentes no muestre efecto dentro del barrio también es u
 
 El **índice de priorización** (antes "score de oportunidad") combina la rentabilidad neta del aviso y la subvaluación fuera de muestra, normalizadas por percentiles, con pesos de 50/50 y ponderadas por la confianza en el dato. Sirve para ordenar **qué avisos revisar primero**; no es una recomendación de compra, porque no hay datos de resultados posteriores para validarlo como regla de inversión. Los avisos con precio/m² menor al 40% de su grupo se apartan para revisión manual. Mover ±25 puntos el peso entre ambos componentes conserva el 81–83% del top 100, y cambiar los supuestos de costos, el 98–99%. La segmentación de barrios (k-means, k=4, ARI bootstrap mediano 0,90) separa los barrios sobre todo por centralidad y precio de entrada.
 
-### Pendiente para completar la PreEntrega 3
+### Dashboard
 
-- **Dashboard** para el interlocutor, alimentado exclusivamente por los cuatro CSV anteriores.
+El dashboard se armó en Power BI a partir de los cuatro archivos de la tabla anterior: [abrir el dashboard en Power BI](https://app.powerbi.com/groups/121e50ac-80d8-4c58-83ad-0411ff098e3a/reports/5b42d890-b1e5-446e-b8b2-daa5c407b603/03858e5a0bb3ec97cb83?ctid=a1f50a97-21c0-49a7-a9d4-f244ebb42da7&experience=power-bi).
 
-## Estado de la PreEntrega 2
-
-**La PreEntrega 2 se considera finalizada dentro del alcance definido.** No quedan tareas obligatorias pendientes para esta entrega: las limitaciones que permanecen están documentadas y se contemplan al interpretar los resultados.
-
-### Completado en el TP2
-
-- EDA cualitativo, cuantitativo y exploratorio en `notebooks/03_eda_inicial.ipynb`.
-- Diagnóstico y tratamiento trazable de faltantes, expensas, amenities, duplicados y valores anómalos en `notebooks/02_calidad_y_limpieza.ipynb`.
-- Incorporación al dataset de distancia al subte y hospitales, cantidad de colectivos y delitos, y distancia, cantidad y superficie de espacios verdes.
-- Visualizaciones descriptivas, análisis contextual de outliers, sensibilidad y modelos ajustados en los notebooks 03 y 04.
-- Escenarios exploratorios Buy to Rent con costos, vacancia y tipo de cambio.
-
-La integración de tren y Metrobus, un índice sintético de conectividad, mapas finales y un ranking operativo de inversión fueron desestimados para esta entrega porque no son requisitos de la consigna. La cobertura limitada de la clasificación entre alquiler tradicional, temporario y desconocido se conserva como una limitación explícita, no como una tarea pendiente.
+El informe está publicado en el espacio de Power BI del ITBA, así que para abrirlo hace falta una cuenta institucional del ITBA.
 
 ## Uso académico y licencias
 
