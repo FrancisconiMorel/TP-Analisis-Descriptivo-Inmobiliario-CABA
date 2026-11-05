@@ -53,7 +53,7 @@ La segunda entrega consolida lo desarrollado en el TP1 y agrega una etapa reprod
 
 | Aspecto | Incorporación en el TP2 |
 |---|---|
-| Dataset analítico | Se parte de `dataframefinal.csv` (91 columnas) y se genera `dataframe_limpio.csv` (114 columnas). |
+| Dataset analítico | Se parte de `dataframefinal.csv` (91 columnas) y se genera `dataframe_limpio.csv` (138 columnas, incluidas las 24 del tratamiento de amenities de la PE3). |
 | Faltantes | Se documenta su cobertura y se aplican tratamientos explícitos únicamente cuando existe una regla acordada; cada imputación queda identificada. |
 | Valores anómalos | Se distinguen datos inválidos, valores sospechosos y extremos plausibles. No se eliminan publicaciones automáticamente. |
 | Duplicados | Se identifican grupos seguros y probables sin borrar filas del archivo original. |
@@ -129,11 +129,13 @@ flowchart LR
 ├── src/
 │   ├── tipo_cambio.py
 │   ├── indicadores.py
-│   └── modelos.py
+│   ├── modelos.py
+│   └── amenities.py
 ├── tests/
 │   ├── test_tipo_cambio.py
 │   ├── test_pipeline_tipo_cambio.py
-│   └── test_indicadores_modelos.py
+│   ├── test_indicadores_modelos.py
+│   └── test_amenities.py
 ├── scrapper/
 │   ├── mercadolibre_scraping_completo.py
 │   └── MercadoLibre_scraper.py
@@ -188,13 +190,13 @@ flowchart LR
 - `data/raw/`: archivos originales sin modificar.
 - `data/processing codes/`: scripts utilizados para limpiar y transformar los datos.
 - `data/processed/`: archivos preparados para el análisis.
-- `src/`: lógica estable que usan los scripts y notebooks: el tipo de cambio (`tipo_cambio.py`), la base analítica, la rentabilidad por segmento, los costos de la inversión y el índice de priorización (`indicadores.py`), y el modelo de precio de referencia con su validación (`modelos.py`).
+- `src/`: lógica estable que usan los scripts y notebooks: el tipo de cambio (`tipo_cambio.py`), la base analítica, la rentabilidad por segmento, los costos de la inversión y el índice de priorización (`indicadores.py`), el modelo de precio de referencia con su validación (`modelos.py`) y el tratamiento de amenities (`amenities.py`).
 - `tests/`: tests automáticos de `src/` (`python -m pytest tests`).
 - `scrapper/`: código utilizado para obtener las publicaciones inmobiliarias.
 - `notebooks/`: análisis sobre el dataset unificado (EDA inicial, limpieza de faltantes y duplicados, y análisis multivariado).
 - `extras/`: documentación complementaria y reportes de calidad.
 - `data/processed/dataframefinal.csv`: salida de `notebooks/01_unificacion.ipynb` (91 columnas).
-- `data/processed/dataframe_limpio.csv`: salida de `notebooks/02_calidad_y_limpieza.ipynb` (114 columnas). **Está versionado** y es la entrada de los notebooks 03 y 04.
+- `data/processed/dataframe_limpio.csv`: salida de `notebooks/02_calidad_y_limpieza.ipynb` (138 columnas). **Está versionado** y es la entrada de los notebooks 03 y 04.
 
 ## Fuentes de datos
 
@@ -612,7 +614,7 @@ El notebook [`02_calidad_y_limpieza.ipynb`](notebooks/02_calidad_y_limpieza.ipyn
 
 **Qué NO hace:** no borra ninguna fila y no modifica ningún valor de las 91 columnas originales. Antes de guardar, el notebook verifica con `assert` que las filas y los valores originales no cambiaron. Todo lo nuevo va en columnas aparte, así que cualquier tratamiento se puede ignorar.
 
-**Entrada:** `data/processed/dataframefinal.csv`. **Salida:** `data/processed/dataframe_limpio.csv` (las mismas 55.582 filas, 91 columnas originales + 23 nuevas).
+**Entrada:** `data/processed/dataframefinal.csv`. **Salida:** `data/processed/dataframe_limpio.csv` (las mismas 55.582 filas, 91 columnas originales + 47 nuevas).
 
 ### Decisiones de grupo
 
@@ -638,7 +640,7 @@ El notebook [`02_calidad_y_limpieza.ipynb`](notebooks/02_calidad_y_limpieza.ipyn
 | `UMBRAL_BAJO`, `UMBRAL_ALTO` | `0,40`, `2,50` | Umbrales del precio por m² relativo a su grupo (decisión 2). |
 | `K_VECINOS`, `MIN_N`, `MIN_N_GRUPO` | `15`, `5`, `8` | Vecinos para asignar barrio, mínimo de avisos por celda de rentabilidad y mínimo de avisos por grupo de precio. |
 
-### Diccionario de las 23 columnas nuevas
+### Diccionario de las 47 columnas nuevas
 
 Los conteos son sobre las 55.582 filas (ventas y alquileres), salvo que se indique otra cosa.
 
@@ -686,6 +688,20 @@ Se consideran el mismo inmueble los avisos con igual barrio, tipo, dirección, p
 | `Duplicado_Nivel` | Certeza del grupo. `Alto`: mismo piso informado, probable republicación (2.048 avisos). `Medio`: piso no informado, no se puede distinguir (2.372). `Bajo`: pisos distintos, probables unidades distintas (537). |
 | `Duplicado_Sobrante_Nivel` | Para los avisos que no son la primera aparición de su grupo: `Seguro` (nivel Alto, 1.106) o `Probable` (nivel Medio, 1.295). Nulo en los demás, incluidos los de nivel Bajo. |
 | `Flag_Duplicado_Sobrante` | 1 si `Duplicado_Sobrante_Nivel` no es nulo (2.401 filas). |
+
+**Amenities y condiciones comerciales (PE3, sección 2.6.9; lógica en `src/amenities.py`)**
+
+| Columna | Descripción |
+|---|---|
+| `<variable>_Tratada` (18 columnas) | Versión tratada de cada amenity y condición comercial: 1, 0 o nulo. Primero se aplican las reglas lógicas (balcón y ascensor) y después la regla por variable, que pasa a nulo los ceros que probablemente son "no informado". Las columnas originales no cambian. |
+| `Completitud_Aviso` | Proporción de 11 campos opcionales que no son amenities (orientación, antigüedad, estado, expensas, piso, etc.) que informa el aviso. |
+| `Flag_Aviso_Poco_Informado` | 1 para el 20% de avisos menos completos de cada tipo de propiedad (11.116 filas). |
+| `Flag_Balcon_Por_Superficie` | 1 si el aviso tenía `Balcon = 0` pero informa una superficie de balcón de hasta 60 m²: pasa a `Balcon_Tratada = 1` (3.213 filas). |
+| `Flag_Ascensor_Por_Piso` | 1 si un departamento en piso 5 o más tenía `Ascensor = 0`: pasa a `Ascensor_Tratada = 1` (3.065 filas). |
+| `Amenities_Sin_Dato` | Cantidad de amenities (de 15) que quedaron como nulo en el aviso. |
+| `Tasa_Confort_Tratada` | Proporción de amenities presentes **entre los informados** del aviso. |
+
+Regla por variable: si un atributo aparece al menos 1,3 veces más en los avisos completos que en el 20% menos completo de su tipo, sus ceros en los avisos poco informados pasan a nulo (ascensor, aire, calefacción, laundry, seguridad, lavadero y terraza en departamentos, entre otros). Pileta, gimnasio, SUM, patio y parrilla no dependen de la completitud: su 0 se mantiene como "no tiene". "Admite mascotas" y "apto profesional" pasan a nulo en PH y casas, donde Mercado Libre casi no muestra el campo. Todos los umbrales son parámetros de `ParametrosAmenities`. **Pendiente de validación grupal**; los notebooks 03, 04 y 05 todavía usan las columnas originales.
 
 ### Limitaciones
 
@@ -818,7 +834,7 @@ Para reproducir el flujo completo se ejecutan los notebooks en orden. Como ambos
 - Las publicaciones representan una fotografía del mercado durante los días del scraping.
 - Los precios y la disponibilidad pueden cambiar o desaparecer.
 - Mercado Libre puede mostrar ubicaciones aproximadas por privacidad.
-- La ausencia de un amenity en una publicación no implica necesariamente que el inmueble no lo tenga. En consecuencia, la `Tasa_Confort_Amenities` mide qué tan completa es la publicación tanto como qué tan equipado está el inmueble.
+- La ausencia de un amenity en una publicación no implica necesariamente que el inmueble no lo tenga. En consecuencia, la `Tasa_Confort_Amenities` mide qué tan completa es la publicación tanto como qué tan equipado está el inmueble. El notebook 02 (sección 2.6.9) agrega versiones tratadas que corrigen los ceros contradictorios y pasan a nulo los dudosos; la `Tasa_Confort_Tratada` se calcula solo sobre los amenities informados.
 - La clasificación entre alquiler tradicional y temporario tiene cobertura limitada.
 
 ### De los KPIs de inversión
