@@ -1,6 +1,6 @@
 # Análisis inmobiliario de CABA para Buy to Rent
 
-El proyecto ayuda a un inversor a elegir qué avisos de viviendas usadas revisar para comprar y alquilar de manera tradicional. El presupuesto se aplica a la **inversión inicial estimada**: precio publicado más costos de compra del escenario base. El orden de revisión combina rentabilidad neta estimada y diferencia frente al precio de referencia.
+El proyecto ayuda a un inversor a elegir qué avisos de viviendas usadas revisar para comprar y alquilar de manera tradicional. El presupuesto se aplica a la **inversión inicial estimada**: precio publicado más costos de compra del escenario base. El orden de revisión combina rentabilidad neta estimada y diferencia frente al precio de referencia. La [propuesta de negocio](extras/propuesta_negocio_descriptiva.pdf) define un capital disponible de USD 80.000 a 250.000.
 
 ## Alcance y datos
 
@@ -10,7 +10,7 @@ Las fuentes integradas en las variables de entorno son subte, colectivos, delito
 
 ### Amenities
 
-Las columnas originales indican detección en el aviso. Un cero original puede reflejar falta de información. Se conserva la cochera tratada del notebook 02, con reglas por tipo y bandera de imputación. En esta copia H2 usa la cochera tratada y los amenities originales de edificio. La rama publicada contiene un tratamiento de amenities más reciente que queda pendiente de integrar y verificar en esta copia.
+Las columnas originales indican detección en el aviso. Un cero original puede reflejar falta de información. Se conserva la cochera tratada del notebook 02, con reglas por tipo y bandera de imputación. H2 usa la cochera tratada y las columnas originales de amenities de edificio. El alcance de las conclusiones de H2 depende de cómo se codifican los amenities faltantes.
 
 ## Fuentes de datos
 
@@ -91,7 +91,7 @@ La revisión manual se aplica por ID y se actualiza si cambia la lista. El puest
 
 ### Sensibilidad a temporarios
 
-El notebook 05 vuelve a estimar el alquiler filtrando señales textuales fuertes y, en un segundo corte, fuertes o débiles. Se publican los alquileres disponibles, las ventas con soporte y la comparación para las mismas ventas en ambos escenarios. La ausencia de una señal deja la modalidad sin confirmar. El resultado por barrio se usa con los tamaños muestrales y los cambios de cobertura. La lectura de control queda en [revision_temporarios.csv](data/processed/revision_temporarios.csv).
+El notebook 05 vuelve a estimar el alquiler excluyendo avisos con señales textuales fuertes y, en una segunda variante, también señales débiles. Informa cantidades de alquileres, cobertura y puestos por barrio. El corte de señales fuertes se compara con 30 reentrenamientos que retiran al azar la misma cantidad de alquileres por barrio. Los cambios de neta del corte por texto y del control se miden sobre un panel fijo de ventas. Son medidas de sensibilidad del modelo. La ausencia de una señal deja la modalidad sin confirmar. La lectura de control queda en [revision_temporarios.csv](data/processed/revision_temporarios.csv).
 
 ## Reproducción
 
@@ -109,7 +109,7 @@ Descargar el CSV original enlazado en Fuentes de datos como `data/raw/mercadolib
 | Notebook | Salida o análisis |
 |---|---|
 | [01 — Unificación](notebooks/01_unificacion.ipynb) | `dataframefinal.csv`, con la muestra residencial y las variables de entorno integradas. |
-| [02 — Calidad](notebooks/02_calidad_y_limpieza.ipynb) | `dataframe_limpio.csv`, con flags, duplicados e imputaciones trazables. |
+| [02 — Calidad](notebooks/02_calidad_y_limpieza.ipynb) | `dataframe_limpio.csv`, con indicadores de calidad, duplicados e imputaciones trazables. La versión reproducida tiene 114 columnas. |
 | [03 — Exploración](notebooks/03_eda_inicial.ipynb) | Distribuciones y relaciones descriptivas. |
 | [04 — Análisis multivariado](notebooks/04_outliers_y_analisis_multivariado.ipynb) | Sensibilidad exploratoria, extremos y comparables. |
 | [05 — Hipótesis e indicadores](notebooks/05_analisis_de_hipotesis.ipynb) | Contrastes, indicadores, índice y sensibilidades. Usa el CSV original y la revisión manual como entradas adicionales. |
@@ -179,7 +179,7 @@ Necesita conexión a internet si algún aviso no trae `TC_Scraping` (como el CSV
 
 El orquestador de extracción está en `scrapper/mercadolibre_scraping_completo.py`. Importa `scrapper/MercadoLibre_scraper.py` para analizar las publicaciones. Para reproducir el corte histórico se usa el CSV original. Una extracción nueva refleja una población y fechas distintas.
 
-### Exportaciones y tablero
+### Exportaciones
 
 - [Indicadores por aviso](data/processed/indicadores_avisos.csv)
 - [Indicadores por barrio](data/processed/indicadores_barrio.csv)
@@ -187,21 +187,25 @@ El orquestador de extracción está en `scrapper/mercadolibre_scraping_completo.
 - [Resultados de hipótesis](data/processed/resultados_hipotesis.csv)
 - [Sensibilidad a temporarios](data/processed/sensibilidad_temporarios.csv)
 
-El informe publicado se enlaza en la [sección Dashboard del repositorio de GitHub](https://github.com/FrancisconiMorel/TP-Analisis-Descriptivo-Inmobiliario-CABA/blob/3abbf29/README.md#dashboard) y requiere una cuenta institucional del ITBA. El informe aún debe actualizarse con estas exportaciones para que sus cifras se puedan cotejar con el análisis.
+## Dashboard
+
+El acceso al informe de Power BI requiere una cuenta institucional del ITBA. Mientras se verifica el enlace directo, la [sección Dashboard del README archivado](https://github.com/FrancisconiMorel/TP-Analisis-Descriptivo-Inmobiliario-CABA/blob/3abbf29/README.md#dashboard) conserva la referencia de acceso. La sincronización de rentabilidad neta y ranking con las exportaciones del notebook 05 está pendiente.
 
 ## Seguimiento de observaciones
+
+El [commit f6ef906](https://github.com/FrancisconiMorel/TP-Analisis-Descriptivo-Inmobiliario-CABA/commit/f6ef906) registra los cambios iniciales de priorización, auditoría y contraste. La tabla indica dónde comprobar cada punto.
 
 | Observación | Estado | Qué cambió | Dónde se verifica |
 |---|---|---|---|
 | Factor de confianza y H6 | Resuelta | El índice usa percentiles sin multiplicador. Se verifican cambios de orden y la lectura de H6 distingue proporciones descriptivas y ajustes. | Notebook 05, secciones 9, 10.3 y 12. |
 | Revisión de avisos y presupuesto | Resuelta | Auditoría por ID, dos listas y motivo de exclusión. El presupuesto incluye los costos de compra; se compara con el filtro por precio. | `data/processed/revision_manual.csv` y notebook 05, sección 10.3. |
-| Temporarios y cobertura por barrio | Resuelta | Se mide el efecto sobre los mismos avisos de venta y se informa el n de alquileres y el soporte. | Notebook 05, sección 10.4, y `sensibilidad_temporarios.csv`. |
+| Temporarios y cobertura por barrio | Resuelta | Se comparan cobertura y puestos, y se mide la variación de la rentabilidad estimada frente a exclusiones aleatorias sobre las mismas ventas. | [Notebook 05](notebooks/05_analisis_de_hipotesis.ipynb), sección 10.4, y [sensibilidad_temporarios.csv](data/processed/sensibilidad_temporarios.csv). |
 | Interpretaciones como Markdown | Resuelta | Lecturas próximas a sus salidas y conclusiones ajustadas. | Notebooks 04 y 05. |
 | Afirmación de negociación en H4b | Resuelta | Se informa la asociación estimada con el precio publicado. | Notebook 05, sección 6. |
 | H4.5 | Resuelta | Se explica la métrica y se informa el contraste por separado dentro de la familia de Holm. | Notebook 05, secciones 6 y 12, y `resultados_hipotesis.csv`. |
 | Consistencia del tablero, mapa y filtros | No resuelta | El tablero publicado todavía requiere actualización y validación. Sus cifras pueden diferir de las exportaciones finales. | Informe institucional y salidas del notebook 05. |
-| Módulo del scraper y coherencia de fuentes | Parcial | Se agrega el parser y se documenta el uso de amenities, tren y Metrobús de esta copia. La integración con la rama publicada sigue pendiente. | `scrapper/`, notebooks 01, 02 y 05 y sección Alcance y datos. |
-| Cierre del repositorio | Parcial | Se documenta un solo flujo y la reproducción. Falta integrar y verificar estos cambios contra la rama publicada. | README, notebooks y dependencias. |
+| Módulo del scraper y coherencia de fuentes | Parcial | Se agrega el parser con una prueba sin conexión y se documenta el uso de amenities, tren y Metrobús. Queda pendiente contrastar H2 con el tratamiento actualizado de amenities. | `scrapper/`, notebooks 01, 02 y 05 y sección Alcance y datos. |
+| Cierre del repositorio | Parcial | Se documenta el flujo y se comprueba su ejecución con los insumos versionados. La validación con el tratamiento actualizado de amenities está pendiente. | README, notebooks y dependencias. |
 
 ## Uso académico y licencias
 
