@@ -10,7 +10,7 @@ Las fuentes integradas en las variables de entorno son subte, colectivos, delito
 
 ### Amenities
 
-Las columnas originales indican detección en el aviso. Un cero original puede reflejar falta de información. Se conserva la cochera tratada del notebook 02, con reglas por tipo y bandera de imputación. H2 usa la cochera tratada y las columnas originales de amenities de edificio. El alcance de las conclusiones de H2 depende de cómo se codifican los amenities faltantes.
+Las columnas originales indican detección en el aviso. Un cero original puede reflejar falta de información. Se conserva la cochera tratada del notebook 02, con reglas por tipo y bandera de imputación. El notebook 02 aplica reglas por variable y tipo de propiedad, corrige contradicciones de balcón y ascensor, y conserva los campos originales. H2 usa la cochera tratada y exige cinco amenities de edificio informados en su especificación principal. La robustez repite el contraste con las columnas originales. El modelo predictivo conserva los indicadores originales de mención en el aviso.
 
 ## Fuentes de datos
 
@@ -109,7 +109,7 @@ Descargar el CSV original enlazado en Fuentes de datos como `data/raw/mercadolib
 | Notebook | Salida o análisis |
 |---|---|
 | [01 — Unificación](notebooks/01_unificacion.ipynb) | `dataframefinal.csv`, con la muestra residencial y las variables de entorno integradas. |
-| [02 — Calidad](notebooks/02_calidad_y_limpieza.ipynb) | `dataframe_limpio.csv`, con indicadores de calidad, duplicados e imputaciones trazables. La versión reproducida tiene 114 columnas. |
+| [02 — Calidad](notebooks/02_calidad_y_limpieza.ipynb) | `dataframe_limpio.csv`, con indicadores de calidad, duplicados e imputaciones trazables. La salida tiene 138 columnas, incluidas las 24 del tratamiento de amenities. |
 | [03 — Exploración](notebooks/03_eda_inicial.ipynb) | Distribuciones y relaciones descriptivas. |
 | [04 — Análisis multivariado](notebooks/04_outliers_y_analisis_multivariado.ipynb) | Sensibilidad exploratoria, extremos y comparables. |
 | [05 — Hipótesis e indicadores](notebooks/05_analisis_de_hipotesis.ipynb) | Contrastes, indicadores, índice y sensibilidades. Usa el CSV original y la revisión manual como entradas adicionales. |
@@ -189,11 +189,11 @@ El orquestador de extracción está en `scrapper/mercadolibre_scraping_completo.
 
 ## Dashboard
 
-El acceso al informe de Power BI requiere una cuenta institucional del ITBA. Mientras se verifica el enlace directo, la [sección Dashboard del README archivado](https://github.com/FrancisconiMorel/TP-Analisis-Descriptivo-Inmobiliario-CABA/blob/3abbf29/README.md#dashboard) conserva la referencia de acceso. La sincronización de rentabilidad neta y ranking con las exportaciones del notebook 05 está pendiente.
+El acceso al informe de Power BI requiere una cuenta institucional del ITBA. [Abrir el dashboard en Power BI](https://app.powerbi.com/groups/121e50ac-80d8-4c58-83ad-0411ff098e3a/reports/5b42d890-b1e5-446e-b8b2-daa5c407b603/03858e5a0bb3ec97cb83?ctid=a1f50a97-21c0-49a7-a9d4-f244ebb42da7&experience=power-bi). La sincronización de rentabilidad neta y ranking con las exportaciones del notebook 05 está pendiente.
 
 ## Seguimiento de observaciones
 
-El [commit f6ef906](https://github.com/FrancisconiMorel/TP-Analisis-Descriptivo-Inmobiliario-CABA/commit/f6ef906) registra los cambios iniciales de priorización, auditoría y contraste. La tabla indica dónde comprobar cada punto.
+El [commit f6ef906](https://github.com/FrancisconiMorel/TP-Analisis-Descriptivo-Inmobiliario-CABA/commit/f6ef906) registra los cambios iniciales de priorización, auditoría y contraste. El tratamiento de amenities y la especificación de H2 siguen los commits [ea63b83](https://github.com/FrancisconiMorel/TP-Analisis-Descriptivo-Inmobiliario-CABA/commit/ea63b8399126dbc01b06b578da0f9dc3ae04d6a4) y [fbf834b](https://github.com/FrancisconiMorel/TP-Analisis-Descriptivo-Inmobiliario-CABA/commit/fbf834b26190e7211316f42f9d1fae2fdcef8a99). La tabla indica dónde comprobar cada punto.
 
 | Observación | Estado | Qué cambió | Dónde se verifica |
 |---|---|---|---|
@@ -204,8 +204,8 @@ El [commit f6ef906](https://github.com/FrancisconiMorel/TP-Analisis-Descriptivo-
 | Afirmación de negociación en H4b | Resuelta | Se informa la asociación estimada con el precio publicado. | Notebook 05, sección 6. |
 | H4.5 | Resuelta | Se explica la métrica y se informa el contraste por separado dentro de la familia de Holm. | Notebook 05, secciones 6 y 12, y `resultados_hipotesis.csv`. |
 | Consistencia del tablero, mapa y filtros | No resuelta | El tablero publicado todavía requiere actualización y validación. Sus cifras pueden diferir de las exportaciones finales. | Informe institucional y salidas del notebook 05. |
-| Módulo del scraper y coherencia de fuentes | Parcial | Se agrega el parser con una prueba sin conexión y se documenta el uso de amenities, tren y Metrobús. Queda pendiente contrastar H2 con el tratamiento actualizado de amenities. | `scrapper/`, notebooks 01, 02 y 05 y sección Alcance y datos. |
-| Cierre del repositorio | Parcial | Se documenta el flujo y se comprueba su ejecución con los insumos versionados. La validación con el tratamiento actualizado de amenities está pendiente. | README, notebooks y dependencias. |
+| Módulo del scraper y coherencia de fuentes | Resuelta | Se agrega el parser con una prueba sin conexión y se documentan el tratamiento de amenities y el alcance de tren y Metrobús. | `scrapper/`, [tratamiento de amenities](src/amenities.py), notebooks 01, 02 y 05. |
+| Cierre del repositorio | Parcial | Se ejecuta el flujo con el tratamiento actualizado de amenities. La base se regeneró localmente y los contrastes H2 reproducen los resultados publicados. Queda pendiente cotejar el contenido completo del CSV publicado e integrar el historial de `main`. | README, notebooks y dependencias. |
 
 ## Uso académico y licencias
 
