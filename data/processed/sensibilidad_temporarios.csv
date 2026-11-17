@@ -1,0 +1,95 @@
+Variante,Barrio,Alquileres_antes,Alquileres_despues,Ventas_soporte_antes,Ventas_soporte_despues,Ventas_en_comun,Neta_base_emparejada,Neta_sensibilidad_emparejada,Puesto_base,Puesto_sensibilidad,Matizar
+Fuertes,Agronomía,6,6,0,0,0,,,,,True
+Fuertes,Almagro,164,164,1987,1988,1987,0.042609,0.04564,14.0,12.0,False
+Fuertes,Balvanera,104,102,1835,1835,1835,0.05569,0.05378,3.0,4.0,False
+Fuertes,Barracas,33,32,364,364,364,0.04412,0.048683,9.0,9.0,False
+Fuertes,Belgrano,379,376,1857,1858,1857,0.035787,0.03782,33.0,33.0,False
+Fuertes,Boedo,39,39,396,396,396,0.041886,0.044964,15.0,14.0,False
+Fuertes,Caballito,308,306,2016,2016,2016,0.038742,0.041172,28.0,28.0,False
+Fuertes,Chacarita,33,32,317,317,317,0.041691,0.041476,16.0,26.0,True
+Fuertes,Coghlan,32,32,363,363,363,0.032427,0.032788,37.0,37.0,False
+Fuertes,Colegiales,80,79,1136,1139,1136,0.038647,0.041535,29.0,25.0,False
+Fuertes,Constitución,18,18,65,65,65,0.046548,0.054102,6.0,3.0,False
+Fuertes,Flores,138,138,1889,1891,1889,0.043657,0.048032,13.0,10.0,False
+Fuertes,Floresta,35,35,358,358,358,0.04418,0.048825,8.0,8.0,False
+Fuertes,La Boca,14,14,88,88,88,0.064004,0.07158,2.0,2.0,False
+Fuertes,La Paternal,21,21,91,91,91,0.041273,0.044764,19.0,17.0,False
+Fuertes,Liniers,41,41,557,557,557,0.040742,0.043151,22.0,21.0,False
+Fuertes,Mataderos,38,38,415,415,415,0.040799,0.043334,21.0,20.0,False
+Fuertes,Monserrat,78,75,831,832,831,0.05014,0.051612,4.0,5.0,False
+Fuertes,Monte Castro,21,21,161,161,161,0.04004,0.044147,24.0,18.0,False
+Fuertes,Nueva Pompeya,8,8,0,0,0,,,,,True
+Fuertes,Núñez,185,177,1855,1855,1855,0.035152,0.034783,35.0,35.0,False
+Fuertes,Palermo,445,435,1981,1983,1981,0.036607,0.038878,31.0,31.0,False
+Fuertes,Parque Avellaneda,14,14,0,0,0,,,,,True
+Fuertes,Parque Chacabuco,45,45,360,360,360,0.043961,0.04508,11.0,13.0,False
+Fuertes,Parque Chas,14,14,51,51,51,0.041614,0.043932,17.0,19.0,False
+Fuertes,Parque Patricios,14,14,0,0,0,,,,,True
+Fuertes,Puerto Madero,346,324,1154,1157,1154,0.033324,0.032961,36.0,36.0,False
+Fuertes,Recoleta,423,418,1742,1744,1742,0.035229,0.037991,34.0,32.0,False
+Fuertes,Retiro,85,80,684,687,684,0.040529,0.043059,23.0,23.0,False
+Fuertes,Saavedra,53,53,986,986,986,0.036197,0.036606,32.0,34.0,False
+Fuertes,San Cristóbal,33,33,581,581,581,0.046046,0.048979,7.0,7.0,False
+Fuertes,San Nicolás,49,49,750,750,750,0.047428,0.051236,5.0,6.0,False
+Fuertes,San Telmo,104,101,790,790,790,0.043769,0.044942,12.0,15.0,False
+Fuertes,Versalles,9,9,0,0,0,,,,,True
+Fuertes,Villa Crespo,133,133,1840,1840,1840,0.0398,0.040578,25.0,29.0,False
+Fuertes,Villa Devoto,110,110,1539,1547,1539,0.041559,0.042998,18.0,24.0,True
+Fuertes,Villa Lugano,41,41,384,384,384,0.068509,0.074294,1.0,1.0,False
+Fuertes,Villa Luro,48,48,716,716,716,0.041138,0.044888,20.0,16.0,False
+Fuertes,Villa Ortúzar,23,23,276,276,276,0.043988,0.046522,10.0,11.0,False
+Fuertes,Villa Pueyrredón,63,62,309,309,309,0.039245,0.043128,27.0,22.0,False
+Fuertes,Villa Real,7,6,0,0,0,,,,,True
+Fuertes,Villa Riachuelo,1,1,0,0,0,,,,,True
+Fuertes,Villa Santa Rita,2,2,0,0,0,,,,,True
+Fuertes,Villa Soldati,6,6,0,0,0,,,,,True
+Fuertes,Villa Urquiza,181,181,1791,1791,1791,0.037792,0.039439,30.0,30.0,False
+Fuertes,Villa del Parque,69,69,899,899,899,0.039723,0.041426,26.0,27.0,False
+Fuertes,Vélez Sarsfield,6,6,0,0,0,,,,,True
+Fuertes y débiles,Agronomía,6,6,0,0,0,,,,,True
+Fuertes y débiles,Almagro,164,164,1987,1988,1987,0.042609,0.045499,14.0,11.0,False
+Fuertes y débiles,Balvanera,104,102,1835,1835,1835,0.05569,0.054659,3.0,3.0,False
+Fuertes y débiles,Barracas,33,32,364,364,364,0.04412,0.047969,9.0,10.0,False
+Fuertes y débiles,Belgrano,379,375,1857,1858,1857,0.035787,0.037891,33.0,33.0,False
+Fuertes y débiles,Boedo,39,39,396,396,396,0.041886,0.045268,15.0,14.0,False
+Fuertes y débiles,Caballito,308,305,2016,2016,2016,0.038742,0.041599,28.0,26.0,False
+Fuertes y débiles,Chacarita,33,32,317,317,317,0.041691,0.042941,16.0,22.0,True
+Fuertes y débiles,Coghlan,32,32,363,363,363,0.032427,0.032853,37.0,37.0,False
+Fuertes y débiles,Colegiales,80,79,1136,1139,1136,0.038647,0.041043,29.0,28.0,False
+Fuertes y débiles,Constitución,18,18,65,65,65,0.046548,0.053696,6.0,4.0,False
+Fuertes y débiles,Flores,138,137,1889,1891,1889,0.043657,0.048125,13.0,9.0,False
+Fuertes y débiles,Floresta,35,35,358,358,358,0.04418,0.049124,8.0,8.0,False
+Fuertes y débiles,La Boca,14,14,88,88,88,0.064004,0.072334,2.0,2.0,False
+Fuertes y débiles,La Paternal,21,21,91,91,91,0.041273,0.044392,19.0,16.0,False
+Fuertes y débiles,Liniers,41,41,557,557,557,0.040742,0.043062,22.0,21.0,False
+Fuertes y débiles,Mataderos,38,38,415,415,415,0.040799,0.04204,21.0,25.0,False
+Fuertes y débiles,Monserrat,78,75,831,832,831,0.05014,0.052003,4.0,5.0,False
+Fuertes y débiles,Monte Castro,21,21,161,161,161,0.04004,0.044007,24.0,17.0,False
+Fuertes y débiles,Nueva Pompeya,8,8,0,0,0,,,,,True
+Fuertes y débiles,Núñez,185,176,1855,1855,1855,0.035152,0.034883,35.0,35.0,False
+Fuertes y débiles,Palermo,445,433,1981,1983,1981,0.036607,0.039202,31.0,31.0,False
+Fuertes y débiles,Parque Avellaneda,14,14,0,0,0,,,,,True
+Fuertes y débiles,Parque Chacabuco,45,45,360,360,360,0.043961,0.045491,11.0,12.0,False
+Fuertes y débiles,Parque Chas,14,14,51,51,51,0.041614,0.042546,17.0,23.0,True
+Fuertes y débiles,Parque Patricios,14,14,0,0,0,,,,,True
+Fuertes y débiles,Puerto Madero,346,322,1154,1157,1154,0.033324,0.032893,36.0,36.0,False
+Fuertes y débiles,Recoleta,423,414,1742,1744,1742,0.035229,0.037911,34.0,32.0,False
+Fuertes y débiles,Retiro,85,78,684,687,684,0.040529,0.042101,23.0,24.0,False
+Fuertes y débiles,Saavedra,53,53,986,986,986,0.036197,0.037333,32.0,34.0,False
+Fuertes y débiles,San Cristóbal,33,33,581,581,581,0.046046,0.049316,7.0,7.0,False
+Fuertes y débiles,San Nicolás,49,49,750,750,750,0.047428,0.051447,5.0,6.0,False
+Fuertes y débiles,San Telmo,104,100,790,790,790,0.043769,0.045308,12.0,13.0,False
+Fuertes y débiles,Versalles,9,9,0,0,0,,,,,True
+Fuertes y débiles,Villa Crespo,133,132,1840,1840,1840,0.0398,0.041225,25.0,27.0,False
+Fuertes y débiles,Villa Devoto,110,110,1539,1547,1539,0.041559,0.043154,18.0,20.0,False
+Fuertes y débiles,Villa Lugano,41,41,384,384,384,0.068509,0.074572,1.0,1.0,False
+Fuertes y débiles,Villa Luro,48,47,716,716,716,0.041138,0.044416,20.0,15.0,False
+Fuertes y débiles,Villa Ortúzar,23,23,276,276,276,0.043988,0.043823,10.0,18.0,True
+Fuertes y débiles,Villa Pueyrredón,63,62,309,309,309,0.039245,0.04343,27.0,19.0,False
+Fuertes y débiles,Villa Real,7,6,0,0,0,,,,,True
+Fuertes y débiles,Villa Riachuelo,1,1,0,0,0,,,,,True
+Fuertes y débiles,Villa Santa Rita,2,2,0,0,0,,,,,True
+Fuertes y débiles,Villa Soldati,6,6,0,0,0,,,,,True
+Fuertes y débiles,Villa Urquiza,181,181,1791,1791,1791,0.037792,0.03953,30.0,30.0,False
+Fuertes y débiles,Villa del Parque,69,69,899,899,899,0.039723,0.040675,26.0,29.0,False
+Fuertes y débiles,Vélez Sarsfield,6,6,0,0,0,,,,,True

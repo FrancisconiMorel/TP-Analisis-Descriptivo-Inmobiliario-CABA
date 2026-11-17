@@ -1,0 +1,73 @@
+Item_ID,Decision,Motivo,Puesto_Original,Puesto_Preliminar
+MLA1518290181,Residencial,Departamento de dos ambientes con distribución residencial y uso profesional alternativo.,,1.0
+MLA1584547443,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3721.0,51.0
+MLA1614067329,Validar,Uso profesional y comercial explícito. Confirmar habilitación y uso residencial actual.,,15.0
+MLA1668059711,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3746.0,76.0
+MLA1675726277,Validar,PH a refaccionar. Presupuestar obra y confirmar superficie útil.,,28.0
+MLA1711667435,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3683.0,18.0
+MLA1778715929,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3720.0,52.0
+MLA1786944075,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",14.0,33.0
+MLA1787361657,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",7.0,20.0
+MLA1795359867,Excluir,La descripción identifica la unidad como oficina en Av. Belgrano.,10.0,24.0
+MLA1809444245,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",9.0,26.0
+MLA1833464065,Residencial,Departamento de tres ambientes con cocina y dependencia.,28.0,68.0
+MLA1845613651,Excluir,La descripción vende una oficina o estudio de 193 m².,20.0,41.0
+MLA1857301281,Residencial,Publicación de vivienda de seis ambientes. Permuta aceptada como opción.,3.0,11.0
+MLA1864347611,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",11.0,29.0
+MLA1887270111,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",47.0,107.0
+MLA1887731141,Residencial,"Cuenta con dormitorio, cocina y baños. Aptitud profesional adicional.",3687.0,23.0
+MLA1892771009,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3771.0,102.0
+MLA1895310443,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",,3.0
+MLA1920059771,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3756.0,86.0
+MLA1929347381,Excluir,El importe corresponde a anticipo más cuotas y no consta el costo total.,3667.0,8.0
+MLA1940350277,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",35.0,85.0
+MLA1945057923,Validar,Vivienda a refaccionar con financiación. Confirmar costo total y estado.,,14.0
+MLA1945603931,Residencial,Departamento de tres ambientes con dos dormitorios. Oficina figura en el descargo de la inmobiliaria.,,
+MLA1946772297,Excluir,Venta en bloque de seis PH. El alquiler del modelo corresponde a una unidad.,3686.0,22.0
+MLA1948065983,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",,104.0
+MLA1948411245,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3745.0,75.0
+MLA1948506087,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",12.0,30.0
+MLA1986529123,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",46.0,105.0
+MLA2457846386,Excluir,Configuración actual como hostel. Requiere otro análisis de renta y costos.,18.0,38.0
+MLA2571529242,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",8.0,21.0
+MLA2783114400,Excluir,La descripción incluye unidades con oficina y depósito. El precio no es comparable a una vivienda individual.,3692.0,27.0
+MLA2787716682,Validar,Vivienda a reciclar. Estimar la inversión de obra.,24.0,48.0
+MLA2797692640,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3722.0,54.0
+MLA2904707670,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",21.0,44.0
+MLA2957655848,Excluir,Oficina de uso actual comercial. La vivienda requiere reconversión.,15.0,35.0
+MLA3112385544,Validar,Vivienda a reciclar. La rentabilidad calculada omite las obras.,13.0,31.0
+MLA3246034172,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",26.0,61.0
+MLA3261884290,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",37.0,92.0
+MLA3310276186,Validar,Vivienda a reciclar. La rentabilidad calculada omite las obras.,16.0,36.0
+MLA3338167398,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",27.0,63.0
+MLA3367197430,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",1.0,6.0
+MLA3372884922,Validar,PH a refaccionar. Estimar la inversión de obra.,21356.0,87.0
+MLA3373895352,Validar,"Oferta mixta de departamento, local u oficina. Confirmar destino y uso actuales.",22.0,46.0
+MLA3389362552,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",4.0,16.0
+MLA3419187150,Residencial,Departamento reciclado. El aviso ofrece financiación opcional.,29.0,69.0
+MLA3419329812,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",31.0,77.0
+MLA3433942884,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3757.0,89.0
+MLA3458507240,Validar,Vivienda ofrecida para reciclar. Confirmar costo de obra.,,62.0
+MLA3489182994,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3675.0,12.0
+MLA3516001054,Residencial,Departamento con descripción residencial y aptitud profesional adicional.,,25.0
+MLA3542524444,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3712.0,45.0
+MLA3551015444,Validar,Uso profesional destacado en la distribución. Confirmar destino residencial.,23.0,49.0
+MLA3607005646,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",6.0,19.0
+MLA3635811968,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",40.0,96.0
+MLA3640752332,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",5.0,17.0
+MLA3650406486,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",41.0,99.0
+MLA3714083292,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",,66.0
+MLA3720093324,Validar,Vivienda a reciclar. Estimar costo y plazo de obra antes de comparar el retorno.,2.0,9.0
+MLA3720467528,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",25.0,55.0
+MLA3720666770,Residencial,Anuncia vivienda o consultorio. La descripción respalda distribución de vivienda.,,4.0
+MLA3721806648,Validar,Vivienda a reformar. Estimar obras antes de comparar.,17.0,39.0
+MLA3726622514,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",,2.0
+MLA3727524862,Residencial,La descripción ofrece una unidad residencial renovable. Confirmar estado actual.,19.0,40.0
+MLA3727525044,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",36.0,88.0
+MLA3727541094,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3778.0,111.0
+MLA3727541108,Validar,PH a refaccionar. Estimar costo y plazo de las obras.,,34.0
+MLA3742410736,Excluir,Precio publicado corresponde al anticipo mínimo del proyecto.,3668.0,10.0
+MLA3742436716,Excluir,Precio publicado corresponde al anticipo mínimo del proyecto.,3655.0,5.0
+MLA3746552786,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3671.0,13.0
+MLA3762180988,Residencial,"Título y descripción de una unidad residencial. Confirmar estado, condiciones y precio con el anunciante.",3664.0,7.0
+MLA3783773408,Residencial,"Departamento terminado de dos ambientes, con uso residencial y aptitud profesional.",30.0,
