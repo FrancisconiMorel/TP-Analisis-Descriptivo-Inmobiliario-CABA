@@ -205,7 +205,7 @@ El [commit f6ef906](https://github.com/FrancisconiMorel/TP-Analisis-Descriptivo-
 | H4.5 | Resuelta | Se explica la métrica y se informa el contraste por separado dentro de la familia de Holm. | Notebook 05, secciones 6 y 12, y `resultados_hipotesis.csv`. |
 | Consistencia del tablero, mapa y filtros | No resuelta | El tablero publicado todavía requiere actualización y validación. Sus cifras pueden diferir de las exportaciones finales. | Informe institucional y salidas del notebook 05. |
 | Módulo del scraper y coherencia de fuentes | Resuelta | Se agrega el parser con una prueba sin conexión y se documentan el tratamiento de amenities y el alcance de tren y Metrobús. | `scrapper/`, [tratamiento de amenities](src/amenities.py), notebooks 01, 02 y 05. |
-| Cierre del repositorio | Parcial | Se ejecuta el flujo con el tratamiento actualizado de amenities. La base se regeneró localmente y los contrastes H2 reproducen los resultados publicados. Queda pendiente cotejar el contenido completo del CSV publicado e integrar el historial de `main`. | README, notebooks y dependencias. |
+| Cierre del repositorio | Resuelta | Se integra el historial de `main` y se verifican H2, el ranking y la sensibilidad con el CSV oficial de 138 columnas. | README, notebooks y dependencias. |
 
 ## Uso académico y licencias
 
