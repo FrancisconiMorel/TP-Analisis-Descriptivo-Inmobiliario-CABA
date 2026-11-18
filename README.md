@@ -189,7 +189,7 @@ El orquestador de extracción está en `scrapper/mercadolibre_scraping_completo.
 
 ## Dashboard
 
-El acceso al informe de Power BI requiere una cuenta institucional del ITBA. [Abrir el dashboard en Power BI](https://app.powerbi.com/groups/121e50ac-80d8-4c58-83ad-0411ff098e3a/reports/5b42d890-b1e5-446e-b8b2-daa5c407b603/03858e5a0bb3ec97cb83?ctid=a1f50a97-21c0-49a7-a9d4-f244ebb42da7&experience=power-bi). La sincronización de rentabilidad neta y ranking con las exportaciones del notebook 05 está pendiente.
+El acceso al informe de Power BI requiere una cuenta institucional del ITBA. [Abrir el dashboard en Power BI](https://app.powerbi.com/groups/121e50ac-80d8-4c58-83ad-0411ff098e3a/reports/5b42d890-b1e5-446e-b8b2-daa5c407b603/03858e5a0bb3ec97cb83?ctid=a1f50a97-21c0-49a7-a9d4-f244ebb42da7&experience=power-bi).
 
 ## Seguimiento de observaciones
 
